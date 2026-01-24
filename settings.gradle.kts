@@ -1,1 +1,1 @@
-rootProject.name = "AmlethMP"
+rootProject.name = "AmlethMP-Backend"
