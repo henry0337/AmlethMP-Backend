@@ -71,8 +71,8 @@ dependencies {
 	implementation("io.sentry:sentry-spring-boot-4-starter")
 
 	// Apache Kafka (Streams)
-//	implementation("org.apache.kafka:kafka-streams")
-//	implementation("org.springframework.boot:spring-boot-starter-kafka")
+	implementation("org.apache.kafka:kafka-streams")
+	implementation("org.springframework.boot:spring-boot-starter-kafka")
 
 	// Microsoft Azure Storage (Tạm thời chưa hỗ trợ)
 //	implementation("com.azure.spring:spring-cloud-azure-starter")
@@ -90,22 +90,22 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 
 	// Manifold (Extension)
-	compileOnly("systems.manifold:manifold-ext:2025.1.31")
-	implementation("systems.manifold:manifold-ext-rt:2025.1.31")
+//	compileOnly("systems.manifold:manifold-ext:2025.1.31")
+//	implementation("systems.manifold:manifold-ext-rt:2025.1.31")
 
 	// Manifold (Properties)
-	compileOnly("systems.manifold:manifold-props:2025.1.31")
-	implementation("systems.manifold:manifold-props-rt:2025.1.31")
+//	compileOnly("systems.manifold:manifold-props:2025.1.31")
+//	implementation("systems.manifold:manifold-props-rt:2025.1.31")
 
 	// Manifold (Optional parameters & named arguments)
-	compileOnly("systems.manifold:manifold-params:2025.1.31")
-	implementation("systems.manifold:manifold-params-rt:2025.1.31")
+//	compileOnly("systems.manifold:manifold-params:2025.1.31")
+//	implementation("systems.manifold:manifold-params-rt:2025.1.31")
 
 	// Manifold (Strings)
-	implementation("systems.manifold:manifold-strings:2025.1.31")
+//	implementation("systems.manifold:manifold-strings:2025.1.31")
 
 	// Manifold (Collections)
-	implementation("systems.manifold:manifold-collections:2025.1.31")
+//	implementation("systems.manifold:manifold-collections:2025.1.31")
 
 	// Apache POI
 	implementation("org.apache.poi:poi:5.5.0")
@@ -113,6 +113,9 @@ dependencies {
 
 	// Swagger (WebFlux)
 	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.8.13")
+
+	// HikariCP
+	implementation("com.zaxxer:HikariCP:7.0.2")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-data-r2dbc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
@@ -127,7 +130,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
-		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
+//		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
 	}
 }
 
@@ -136,9 +139,9 @@ tasks {
 		useJUnitPlatform()
 	}
 
-	withType<JavaCompile> {
-		options.compilerArgs = listOf("-Xplugin:Manifold")
-	}
+//	withType<JavaCompile> {
+//		options.compilerArgs = listOf("-Xplugin:Manifold")
+//	}
 
 	bootBuildImage {
 		runImage = "paketobuildpacks/ubuntu-noble-run:latest"
