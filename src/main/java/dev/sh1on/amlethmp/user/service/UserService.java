@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.user.service;
 
-import dev.sh1on.amlethmp.common.shared.service.BaseApiService;
+import dev.sh1on.amlethmp.common.template.service.BaseApiService;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.AccessLevel;

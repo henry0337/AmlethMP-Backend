@@ -1,27 +1,28 @@
 package dev.sh1on.amlethmp.user.model;
 
-import dev.sh1on.amlethmp.common.shared.model.AuditingEntity;
+import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
  */
-@EqualsAndHashCode(callSuper = true) // DANGER: Unknown effect on usage
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table("users")
-public class User extends AuditingEntity implements UserDetails {
+public class User extends SoftDeletableEntity implements UserDetails {
     @Id
     private String id;
 
@@ -39,7 +40,17 @@ public class User extends AuditingEntity implements UserDetails {
 
     private boolean isCredentialsExpired;
 
-    private boolean isEnabled;
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @LastModifiedBy
+    private String updatedBy;
 
     @Override
     public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
@@ -73,6 +84,6 @@ public class User extends AuditingEntity implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return !isDisabled;
     }
 }

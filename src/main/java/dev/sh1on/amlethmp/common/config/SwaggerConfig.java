@@ -6,14 +6,16 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
-import static dev.sh1on.amlethmp.common.constant.SwaggerConstant.*;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
 
 /**
  * Lớp cấu hình cho <b>Swagger</b>.
  * @see <a href="https://swagger.io/">Swagger</a>
  * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
  */
+@Profile("dev")
 @Configuration(proxyBeanMethods = false)
 public class SwaggerConfig {
 

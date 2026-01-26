@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.service;
+package dev.sh1on.amlethmp.common.template.controller;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -8,7 +8,8 @@ import reactor.core.publisher.Mono;
  * @param <T> (WIP)
  * @param <ID> (WIP)
  */
-public interface BaseApiService<T, ID> {
+@SuppressWarnings("unused")
+public interface BaseApiController<T, ID> {
     Flux<T> getAll();
     Mono<T> getById(ID id);
     Mono<T> create(T entity);
