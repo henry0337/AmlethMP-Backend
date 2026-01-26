@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.user.controller;
 
-import dev.sh1on.amlethmp.common.template.controller.BaseApiController;
+import dev.sh1on.amlethmp.common.template.controller.AmlethMPController;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.service.UserService;
 import lombok.AccessLevel;
