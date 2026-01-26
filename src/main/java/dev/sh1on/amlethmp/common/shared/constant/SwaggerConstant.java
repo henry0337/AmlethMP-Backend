@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.constant;
+package dev.sh1on.amlethmp.common.shared.constant;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>

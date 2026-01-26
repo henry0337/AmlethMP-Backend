@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: AmlethMP
+  r2dbc:
+    url:
+    username:
+    password:
+  liquibase:
+    url:
+    user:
+    password:
+    change-log:
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
