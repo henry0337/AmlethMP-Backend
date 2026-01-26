@@ -6,7 +6,8 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 
 /**
- * Đánh dấu một thực thể có thể sử dụng cơ chế <b>soft-delete</b> lên các dữ liệu bên trong chúng.
+ * <b>[Domain-only]</b> <br>
+ * Lớp trừu tượng giúp đánh dấu một thực thể có khả năng tận dụng cơ chế <b>soft-delete</b> lên các dữ liệu bên trong chúng.
  * @author <a href="https://github.com/henry0337">Amleth</a>
  * @see <a href="https://viblo.asia/p/ban-nen-tranh-su-dung-soft-delete-khi-co-the-va-day-la-ly-do-tai-sao-LzD5dL1E5jY#_i-giai-thich-so-qua-ve-soft-delete-0">Soft-Delete (Xóa mềm)</a>
  */
@@ -24,10 +25,10 @@ public abstract class SoftDeletableEntity {
     /**
      * Đối tượng mới nhất thực hiện vô hiệu hóa bản ghi này.
      */
-    protected String disabledBy;
+    protected String lastDisabledBy;
 
     /**
-     * Thời gian thực hiện vô hiệu hóa bản ghi này.
+     * Thời gian lần cuối thực hiện vô hiệu hóa bản ghi này.
      */
-    protected LocalDateTime disabledAt;
+    protected LocalDateTime lastDisabledAt;
 }
