@@ -3,7 +3,7 @@ package dev.sh1on.amlethmp.common.template.service;
 import org.springframework.stereotype.Service;
 
 /**
- * <b>[Service-only]</b> <br>
+ * <b>[Internal, Service-only]</b> <br>
  * Giao diện phía {@linkplain Service nghiệp vụ} cung cấp các phương thức CRUD tối thiểu cần thiết cho một Entity.
  * @author <a href="https://github.com/henry0337">Amleth</a>
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
