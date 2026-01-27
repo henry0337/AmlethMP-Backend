@@ -11,8 +11,9 @@ import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
@@ -31,8 +32,13 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     UserMapper mapper;
 
     @Override
-    public Flux<UserDto> findAll(Pageable pageable, Sort sort) {
-        return repository.findAll().map(mapper::toUserDto);
+    public Mono<Page<UserDto>> findAll(Pageable pageable) {
+        return repository.findAllBy(pageable)
+                .switchIfEmpty(Flux.empty())
+                .map(mapper::toUserDto)
+                .collectList()
+                .zipWith(repository.count())
+                .map(tuple -> new PageImpl<>(tuple.getT1(), pageable, tuple.getT2()));
     }
 
     @Override

@@ -1,9 +1,9 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  */
 @SuppressWarnings("unused")
 public interface AmlethMPRestController<OD, K, CD, UD> {
-    Mono<ResponseEntity<Flux<OD>>> findAll(int offset, int limit, Sort sort);
+    Mono<ResponseEntity<Mono<Page<OD>>>> findAll(int offset, int limit, Sort sort);
 
     Mono<ResponseEntity<Mono<OD>>> findByKey(K key);
 
@@ -27,5 +27,5 @@ public interface AmlethMPRestController<OD, K, CD, UD> {
 
     Mono<ResponseEntity<Mono<OD>>> update(K key, UD dto);
 
-    Mono<ResponseEntity<Mono<Void>>> delete(K key);
+    Mono<ResponseEntity<Void>> delete(K key);
 }

@@ -13,6 +13,6 @@ public class UserUpdateDto {
     private Role role;
     private LocalDateTime updatedAt;
     private String updatedBy;
-    private LocalDateTime deletedAt;
-    private String deletedBy;
+    private LocalDateTime lastDisabledAt;
+    private String lastDisabledBy;
 }

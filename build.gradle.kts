@@ -2,7 +2,7 @@ plugins {
 	java
 	idea
 	eclipse
-	id("org.springframework.boot") version "4.0.1"
+	id("org.springframework.boot") version "4.0.2"
 	id("io.spring.dependency-management") version "1.1.7"
 }
 
@@ -120,6 +120,10 @@ dependencies {
 	// MapStruct
 	implementation("org.mapstruct:mapstruct:1.6.3")
 	annotationProcessor("org.mapstruct:mapstruct-processor:1.6.3")
+
+	// Therapi Javadoc for OpenAPI
+	implementation("com.github.therapi:therapi-runtime-javadoc:0.15.0")
+	annotationProcessor("com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0")
 
 	testImplementation("org.springframework.boot:spring-boot-starter-data-r2dbc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
