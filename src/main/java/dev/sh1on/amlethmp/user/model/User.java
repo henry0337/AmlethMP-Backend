@@ -29,6 +29,8 @@ public class User extends SoftDeletableEntity implements UserDetails {
     @Column("username")
     private String accountName;
 
+    private String displayName;
+
     @Column("password")
     private String accountPassword;
 
@@ -41,16 +43,16 @@ public class User extends SoftDeletableEntity implements UserDetails {
     private boolean isCredentialsExpired;
 
     @CreatedDate
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     @CreatedBy
     private String createdBy;
 
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private String lastUpdatedAt;
 
     @LastModifiedBy
-    private String updatedBy;
+    private String lastUpdatedBy;
 
     @Override
     public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {

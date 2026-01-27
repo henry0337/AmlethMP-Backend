@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.user.route;
+package dev.sh1on.amlethmp.user;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
