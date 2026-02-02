@@ -1,10 +1,9 @@
 package dev.sh1on.amlethmp.user.model;
 
 import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
@@ -19,6 +18,7 @@ import java.util.List;
  * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
  */
 @Data
+@Builder
 @EqualsAndHashCode(callSuper = true)
 @Table("users")
 public class User extends SoftDeletableEntity implements UserDetails {
@@ -53,18 +53,22 @@ public class User extends SoftDeletableEntity implements UserDetails {
     @LastModifiedBy
     private String lastUpdatedBy;
 
+    @Version
+    @Transient
+    private Integer version;
+
     @Override
-    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return accountPassword;
     }
 
     @Override
-    public @NonNull String getUsername() {
+    public String getUsername() {
         return accountName;
     }
 

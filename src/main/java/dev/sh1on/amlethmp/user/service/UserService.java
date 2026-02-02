@@ -14,9 +14,9 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -30,11 +30,12 @@ import java.time.LocalDateTime;
 public class UserService implements AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto>, Reversible<String> {
     UserRepository repository;
     UserMapper mapper;
+    PasswordEncoder encoder;
 
     @Override
     public Mono<Page<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
-                .switchIfEmpty(Flux.empty())
+                .switchIfEmpty(Mono.empty())
                 .map(mapper::toUserDto)
                 .collectList()
                 .zipWith(repository.count())
@@ -51,6 +52,7 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     public Mono<UserDto> save(UserCreateDto dto) {
         UserDto newUserDto = mapper.toUserDto(dto);
         User user = mapper.toUser(newUserDto);
+        user.setAccountPassword(encoder.encode(dto.getPassword()));
         repository.save(user);
         return Mono.just(newUserDto);
     }
@@ -58,7 +60,23 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     @Override
     @Transactional
     public Mono<UserDto> update(String key, UserUpdateDto dto) {
-        return null;
+        return repository.findById(key)
+                .switchIfEmpty(Mono.error(new Exception("User not found")))
+                .map(user -> {
+                    if (dto.getEmail() != null) user.setAccountName(dto.getEmail());
+                    if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
+                    if (dto.getRole() != null) user.setRole(dto.getRole().toString());
+                    if (dto.getPassword() != null) user.setAccountPassword(encoder.encode(dto.getPassword()));
+                    user.setAccountExpired(false);
+                    user.setAccountLocked(false);
+                    user.setCredentialsExpired(false);
+                    user.setLastUpdatedAt(dto.getUpdatedAt().toString());
+                    user.setLastUpdatedBy(dto.getUpdatedBy());
+
+                    return user;
+                })
+                .flatMap(repository::save)
+                .map(mapper::toUserDto);
     }
 
     @Override
@@ -73,8 +91,9 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new Exception("User not found")))
                 .flatMap(user -> {
-                    user.setLastDisabledBy(user.getId());
-                    user.setLastDisabledAt(LocalDateTime.now());
+                    user.setDisabled(true);
+                    user.setLastDisabledAt(LocalDateTime.now().toString());
+                    user.setLastUpdatedAt(LocalDateTime.now().toString());
                     return repository.save(user);
                 })
                 .then();

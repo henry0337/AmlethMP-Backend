@@ -31,19 +31,6 @@
             <column name="is_enabled" type="boolean" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_disabled_by" type="varchar(255)"/>
-            <column name="last_disabled_at" type="timestamp with time zone"/>
-            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_by" type="varchar(255)"/>
-            <column name="last_modified_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_modified_by" type="varchar(255)"/>
         </createTable>
     </changeSet>
 

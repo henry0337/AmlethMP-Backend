@@ -1,4 +1,4 @@
 @NonNullApi
-package dev.sh1on.amlethmp.common.config;
+package dev.sh1on.amlethmp.user.model;
 
 import org.springframework.lang.NonNullApi;

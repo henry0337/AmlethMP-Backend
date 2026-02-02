@@ -30,5 +30,5 @@ public abstract class SoftDeletableEntity {
     /**
      * Thời gian lần cuối thực hiện vô hiệu hóa bản ghi này.
      */
-    protected LocalDateTime lastDisabledAt;
+    protected String lastDisabledAt;
 }

@@ -125,6 +125,11 @@ dependencies {
 	implementation("com.github.therapi:therapi-runtime-javadoc:0.15.0")
 	annotationProcessor("com.github.therapi:therapi-runtime-javadoc-scribe:0.15.0")
 
+	// JJWT
+	implementation("io.jsonwebtoken:jjwt-api:0.13.0")
+	implementation("io.jsonwebtoken:jjwt-jackson:0.13.0")
+	implementation("io.jsonwebtoken:jjwt-impl:0.13.0")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-data-r2dbc-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-liquibase-test")
 	testImplementation("org.springframework.boot:spring-boot-starter-mail-test")

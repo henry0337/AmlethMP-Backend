@@ -1,18 +1,20 @@
-package dev.sh1on.amlethmp.common.config;
+package dev.sh1on.amlethmp.common.config.development;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
+@Profile("dev")
 @Configuration(proxyBeanMethods = false)
-public class ConnectionPoolConfig {
+public class ConnectionPoolDevelopmentConfig {
     @Value("${spring.liquibase.url}")
     private String url;
 

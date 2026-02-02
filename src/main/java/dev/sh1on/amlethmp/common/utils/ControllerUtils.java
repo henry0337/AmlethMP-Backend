@@ -7,14 +7,9 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
-public class HttpUtils {
-
+public class ControllerUtils {
     public <T> Mono<ResponseEntity<T>> awaitableOk(@Nullable T body) {
         return Mono.just(ResponseEntity.ok(body));
-    }
-
-    public Mono<ResponseEntity<Void>> awaitableOk() {
-        return Mono.just(ResponseEntity.ok().build());
     }
 
     public <T> Mono<ResponseEntity<T>> awaitableCreated(@Nullable T body) {

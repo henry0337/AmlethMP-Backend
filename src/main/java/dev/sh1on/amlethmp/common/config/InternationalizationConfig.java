@@ -13,7 +13,7 @@ import java.util.Locale;
 /**
  * Lớp cấu hình chức năng
  * <a href="https://docs.spring.io/spring-boot/reference/features/internationalization.html">quốc tế hóa ngôn ngữ - Internationalization</a>
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @Configuration
 public class InternationalizationConfig {

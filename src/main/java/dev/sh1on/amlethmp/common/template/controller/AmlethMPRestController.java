@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  */
 @SuppressWarnings("unused")
 public interface AmlethMPRestController<OD, K, CD, UD> {
-    Mono<ResponseEntity<Mono<Page<OD>>>> findAll(int offset, int limit, Sort sort);
+    Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, Sort sort);
 
     Mono<ResponseEntity<Mono<OD>>> findByKey(K key);
 
@@ -27,5 +27,5 @@ public interface AmlethMPRestController<OD, K, CD, UD> {
 
     Mono<ResponseEntity<Mono<OD>>> update(K key, UD dto);
 
-    Mono<ResponseEntity<Void>> delete(K key);
+    Mono<ResponseEntity<Mono<Void>>> delete(K key);
 }

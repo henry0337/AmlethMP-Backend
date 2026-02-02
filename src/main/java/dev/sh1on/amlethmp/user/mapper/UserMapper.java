@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.user.mapper;
 
+import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
@@ -16,21 +17,26 @@ public interface UserMapper {
 
     UserDto toUserDto(UserCreateDto dto);
 
+    @Mapping(target = "role", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    UserDto toUserDto(RegisterRequest request);
+
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     UserDto toUserDto(UserUpdateDto userDto);
 
+    @Mapping(target = "version", ignore = true)
     @Mapping(target = "lastUpdatedBy", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
     @Mapping(target = "lastDisabledBy", ignore = true)
     @Mapping(target = "lastDisabledAt", ignore = true)
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "disabled", ignore = true)
-    @Mapping(target = "credentialsExpired", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
+    @Mapping(target = "isDisabled", ignore = true)
+    @Mapping(target = "isCredentialsExpired", ignore = true)
     @Mapping(target = "accountPassword", ignore = true)
     @Mapping(target = "accountName", ignore = true)
-    @Mapping(target = "accountLocked", ignore = true)
-    @Mapping(target = "accountExpired", ignore = true)
+    @Mapping(target = "isAccountLocked", ignore = true)
+    @Mapping(target = "isAccountExpired", ignore = true)
     User toUser(UserDto userDto);
 }
