@@ -3,8 +3,6 @@ package dev.sh1on.amlethmp.common.template.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 /**
  * <b>[Domain-only]</b> <br>
  * Lớp trừu tượng giúp đánh dấu một thực thể có khả năng tận dụng cơ chế <b>soft-delete</b> lên các dữ liệu bên trong chúng.

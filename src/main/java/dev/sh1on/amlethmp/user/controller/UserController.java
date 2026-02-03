@@ -1,5 +1,7 @@
 package dev.sh1on.amlethmp.user.controller;
 
+import dev.sh1on.amlethmp.common.shared.SortPredicate;
+import dev.sh1on.amlethmp.common.shared.constant.SortOrder;
 import dev.sh1on.amlethmp.common.template.controller.AmlethMPRestController;
 import dev.sh1on.amlethmp.common.utils.ControllerUtils;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
@@ -9,7 +11,6 @@ import dev.sh1on.amlethmp.user.service.UserService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -33,10 +34,15 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @GetMapping
     public Mono<ResponseEntity<Mono<Page<UserDto>>>> findAll(
-            @RequestParam(required = false) Integer offset,
-            @RequestParam(required = false) Integer limit,
-            @Nullable Sort sort) {
-        if (sort == null) sort = Sort.unsorted();
+            @RequestParam(defaultValue = "0") Integer offset,
+            @RequestParam(defaultValue = "10") Integer limit,
+            @RequestParam(defaultValue = "ASC") String order,
+            @RequestParam(defaultValue = "") String prop) {
+        Sort sort = Sort.unsorted();
+        if (!order.isBlank() && !prop.isBlank()) {
+            sort = Sort.by(Sort.Direction.fromString(order), prop);
+        }
+
         PageRequest pageable = PageRequest.of(offset, limit, sort);
         return controllerUtils.awaitableOk(service.findAll(pageable));
     }

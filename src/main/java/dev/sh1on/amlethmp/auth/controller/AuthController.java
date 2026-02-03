@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<User>> register(@RequestBody RegisterRequest user) {
+    public Mono<ResponseEntity<UserDto>> register(@RequestBody RegisterRequest user) {
         return service.register(user)
                 .map(saved -> ResponseEntity.status(HttpStatus.CREATED).body(saved))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));

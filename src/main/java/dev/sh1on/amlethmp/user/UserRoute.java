@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import static dev.sh1on.amlethmp.common.shared.route.AmlethMPRoute.*;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UserRoute {

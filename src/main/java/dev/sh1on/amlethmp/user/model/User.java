@@ -25,8 +25,7 @@ public class User extends SoftDeletableEntity implements UserDetails {
     @Id
     private String id;
 
-    @Column("username")
-    private String accountName;
+    private String email;
 
     private String displayName;
 
@@ -69,7 +68,7 @@ public class User extends SoftDeletableEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return accountName;
+        return email;
     }
 
     @Override

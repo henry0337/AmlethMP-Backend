@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
+import dev.sh1on.amlethmp.common.shared.constant.SortOrder;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
  */
 @SuppressWarnings("unused")
 public interface AmlethMPRestController<OD, K, CD, UD> {
-    Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, Sort sort);
+    Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, String order, String prop);
 
     Mono<ResponseEntity<Mono<OD>>> findByKey(K key);
 

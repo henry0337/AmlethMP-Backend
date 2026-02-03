@@ -8,13 +8,13 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.server.resource.authentication.JwtReactiveAuthenticationManager;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -37,7 +37,7 @@ public class SecurityConfiguration {
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
-                        .pathMatchers("/api/auth/v1/**").permitAll()
+                        .pathMatchers("/api/auth/v1/**", "/api/user/v1/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
@@ -50,7 +50,7 @@ public class SecurityConfiguration {
 
     @Bean
     AuthenticationWebFilter jwtAuthenticationWebFilter() {
-        var filter = new AuthenticationWebFilter(new JwtReactiveAuthenticationManager(jwtService, userDetailsService));
+        var filter = new AuthenticationWebFilter(reactiveAuthenticationManager());
         filter.setServerAuthenticationConverter(jwtAuthenticationConverter());
         return filter;
     }
@@ -79,5 +79,10 @@ public class SecurityConfiguration {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    ReactiveAuthenticationManager reactiveAuthenticationManager() {
+        return Mono::justOrEmpty;
     }
 }

@@ -17,12 +17,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @Service
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     @Override
     public Mono<Page<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
-                .switchIfEmpty(Mono.empty())
+                .switchIfEmpty(Flux.empty())
                 .map(mapper::toUserDto)
                 .collectList()
                 .zipWith(repository.count())
@@ -52,7 +54,8 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     public Mono<UserDto> save(UserCreateDto dto) {
         UserDto newUserDto = mapper.toUserDto(dto);
         User user = mapper.toUser(newUserDto);
-        user.setAccountPassword(encoder.encode(dto.getPassword()));
+        String encodedPassword = encoder.encode(user.getPassword());
+        user.setAccountPassword(Objects.requireNonNull(encodedPassword));
         repository.save(user);
         return Mono.just(newUserDto);
     }
@@ -63,10 +66,10 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new Exception("User not found")))
                 .map(user -> {
-                    if (dto.getEmail() != null) user.setAccountName(dto.getEmail());
+                    if (dto.getEmail() != null) user.setEmail(dto.getEmail());
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
                     if (dto.getRole() != null) user.setRole(dto.getRole().toString());
-                    if (dto.getPassword() != null) user.setAccountPassword(encoder.encode(dto.getPassword()));
+                    user.setAccountPassword(Objects.requireNonNull(encoder.encode(dto.getPassword())));
                     user.setAccountExpired(false);
                     user.setAccountLocked(false);
                     user.setCredentialsExpired(false);
