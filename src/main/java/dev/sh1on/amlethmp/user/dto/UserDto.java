@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.user.dto;
 
-/**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
- */
-public class UserDto {
-}
+import dev.sh1on.amlethmp.user.model.Role;
+
+import java.time.LocalDateTime;
+
+public record UserDto(String email, String displayName, Role role, LocalDateTime createdAt, String createdBy) { }

@@ -1,70 +1,78 @@
 package dev.sh1on.amlethmp.user.model;
 
 import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
+@Builder
+@EqualsAndHashCode(callSuper = false)
 @Table("users")
 public class User extends SoftDeletableEntity implements UserDetails {
-    @Id
-    private String id;
+    private String email;
 
-    @Column("username")
-    private String accountName;
+    @Column("display_name")
+    private String displayName;
 
     @Column("password")
     private String accountPassword;
 
     private String role;
 
+    @Column("is_account_expired")
     private boolean isAccountExpired;
 
+    @Column("is_account_locked")
     private boolean isAccountLocked;
 
+    @Column("is_credentials_expired")
     private boolean isCredentialsExpired;
 
+    @Column("created_at")
     @CreatedDate
-    private LocalDateTime createdAt;
+    @InsertOnlyProperty
+    private String createdAt;
 
+    @Column("created_by")
     @CreatedBy
+    @InsertOnlyProperty
     private String createdBy;
 
+    @Column("last_updated_at")
     @LastModifiedDate
-    private LocalDateTime updatedAt;
+    private String lastUpdatedAt;
 
+    @Column("last_updated_by")
     @LastModifiedBy
-    private String updatedBy;
+    private String lastUpdatedBy;
 
     @Override
-    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return accountPassword;
     }
 
     @Override
-    public @NonNull String getUsername() {
-        return accountName;
+    public String getUsername() {
+        return email;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.config;
+package dev.sh1on.amlethmp.common.config.development;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -13,7 +13,7 @@ import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
 /**
  * Lớp cấu hình cho <b>Swagger</b>.
  * @see <a href="https://swagger.io/">Swagger</a>
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @Profile("dev")
 @Configuration(proxyBeanMethods = false)

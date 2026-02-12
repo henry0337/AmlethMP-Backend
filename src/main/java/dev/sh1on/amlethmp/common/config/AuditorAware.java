@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import reactor.core.publisher.Mono;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @Configuration
 public class AuditorAware implements ReactiveAuditorAware<String> {
@@ -17,15 +17,13 @@ public class AuditorAware implements ReactiveAuditorAware<String> {
     public Mono<String> getCurrentAuditor() {
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {
             Authentication authentication = securityContext.getAuthentication();
-            if (authentication != null && authentication.isAuthenticated()) {
-                Object principal = authentication.getPrincipal();
-                if (principal instanceof UserDetails) {
-                    return ((UserDetails) principal).getUsername();
-                }
-                assert principal != null;
-                return principal.toString();
+            if (authentication == null || !authentication.isAuthenticated()) return "Unknown User";
+
+            Object principal = authentication.getPrincipal();
+            if (principal instanceof UserDetails auditor) {
+                return auditor.getUsername();
             }
-            return "anonymous";
+            return principal != null ? principal.toString() : "Unknown User";
         });
     }
 }

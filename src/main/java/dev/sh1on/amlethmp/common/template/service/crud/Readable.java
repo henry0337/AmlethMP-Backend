@@ -1,8 +1,8 @@
-package dev.sh1on.amlethmp.common.template.service;
+package dev.sh1on.amlethmp.common.template.service.crud;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 /**
  * <b>[Service-only, Standard CRUD]</b> <br>
@@ -17,9 +17,7 @@ public interface Readable<OD> {
     /**
      * Hiển thị toàn bộ dữ liệu trong cơ sở dữ liệu.
      * @param pageable Đối tượng dùng để <b>phân trang</b> dữ liệu
-     * @param sort Đối tượng dùng để <b>sắp xếp thứ tự</b> hiển thị dữ liệu
-     * @return Danh sách dữ liệu mặc định, hoặc đã được <b>phân trang</b>, hoặc đã được <b>sắp xếp</b>, hoặc đã bao gồm
-     * cả <b>phân trang + sắp xếp</b>.
+     * @return Danh sách dữ liệu đã được <b>phân trang</b>, hoặc đã bao gồm cả <b>phân trang + sắp xếp</b>.
      */
-    Flux<OD> findAll(Pageable pageable, Sort sort);
+    Mono<Page<OD>> findAll(Pageable pageable);
 }

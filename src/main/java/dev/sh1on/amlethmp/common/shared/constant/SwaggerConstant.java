@@ -1,8 +1,12 @@
 package dev.sh1on.amlethmp.common.shared.constant;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SwaggerConstant {
     public static final String OPENAPI_VERSION = "3.1.1";
     public static final String OPENAPI_TITLE = "Swagger API";

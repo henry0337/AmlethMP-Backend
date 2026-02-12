@@ -5,14 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20260127-create-users-table" author="Amleth">
+    <changeSet id="20260204-create-users-table" author="Patricia">
         <createTable tableName="users">
-            <column name="id" type="varchar(255)">
+            <column name="id" type="UUID" defaultValueComputed="uuidv7()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="username" type="varchar(255)">
+            <column name="email" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="display_name" type="varchar(255)" />
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -28,10 +29,7 @@
             <column name="is_credentials_expired" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_enabled" type="boolean" defaultValueBoolean="true">
-                <constraints nullable="false"/>
-            </column>
-            <column name="is_deleted" type="boolean" defaultValueBoolean="false">
+            <column name="is_disabled" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
             <column name="last_disabled_by" type="varchar(255)"/>
@@ -40,11 +38,10 @@
                 <constraints nullable="false"/>
             </column>
             <column name="created_by" type="varchar(255)"/>
-            <column name="last_modified_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="last_updated_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="last_modified_by" type="varchar(255)"/>
+            <column name="last_updated_by" type="varchar(255)"/>
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
