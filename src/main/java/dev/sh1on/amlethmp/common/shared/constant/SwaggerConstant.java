@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SwaggerConstant {

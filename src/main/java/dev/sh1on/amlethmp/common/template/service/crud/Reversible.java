@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.template.service;
+package dev.sh1on.amlethmp.common.template.service.crud;
 
 import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
 import reactor.core.publisher.Mono;

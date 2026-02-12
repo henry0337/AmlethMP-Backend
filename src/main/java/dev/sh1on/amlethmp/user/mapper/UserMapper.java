@@ -26,10 +26,8 @@ public interface UserMapper {
     @Mapping(target = "createdAt", ignore = true)
     UserDto toUserDto(UserUpdateDto userDto);
 
-    @Mapping(target = "version", ignore = true)
     @Mapping(target = "lastUpdatedBy", ignore = true)
     @Mapping(target = "lastUpdatedAt", ignore = true)
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "isCredentialsExpired", ignore = true)
     @Mapping(target = "accountPassword", ignore = true)
     @Mapping(target = "email", ignore = true)

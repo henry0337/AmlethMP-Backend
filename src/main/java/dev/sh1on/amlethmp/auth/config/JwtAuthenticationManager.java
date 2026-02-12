@@ -13,7 +13,9 @@ import reactor.core.publisher.Mono;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @deprecated
  */
+@Deprecated(forRemoval = true)
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class JwtAuthenticationManager implements ReactiveAuthenticationManager {

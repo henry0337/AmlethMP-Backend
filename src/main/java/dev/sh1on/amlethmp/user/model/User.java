@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -15,18 +16,16 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Data
 @Builder
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = false)
 @Table("users")
 public class User extends SoftDeletableEntity implements UserDetails {
-    @Id
-    private String id;
-
     private String email;
 
+    @Column("display_name")
     private String displayName;
 
     @Column("password")
@@ -34,27 +33,32 @@ public class User extends SoftDeletableEntity implements UserDetails {
 
     private String role;
 
+    @Column("is_account_expired")
     private boolean isAccountExpired;
 
+    @Column("is_account_locked")
     private boolean isAccountLocked;
 
+    @Column("is_credentials_expired")
     private boolean isCredentialsExpired;
 
+    @Column("created_at")
     @CreatedDate
+    @InsertOnlyProperty
     private String createdAt;
 
+    @Column("created_by")
     @CreatedBy
+    @InsertOnlyProperty
     private String createdBy;
 
+    @Column("last_updated_at")
     @LastModifiedDate
     private String lastUpdatedAt;
 
+    @Column("last_updated_by")
     @LastModifiedBy
     private String lastUpdatedBy;
-
-    @Version
-    @Transient
-    private Integer version;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

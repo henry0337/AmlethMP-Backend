@@ -2,9 +2,7 @@ package dev.sh1on.amlethmp.auth.config;
 
 import dev.sh1on.amlethmp.auth.service.JwtService;
 import dev.sh1on.amlethmp.common.annotation.EnableReactiveSecurityCustomization;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -21,14 +19,13 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import reactor.core.publisher.Mono;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @EnableReactiveSecurityCustomization
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class SecurityConfiguration {
-    JwtService jwtService;
-    ReactiveUserDetailsService userDetailsService;
+    private final JwtService jwtService;
+    private final ReactiveUserDetailsService userDetailsService;
 
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {

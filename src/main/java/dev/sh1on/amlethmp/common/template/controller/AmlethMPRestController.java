@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
-import dev.sh1on.amlethmp.common.shared.constant.SortOrder;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

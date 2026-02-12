@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>, <a href="https://github.com/henry0337">Amleth</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>, <a href="https://github.com/henry0337">Amleth</a>
  */
 @SpringBootApplication
 @EnableR2dbcAuditing

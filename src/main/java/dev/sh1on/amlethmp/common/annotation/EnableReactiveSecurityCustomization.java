@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import java.lang.annotation.*;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration
 @EnableWebFluxSecurity

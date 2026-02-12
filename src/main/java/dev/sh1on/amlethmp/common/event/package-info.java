@@ -1,4 +1,4 @@
-@NonNullApi
+@NullMarked
 package dev.sh1on.amlethmp.common.event;
 
-import org.springframework.lang.NonNullApi;
+import org.jspecify.annotations.NullMarked;

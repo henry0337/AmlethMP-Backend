@@ -1,5 +1,9 @@
 package dev.sh1on.amlethmp.common.template.service;
 
+import dev.sh1on.amlethmp.common.template.service.crud.Deletable;
+import dev.sh1on.amlethmp.common.template.service.crud.Insertable;
+import dev.sh1on.amlethmp.common.template.service.crud.Modifiable;
+import dev.sh1on.amlethmp.common.template.service.crud.ReadableWithKey;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.template.service;
+package dev.sh1on.amlethmp.common.template.service.crud;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

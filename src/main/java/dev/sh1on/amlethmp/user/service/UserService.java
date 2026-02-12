@@ -1,16 +1,16 @@
 package dev.sh1on.amlethmp.user.service;
 
+import dev.sh1on.amlethmp.common.exception.UserNotFoundException;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPRestService;
-import dev.sh1on.amlethmp.common.template.service.Reversible;
+import dev.sh1on.amlethmp.common.template.service.crud.Reversible;
+import dev.sh1on.amlethmp.common.utils.MessageUtils;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
-import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -24,17 +24,20 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * Lớp xử lý <b>logic nghiệp vụ</b> cho mô-đun {@link User}.
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService implements AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto>, Reversible<String> {
-    UserRepository repository;
-    UserMapper mapper;
-    PasswordEncoder encoder;
+    private final UserRepository repository;
+    private final UserMapper mapper;
+    private final PasswordEncoder encoder;
+    private final MessageUtils messageUtils;
 
     @Override
+    @Transactional(readOnly = true)
     public Mono<Page<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(Flux.empty())
@@ -45,26 +48,28 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Mono<UserDto> findByKey(String key) {
         return repository.findById(key).map(mapper::toUserDto);
     }
 
     @Override
-    @Transactional
     public Mono<UserDto> save(UserCreateDto dto) {
         UserDto newUserDto = mapper.toUserDto(dto);
         User user = mapper.toUser(newUserDto);
         String encodedPassword = encoder.encode(user.getPassword());
-        user.setAccountPassword(Objects.requireNonNull(encodedPassword));
+        user.setAccountPassword(
+                Objects.requireNonNull(
+                        encodedPassword,
+                        messageUtils.obtainLocalizedStaticMessage("message.password")));
         repository.save(user);
         return Mono.just(newUserDto);
     }
 
     @Override
-    @Transactional
     public Mono<UserDto> update(String key, UserUpdateDto dto) {
         return repository.findById(key)
-                .switchIfEmpty(Mono.error(new Exception("User not found")))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
                 .map(user -> {
                     if (dto.getEmail() != null) user.setEmail(dto.getEmail());
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
@@ -83,16 +88,14 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     }
 
     @Override
-    @Transactional
     public Mono<Void> deleteById(String key) {
         return repository.deleteById(key);
     }
 
     @Override
-    @Transactional
     public Mono<Void> disableById(String key) {
         return repository.findById(key)
-                .switchIfEmpty(Mono.error(new Exception("User not found")))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
                 .flatMap(user -> {
                     user.setDisabled(true);
                     user.setLastDisabledAt(LocalDateTime.now().toString());

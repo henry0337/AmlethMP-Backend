@@ -2,8 +2,6 @@ package dev.sh1on.amlethmp.common.config.production;
 
 import dev.sh1on.amlethmp.common.annotation.EnableReactiveWebCustomization;
 import org.springframework.context.annotation.Profile;
-import org.springframework.web.reactive.config.ApiVersionConfigurer;
-import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**

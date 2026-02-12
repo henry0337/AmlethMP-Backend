@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
 public class JwtService {

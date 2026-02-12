@@ -41,7 +41,7 @@ eclipse {
 }
 
 extra["sentryVersion"] = "8.27.0"
-extra["springCloudAzureVersion"] = "6.0.0"
+extra["springCloudAzureVersion"] = "7.0.0"
 
 dependencies {
 	// Spring Boot WebFlux (Reactive)
@@ -55,9 +55,6 @@ dependencies {
 
 	// Validation
 	implementation("org.springframework.boot:spring-boot-starter-validation")
-
-	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	// Spring Security
 	implementation("org.springframework.boot:spring-boot-starter-security")
@@ -74,9 +71,12 @@ dependencies {
 	implementation("org.apache.kafka:kafka-streams")
 	implementation("org.springframework.boot:spring-boot-starter-kafka")
 
-	// Microsoft Azure Storage (Tạm thời chưa hỗ trợ)
-//	implementation("com.azure.spring:spring-cloud-azure-starter")
-//	implementation("com.azure.spring:spring-cloud-azure-starter-storage")
+	// Microsoft Azure Storage
+	implementation("com.azure.spring:spring-cloud-azure-starter")
+	implementation("com.azure.spring:spring-cloud-azure-starter-storage")
+
+	annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	// Docker Compose
 //	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
@@ -144,7 +144,7 @@ dependencies {
 dependencyManagement {
 	imports {
 		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
-//		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
+		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
 	}
 }
 
