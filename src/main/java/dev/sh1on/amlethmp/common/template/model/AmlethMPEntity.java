@@ -9,6 +9,7 @@ public abstract class AmlethMPEntity {
     @Id
     protected String id;
 
+    // TODO: Erm, why you set the visibility of this property is "private"? It should be "protected", right?
     @Version
     private Integer version;
 }

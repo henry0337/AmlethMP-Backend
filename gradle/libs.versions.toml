@@ -1,0 +1,74 @@
+[versions]
+spring-boot = "4.0.2"
+spring-dependency-management = "1.1.7"
+spring-cloud-azure = "7.0.0"
+sentry = "8.27.0"
+
+springdoc = "2.8.13"
+hikari = "7.0.2"
+mapstruct = "1.6.3"
+therapi = "0.15.0"
+jjwt = "0.13.0"
+poi = "5.5.0"
+
+[plugins]
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dependency-management" }
+
+[libraries]
+spring-boot-starter-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux" }
+spring-boot-starter-liquibase = { module = "org.springframework.boot:spring-boot-starter-liquibase" }
+spring-boot-starter-mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation" }
+spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security" }
+spring-boot-starter-security-oauth2-resource-server = { module = "org.springframework.boot:spring-boot-starter-security-oauth2-resource-server" }
+spring-boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc" }
+spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
+spring-jdbc = { module = "org.springframework:spring-jdbc" }
+
+kafka-streams = { module = "org.apache.kafka:kafka-streams" }
+spring-boot-starter-kafka = { module = "org.springframework.boot:spring-boot-starter-kafka" }
+
+spring-cloud-azure-starter = { module = "com.azure.spring:spring-cloud-azure-starter" }
+spring-cloud-azure-starter-storage = { module = "com.azure.spring:spring-cloud-azure-starter-storage" }
+
+sentry-spring-boot-starter = { module = "io.sentry:sentry-spring-boot-4-starter" }
+
+springdoc-openapi-webflux-ui = { module = "org.springdoc:springdoc-openapi-starter-webflux-ui", version.ref = "springdoc" }
+
+hikari-cp = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+
+mapstruct = { module = "org.mapstruct:mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { module = "org.mapstruct:mapstruct-processor", version.ref = "mapstruct" }
+
+therapi-runtime-javadoc = { module = "com.github.therapi:therapi-runtime-javadoc", version.ref = "therapi" }
+therapi-runtime-javadoc-scribe = { module = "com.github.therapi:therapi-runtime-javadoc-scribe", version.ref = "therapi" }
+
+jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
+jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
+jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
+
+poi = { module = "org.apache.poi:poi", version.ref = "poi" }
+poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
+
+postgresql = { module = "org.postgresql:postgresql" }
+r2dbc-postgresql = { module = "org.postgresql:r2dbc-postgresql" }
+
+lombok = { module = "org.projectlombok:lombok" }
+
+spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
+
+# Test
+spring-boot-starter-test-webflux = { module = "org.springframework.boot:spring-boot-starter-webflux-test", version.ref = "spring-boot" }
+spring-boot-starter-test-security = { module = "org.springframework.boot:spring-boot-starter-security-test", version.ref = "spring-boot" }
+spring-boot-starter-test-validation = { module = "org.springframework.boot:spring-boot-starter-validation-test", version.ref = "spring-boot" }
+spring-boot-starter-test-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc-test", version.ref = "spring-boot" }
+spring-boot-starter-test-liquibase = { module = "org.springframework.boot:spring-boot-starter-liquibase-test", version.ref = "spring-boot" }
+spring-boot-starter-test-mail = { module = "org.springframework.boot:spring-boot-starter-mail-test", version.ref = "spring-boot" }
+spring-boot-starter-test-security-oauth2 = { module = "org.springframework.boot:spring-boot-starter-security-oauth2-resource-server-test", version.ref = "spring-boot" }
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[bundles]
+jjwt = ["jjwt-api", "jjwt-jackson", "jjwt-impl"]
+poi = ["poi", "poi-ooxml"]
