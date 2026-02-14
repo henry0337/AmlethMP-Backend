@@ -12,7 +12,7 @@ description = "Backend for Amleth's music player application"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
