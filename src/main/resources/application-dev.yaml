@@ -1,0 +1,19 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  r2dbc:
+    url: ${DB_HOST}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  liquibase:
+    url: ${LIQUIBASE_HOST}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+jwt:
+  secret: ${JWT_SECRET}

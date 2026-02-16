@@ -34,5 +34,6 @@ out/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/application-dev.yaml
-/src/main/resources/application-prod.yaml
+
+### Other ###
+.env

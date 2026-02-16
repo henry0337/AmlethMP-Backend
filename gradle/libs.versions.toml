@@ -1,8 +1,7 @@
 [versions]
 spring-boot = "4.0.2"
 spring-dependency-management = "1.1.7"
-spring-cloud-azure = "7.0.0"
-sentry = "8.27.0"
+dotenv = "5.1.0"
 
 springdoc = "2.8.13"
 hikari = "7.0.2"
@@ -25,6 +24,7 @@ spring-boot-starter-security-oauth2-resource-server = { module = "org.springfram
 spring-boot-starter-data-r2dbc = { module = "org.springframework.boot:spring-boot-starter-data-r2dbc" }
 spring-boot-docker-compose = { module = "org.springframework.boot:spring-boot-docker-compose" }
 spring-jdbc = { module = "org.springframework:spring-jdbc" }
+spring-dotenv = { module = "me.paulschwarz:spring-dotenv" , version.ref = "dotenv" }
 
 kafka-streams = { module = "org.apache.kafka:kafka-streams" }
 spring-boot-starter-kafka = { module = "org.springframework.boot:spring-boot-starter-kafka" }
