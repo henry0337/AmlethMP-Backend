@@ -22,10 +22,6 @@ configurations {
 	}
 }
 
-repositories {
-	mavenCentral()
-}
-
 idea {
 	module {
 		isDownloadJavadoc = false
@@ -63,6 +59,7 @@ dependencies {
 	implementation(libs.therapi.runtime.javadoc)
 	implementation(libs.bundles.jjwt)
 	implementation(libs.bundles.poi)
+	implementation(libs.spring.dotenv)
 
 	annotationProcessor(libs.mapstruct.processor)
 	annotationProcessor(libs.therapi.runtime.javadoc.scribe)
@@ -98,6 +95,16 @@ dependencyManagement {
 tasks {
 	withType<Test> {
 		useJUnitPlatform()
+	}
+
+	withType<JavaCompile> {
+		options.compilerArgs.addAll(listOf(
+			"-Amapstruct.suppressGeneratorTimestamp=true",
+			"-Amapstruct.suppressGeneratorVersionInfoComment=true",
+			"-Amapstruct.verbose=true",
+			"-Amapstruct.defaultComponentModel=spring",
+			"-Amapstruct.defaultInjectionStrategy=constructor"
+		))
 	}
 
 	bootBuildImage {
