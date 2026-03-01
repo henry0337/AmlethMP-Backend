@@ -5,33 +5,24 @@ import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
 import dev.sh1on.amlethmp.user.model.User;
-import org.mapstruct.InjectionStrategy;
+import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingConstants;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+/**
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ */
+@Mapper
+@Javadoc(
+        value = "Giao diện cung cấp các phương thức mapping cho mô-đun {@link User}.",
+        authors = {"<a href=\"https://github.com/AdorableDandelion25\">Patricia</a>", "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
 public interface UserMapper {
-    @Mapping(target = "email", ignore = true)
     UserDto toUserDto(User user);
 
     UserDto toUserDto(UserCreateDto dto);
 
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     UserDto toUserDto(RegisterRequest request);
 
-    @Mapping(target = "createdBy", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
     UserDto toUserDto(UserUpdateDto userDto);
 
-    @Mapping(target = "lastUpdatedBy", ignore = true)
-    @Mapping(target = "lastUpdatedAt", ignore = true)
-    @Mapping(target = "isCredentialsExpired", ignore = true)
-    @Mapping(target = "accountPassword", ignore = true)
-    @Mapping(target = "email", ignore = true)
-    @Mapping(target = "isAccountLocked", ignore = true)
-    @Mapping(target = "isAccountExpired", ignore = true)
     User toUser(UserDto userDto);
 }

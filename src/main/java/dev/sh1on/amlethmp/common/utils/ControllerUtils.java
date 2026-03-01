@@ -9,11 +9,11 @@ import reactor.core.publisher.Mono;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ControllerUtils {
-    public static <T> Mono<ResponseEntity<T>> awaitableOk(@Nullable T body) {
+    public static <T> Mono<ResponseEntity<T>> awaitOk(@Nullable T body) {
         return Mono.just(ResponseEntity.ok(body));
     }
 
-    public static <T> Mono<ResponseEntity<T>> awaitableCreated(@Nullable T body) {
+    public static <T> Mono<ResponseEntity<T>> awaitCreated(@Nullable T body) {
         return Mono.just(new ResponseEntity<>(body, HttpStatus.CREATED));
     }
 }

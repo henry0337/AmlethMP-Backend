@@ -46,13 +46,13 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
             @RequestParam(defaultValue = "10") Integer limit,
             @RequestParam(defaultValue = "ASC") String order,
             @RequestParam(defaultValue = "") String prop) {
-        var sort = Sort.unsorted();
+        Sort sort = Sort.unsorted();
         if (!order.isBlank() && !prop.isBlank()) {
             sort = Sort.by(Sort.Direction.fromString(order), prop);
         }
 
         var pageRequest = PageRequest.of(offset, limit, sort);
-        return ControllerUtils.awaitableOk(service.findAll(pageRequest));
+        return ControllerUtils.awaitOk(service.findAll(pageRequest));
     }
 
     /**
@@ -63,7 +63,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Mono<UserDto>>> findByKey(@PathVariable String id) {
-        return ControllerUtils.awaitableOk(service.findByKey(id));
+        return ControllerUtils.awaitOk(service.findByKey(id));
     }
 
     /**
@@ -74,7 +74,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @PostMapping
     public Mono<ResponseEntity<Mono<UserDto>>> create(@RequestBody UserCreateDto dto) {
-        return ControllerUtils.awaitableCreated(service.save(dto));
+        return ControllerUtils.awaitCreated(service.save(dto));
     }
 
     /**
@@ -86,7 +86,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Mono<UserDto>>> update(@PathVariable String id, @RequestBody UserUpdateDto dto) {
-        return ControllerUtils.awaitableOk(service.update(id, dto));
+        return ControllerUtils.awaitOk(service.update(id, dto));
     }
 
     /**
@@ -97,6 +97,6 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Mono<Void>>> delete(@PathVariable String id) {
-        return ControllerUtils.awaitableOk(service.deleteById(id));
+        return ControllerUtils.awaitOk(service.deleteById(id));
     }
 }

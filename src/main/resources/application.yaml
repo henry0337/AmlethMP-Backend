@@ -1,5 +1,12 @@
 spring:
   application:
     name: AmlethMP
+  cache:
+    type: redis
   profiles:
     active: dev
+resilience4j:
+  circuitbreaker:
+    circuitBreakerAspectOrder: 1
+  retry:
+    retryAspectOrder: 2

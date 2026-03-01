@@ -34,7 +34,6 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
-    private final MessageUtils messageUtils;
 
     @Override
     @Transactional(readOnly = true)
@@ -58,10 +57,7 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
         UserDto newUserDto = mapper.toUserDto(dto);
         User user = mapper.toUser(newUserDto);
         String encodedPassword = encoder.encode(user.getPassword());
-        user.setAccountPassword(
-                Objects.requireNonNull(
-                        encodedPassword,
-                        messageUtils.obtainLocalizedStaticMessage("message.password")));
+        user.setAccountPassword(Objects.requireNonNull(encodedPassword));
         repository.save(user);
         return Mono.just(newUserDto);
     }
@@ -75,9 +71,9 @@ public class UserService implements AmlethMPRestService<UserDto, String, UserCre
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
                     if (dto.getRole() != null) user.setRole(dto.getRole().toString());
                     user.setAccountPassword(Objects.requireNonNull(encoder.encode(dto.getPassword())));
-                    user.setAccountExpired(false);
-                    user.setAccountLocked(false);
-                    user.setCredentialsExpired(false);
+                    user.setExpired(false);
+                    user.setLocked(false);
+                    user.setCredExpired(false);
                     user.setLastUpdatedAt(dto.getUpdatedAt().toString());
                     user.setLastUpdatedBy(dto.getUpdatedBy());
 

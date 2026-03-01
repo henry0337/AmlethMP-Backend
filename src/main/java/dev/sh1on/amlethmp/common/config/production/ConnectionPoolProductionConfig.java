@@ -9,9 +9,6 @@ import org.springframework.context.annotation.Profile;
 
 import javax.sql.DataSource;
 
-/**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
- */
 @Profile("prod")
 @Configuration(proxyBeanMethods = false)
 public class ConnectionPoolProductionConfig {

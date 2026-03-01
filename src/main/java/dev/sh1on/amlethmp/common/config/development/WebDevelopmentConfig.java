@@ -6,7 +6,7 @@ import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Profile("dev")
 @EnableReactiveWebCustomization

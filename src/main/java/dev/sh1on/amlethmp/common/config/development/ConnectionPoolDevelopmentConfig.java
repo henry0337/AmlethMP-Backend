@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Profile("dev")
 @Configuration(proxyBeanMethods = false)

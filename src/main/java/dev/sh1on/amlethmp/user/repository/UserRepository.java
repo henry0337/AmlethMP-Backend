@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.user.repository;
 
+import dev.sh1on.amlethmp.common.template.repository.AmlethMPRepository;
 import dev.sh1on.amlethmp.user.model.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
@@ -9,7 +10,7 @@ import reactor.core.publisher.Mono;
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
-public interface UserRepository extends R2dbcRepository<User, String> {
+public interface UserRepository extends AmlethMPRepository<User, String> {
     Flux<User> findAllBy(Pageable pageable);
     Mono<User> findByEmail(String email);
 }

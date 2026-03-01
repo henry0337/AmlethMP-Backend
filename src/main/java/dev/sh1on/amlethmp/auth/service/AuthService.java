@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.sh1on.amlethmp.auth.dto.LoginRequest;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
@@ -11,6 +10,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.util.Objects;
@@ -20,12 +20,14 @@ import java.util.Objects;
  */
 @Service
 @RequiredArgsConstructor
-public class AuthService implements JwtAuthenticationService<RegisterRequest, UserDto, LoginRequest, String> {
+public class AuthService implements JwtAuthenticationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
+    @Override
+    @Transactional(readOnly = true)
     public Mono<String> login(String email, String password) {
         return userRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found")))
@@ -34,6 +36,8 @@ public class AuthService implements JwtAuthenticationService<RegisterRequest, Us
                 .map(jwtService::generateToken);
     }
 
+    @Override
+    @Transactional
     public Mono<UserDto> register(RegisterRequest dto) {
         UserDto responseData = userMapper.toUserDto(dto);
         User user = userMapper.toUser(responseData);

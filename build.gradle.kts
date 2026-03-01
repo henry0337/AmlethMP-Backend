@@ -40,6 +40,8 @@ extra["sentryVersion"] = "8.27.0"
 extra["springCloudAzureVersion"] = "7.0.0"
 
 dependencies {
+	implementation(libs.spring.boot.starter.actuator)
+	implementation(libs.spring.boot.starter.aop)
 	implementation(libs.spring.boot.starter.webflux)
 	implementation(libs.spring.boot.starter.liquibase)
 	implementation(libs.spring.boot.starter.mail)
@@ -47,6 +49,8 @@ dependencies {
 	implementation(libs.spring.boot.starter.security)
 	implementation(libs.spring.boot.starter.security.oauth2.resource.server)
 	implementation(libs.spring.boot.starter.data.r2dbc)
+	implementation(libs.spring.boot.starter.data.redis)
+	implementation(libs.spring.boot.starter.webclient)
 	implementation(libs.spring.jdbc)
 	implementation(libs.kafka.streams)
 	implementation(libs.spring.boot.starter.kafka)
@@ -56,14 +60,18 @@ dependencies {
 	implementation(libs.springdoc.openapi.webflux.ui)
 	implementation(libs.hikari.cp)
 	implementation(libs.mapstruct)
+	implementation(libs.mapstruct.spring.annotations)
 	implementation(libs.therapi.runtime.javadoc)
 	implementation(libs.bundles.jjwt)
 	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
+	implementation(libs.resilience4j.spring.boot4)
 
 	annotationProcessor(libs.mapstruct.processor)
 	annotationProcessor(libs.therapi.runtime.javadoc.scribe)
 	annotationProcessor(libs.lombok)
+	annotationProcessor(libs.lombok.mapstruct.binding)
+	annotationProcessor(libs.mapstruct.spring.extensions)
 	annotationProcessor(libs.spring.boot.configuration.processor)
 
 	runtimeOnly(libs.postgresql)
@@ -81,6 +89,7 @@ dependencies {
 	testImplementation(libs.spring.boot.starter.test.liquibase)
 	testImplementation(libs.spring.boot.starter.test.mail)
 	testImplementation(libs.spring.boot.starter.test.security.oauth2)
+	testImplementation(libs.spring.boot.starter.data.redis.reactive.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 	testAnnotationProcessor(libs.mapstruct.processor)
 }
@@ -103,7 +112,8 @@ tasks {
 			"-Amapstruct.suppressGeneratorVersionInfoComment=true",
 			"-Amapstruct.verbose=true",
 			"-Amapstruct.defaultComponentModel=spring",
-			"-Amapstruct.defaultInjectionStrategy=constructor"
+			"-Amapstruct.defaultInjectionStrategy=constructor",
+			"-parameters"
 		))
 	}
 

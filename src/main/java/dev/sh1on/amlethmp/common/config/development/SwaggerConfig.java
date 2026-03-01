@@ -13,12 +13,11 @@ import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
 /**
  * Lớp cấu hình cho <b>Swagger</b>.
  * @see <a href="https://swagger.io/">Swagger</a>
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Profile("dev")
 @Configuration(proxyBeanMethods = false)
 public class SwaggerConfig {
-
     @Bean
     OpenAPI swagger() {
         var instance = new OpenAPI();
@@ -38,5 +37,4 @@ public class SwaggerConfig {
 
         return instance;
     }
-
 }

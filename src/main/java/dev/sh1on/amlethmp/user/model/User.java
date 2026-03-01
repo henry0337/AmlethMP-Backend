@@ -1,12 +1,8 @@
 package dev.sh1on.amlethmp.user.model;
 
 import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.data.annotation.*;
+import lombok.*;
 import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +16,8 @@ import java.util.List;
  */
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Table("users")
 public class User extends SoftDeletableEntity implements UserDetails {
@@ -34,31 +32,13 @@ public class User extends SoftDeletableEntity implements UserDetails {
     private String role;
 
     @Column("is_account_expired")
-    private boolean isAccountExpired;
+    private boolean expired;
 
     @Column("is_account_locked")
-    private boolean isAccountLocked;
+    private boolean locked;
 
     @Column("is_credentials_expired")
-    private boolean isCredentialsExpired;
-
-    @Column("created_at")
-    @CreatedDate
-    @InsertOnlyProperty
-    private String createdAt;
-
-    @Column("created_by")
-    @CreatedBy
-    @InsertOnlyProperty
-    private String createdBy;
-
-    @Column("last_updated_at")
-    @LastModifiedDate
-    private String lastUpdatedAt;
-
-    @Column("last_updated_by")
-    @LastModifiedBy
-    private String lastUpdatedBy;
+    private boolean credExpired;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -77,17 +57,17 @@ public class User extends SoftDeletableEntity implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return !isAccountExpired;
+        return !expired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return !isAccountLocked;
+        return !locked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !isCredentialsExpired;
+        return !credExpired;
     }
 
     @Override

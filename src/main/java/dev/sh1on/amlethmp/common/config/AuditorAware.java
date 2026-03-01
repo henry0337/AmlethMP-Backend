@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import reactor.core.publisher.Mono;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration
 public class AuditorAware implements ReactiveAuditorAware<String> {

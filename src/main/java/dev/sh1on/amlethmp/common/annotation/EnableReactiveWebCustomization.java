@@ -16,7 +16,7 @@ import java.lang.annotation.*;
  * @see Configuration
  * @see EnableWebFlux
  * @see <a href="https://docs.spring.io/spring-framework/reference/web/webflux/config.html">WebFlux Config</a>
- * @author <a href="https://github.com/AdorableDandelion25">Sh1on</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration
 @EnableWebFlux
