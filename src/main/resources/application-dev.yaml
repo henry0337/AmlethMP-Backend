@@ -1,0 +1,38 @@
+spring:
+  devtools:
+    livereload:
+      enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+      database: 0
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_ACCOUNT}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  r2dbc:
+    url: ${DB_HOST}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  liquibase:
+    url: ${LIQUIBASE_HOST}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    change-log: classpath:/db/changelog/db.changelog-master.xml
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
+jwt:
+  secret: ${JWT_SECRET}
+server:
+  shutdown: immediate
