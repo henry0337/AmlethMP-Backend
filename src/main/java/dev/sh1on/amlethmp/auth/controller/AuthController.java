@@ -4,6 +4,7 @@ import dev.sh1on.amlethmp.auth.AuthRoute;
 import dev.sh1on.amlethmp.auth.dto.LoginRequest;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.auth.service.AuthService;
+import dev.sh1on.amlethmp.common.template.controller.AmlethMPController;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "Auth", description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
-public class AuthController {
+public class AuthController implements AmlethMPController {
     private final AuthService service;
 
     /**

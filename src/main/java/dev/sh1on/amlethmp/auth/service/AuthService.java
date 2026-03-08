@@ -19,6 +19,7 @@ import java.util.Objects;
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthService implements JwtAuthenticationService {
     private final UserRepository userRepository;
@@ -37,7 +38,6 @@ public class AuthService implements JwtAuthenticationService {
     }
 
     @Override
-    @Transactional
     public Mono<UserDto> register(RegisterRequest dto) {
         UserDto responseData = userMapper.toUserDto(dto);
         User user = userMapper.toUser(responseData);

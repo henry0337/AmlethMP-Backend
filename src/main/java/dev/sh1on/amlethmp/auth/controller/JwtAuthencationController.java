@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.auth.controller;
 
-import dev.sh1on.amlethmp.common.template.controller.AmlethMPAuthController;
 import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Mono;
 
@@ -12,7 +11,7 @@ import reactor.core.publisher.Mono;
  * @param <I2>
  * @param <O2>
  */
-public interface JwtAuthencationController<I1, O1, I2, O2> extends AmlethMPAuthController {
+public interface JwtAuthencationController<I1, O1, I2, O2> {
     Mono<ResponseEntity<O2>> login(I2 request);
     Mono<ResponseEntity<O1>> register(I1 request);
 }

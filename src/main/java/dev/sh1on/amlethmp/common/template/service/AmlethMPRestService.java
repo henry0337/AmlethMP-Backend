@@ -4,6 +4,7 @@ import dev.sh1on.amlethmp.common.template.service.crud.Deletable;
 import dev.sh1on.amlethmp.common.template.service.crud.Insertable;
 import dev.sh1on.amlethmp.common.template.service.crud.Modifiable;
 import dev.sh1on.amlethmp.common.template.service.crud.ReadableWithKey;
+import org.springframework.stereotype.Indexed;
 import org.springframework.stereotype.Service;
 
 /**
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
  * @param <CD> DTO riêng biệt dùng để thêm mới dữ liệu
  * @param <UD> DTO riêng biệt dùng để cập nhật dữ liệu
  */
+@Indexed
 public interface AmlethMPRestService<OD, K, CD, UD> extends
         ReadableWithKey<OD, K>,
         Insertable<OD, CD>,

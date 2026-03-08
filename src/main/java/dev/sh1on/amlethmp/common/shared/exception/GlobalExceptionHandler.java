@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.exception;
+package dev.sh1on.amlethmp.common.shared.exception;
 
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 

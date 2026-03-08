@@ -4,6 +4,7 @@ plugins {
 	eclipse
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.dependency.management)
+	id("org.sonarqube") version "7.2.2.6593"
 }
 
 group = "dev.sh1on"
@@ -13,6 +14,13 @@ description = "Backend for Amleth's music player application"
 java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(21)
+	}
+}
+
+sonar {
+	properties {
+		property("sonar.projectKey", "AmlethMP")
+		property("sonar.projectName", "AmlethMP")
 	}
 }
 

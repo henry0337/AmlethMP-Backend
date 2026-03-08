@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.utils;
+package dev.sh1on.amlethmp.common.shared.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,7 @@ public final class ReactorUtils {
      */
     @Nullable
     @Deprecated(since = "0.0.1-SNAPSHOT")
-    public static <T> T markAsSynchronous(Mono<T> publisher) {
+    public static <T> T unwrapMono(Mono<T> publisher) {
         return publisher.block();
     }
 
@@ -40,7 +40,7 @@ public final class ReactorUtils {
      */
     @Nullable
     @Deprecated(since = "0.0.1-SNAPSHOT")
-    public static <T> List<T> markAsSynchronous(Flux<T> publisher) {
+    public static <T> List<T> unwrapFluxToList(Flux<T> publisher) {
         return publisher.collectList().block();
     }
 }

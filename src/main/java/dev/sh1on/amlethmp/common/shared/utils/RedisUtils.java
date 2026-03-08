@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.utils;
+package dev.sh1on.amlethmp.common.shared.utils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,7 +1,9 @@
 package dev.sh1on.amlethmp.common.template.repository;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.repository.R2dbcRepository;
 import org.springframework.data.repository.NoRepositoryBean;
+import reactor.core.publisher.Flux;
 
 /**
  * Repository đặc thù chứa các phương thức truy vấn có thể được sử dụng nhiều trong dự án.
@@ -10,4 +12,6 @@ import org.springframework.data.repository.NoRepositoryBean;
  * @author <a href="https://github.com/henry0337">Amleth</a>
  */
 @NoRepositoryBean
-public interface AmlethMPRepository<T, ID> extends R2dbcRepository<T, ID> { }
+public interface AmlethMPRepository<T, ID> extends R2dbcRepository<T, ID> {
+    Flux<T> findAllBy(Pageable pageable);
+}

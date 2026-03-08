@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.utils.MessageUtils;
-import dev.sh1on.amlethmp.common.utils.ReactorUtils;
+import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
+import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -10,10 +10,10 @@ import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.GenericApplicationListener;
 import org.springframework.core.ResolvableType;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 import java.io.IOException;
 
@@ -21,6 +21,7 @@ import java.io.IOException;
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Component
+@Order(3)
 @Profile("dev")
 @RequiredArgsConstructor
 @Slf4j
@@ -28,17 +29,17 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
     private final Environment env;
     private final MessageUtils messageUtils;
 
+    private final String port = env.getProperty("server.port", "8080");
+    private final String url = "http://localhost:" + port + "/swagger-ui.html";
+
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         // Đảm bảo event này chỉ được xử lý sau khi ứng dụng được khởi động đúng cách.
         if (!(event instanceof ApplicationReadyEvent)) return;
 
-        String port = env.getProperty("server.port", "8080");
-        String url = "http://localhost:" + port + "/swagger-ui.html";
-
         // Ghi chú: Nếu bạn (người đọc mã) mà thấy phương thức markAsSynchronous bị đánh dấu là deprecated, yên tâm vì nó
         // là chủ đích của tôi thôi, đọc Javadoc của phương thức là sẽ rõ
-        ReactorUtils.markAsSynchronous(Mono.fromRunnable(() -> {
+        ReactorUtils.unwrapMono(Mono.fromRunnable(() -> {
             ProcessBuilder processBuilder = null;
 
             if (SystemUtils.IS_OS_WINDOWS) {
@@ -54,7 +55,7 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
             } catch (IOException e) {
                 throw new UnsupportedOperationException(e);
             }
-        }).subscribeOn(Schedulers.boundedElastic()));
+        }));
     }
 
     @Override

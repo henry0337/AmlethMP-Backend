@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.utils;
+package dev.sh1on.amlethmp.common.shared.utils;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -20,7 +20,7 @@ public final class ClassUtils {
      * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
      */
     public static List<String> extractAllNonStaticPropertiesNameFrom(Class<?> clazz) {
-        var names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         while (clazz != null && clazz != Object.class) {
             Arrays.stream(clazz.getDeclaredFields())
                     .filter(f -> !Modifier.isStatic(f.getModifiers()))

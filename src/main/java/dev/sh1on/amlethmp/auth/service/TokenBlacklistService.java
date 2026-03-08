@@ -1,12 +1,9 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.sh1on.amlethmp.common.utils.RedisUtils;
+import dev.sh1on.amlethmp.common.shared.utils.RedisUtils;
 import lombok.RequiredArgsConstructor;
-//import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.time.Duration;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
@@ -27,7 +24,7 @@ public class TokenBlacklistService {
      */
     public Mono<Boolean> isBlacklisted(String token) {
 //        return redisTemplate.hasKey(token);
-        return Mono.just(true);
+        return Mono.just(false);
     }
 
 }

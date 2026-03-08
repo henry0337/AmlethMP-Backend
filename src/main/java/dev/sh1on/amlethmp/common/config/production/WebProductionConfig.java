@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.config.production;
 
-import dev.sh1on.amlethmp.common.annotation.EnableReactiveWebCustomization;
+import dev.sh1on.amlethmp.common.shared.annotation.EnableReactiveWebCustomization;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 

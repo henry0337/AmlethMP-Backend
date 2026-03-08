@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.config.development;
 
-import dev.sh1on.amlethmp.common.annotation.EnableReactiveWebCustomization;
+import dev.sh1on.amlethmp.common.shared.annotation.EnableReactiveWebCustomization;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
@@ -8,8 +8,8 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
-@Profile("dev")
 @EnableReactiveWebCustomization
+@Profile("dev")
 public class WebDevelopmentConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {

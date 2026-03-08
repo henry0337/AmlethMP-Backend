@@ -2,6 +2,7 @@ package dev.sh1on.amlethmp.common.template.controller;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Indexed;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +17,7 @@ import reactor.core.publisher.Mono;
  * @param <UD> DTO riêng biệt dùng để cập nhật dữ liệu
  * @author <a href="https://github.com/henry0337">Amleth</a>
  */
+@Indexed
 @SuppressWarnings("unused")
 public interface AmlethMPRestController<OD, K, CD, UD> {
     Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, String order, String prop);

@@ -1,11 +1,16 @@
 package dev.sh1on.amlethmp.common.template.model;
 
-import lombok.Data;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 public abstract class AmlethMPEntity {
     @Id
     protected String id;

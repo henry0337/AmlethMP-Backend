@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.auth.config;
 
 import dev.sh1on.amlethmp.auth.service.JwtService;
-import dev.sh1on.amlethmp.common.annotation.EnableReactiveSecurityCustomization;
+import dev.sh1on.amlethmp.common.shared.annotation.EnableReactiveSecurityCustomization;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
@@ -61,9 +61,7 @@ public class SecurityConfiguration {
     ServerAuthenticationConverter jwtAuthenticationConverter() {
         return exchange -> {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                return Mono.empty();
-            }
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) return Mono.empty();
 
             var token = authHeader.substring(7);
             String username = jwtService.extractUsername(token);

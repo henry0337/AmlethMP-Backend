@@ -1,9 +1,8 @@
 package dev.sh1on.amlethmp.user.service;
 
-import dev.sh1on.amlethmp.common.exception.UserNotFoundException;
+import dev.sh1on.amlethmp.common.shared.exception.UserNotFoundException;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPRestService;
 import dev.sh1on.amlethmp.common.template.service.crud.Reversible;
-import dev.sh1on.amlethmp.common.utils.MessageUtils;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;

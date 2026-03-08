@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
-import dev.sh1on.amlethmp.common.annotation.Marker;
+import dev.sh1on.amlethmp.common.shared.annotation.Marker;
 
 /**
  * <b>[Internal, Marker Interface, Controller-only]</b> <br>
@@ -16,4 +16,4 @@ import dev.sh1on.amlethmp.common.annotation.Marker;
  * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
  */
 @Marker
-public interface AmlethMPAuthController { }
+public interface AmlethMPController { }

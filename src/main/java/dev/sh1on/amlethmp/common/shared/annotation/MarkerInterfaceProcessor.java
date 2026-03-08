@@ -1,6 +1,6 @@
-package dev.sh1on.amlethmp.common.annotation;
+package dev.sh1on.amlethmp.common.shared.annotation;
 
-import dev.sh1on.amlethmp.common.utils.MessageUtils;
+import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.processing.AbstractProcessor;
