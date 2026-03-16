@@ -10,3 +10,5 @@ resilience4j:
     circuitBreakerAspectOrder: 1
   retry:
     retryAspectOrder: 2
+jwt:
+  secret: ${JWT_SECRET}

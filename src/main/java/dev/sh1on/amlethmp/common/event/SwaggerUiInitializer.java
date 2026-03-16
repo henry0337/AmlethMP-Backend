@@ -2,7 +2,6 @@ package dev.sh1on.amlethmp.common.event;
 
 import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
 import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -23,14 +22,18 @@ import java.io.IOException;
 @Component
 @Order(3)
 @Profile("dev")
-@RequiredArgsConstructor
 @Slf4j
 public class SwaggerUiInitializer implements GenericApplicationListener {
-    private final Environment env;
     private final MessageUtils messageUtils;
+    private final ReactorUtils reactorUtils;
+    private final String url;
 
-    private final String port = env.getProperty("server.port", "8080");
-    private final String url = "http://localhost:" + port + "/swagger-ui.html";
+    public SwaggerUiInitializer(Environment env, MessageUtils messageUtils, ReactorUtils reactorUtils) {
+        this.messageUtils = messageUtils;
+        this.reactorUtils = reactorUtils;
+        String port = env.getProperty("server.port", "8080");
+        this.url = "http://localhost:" + port + "/swagger-ui.html";
+    }
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
@@ -39,7 +42,7 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
 
         // Ghi chú: Nếu bạn (người đọc mã) mà thấy phương thức markAsSynchronous bị đánh dấu là deprecated, yên tâm vì nó
         // là chủ đích của tôi thôi, đọc Javadoc của phương thức là sẽ rõ
-        ReactorUtils.unwrapMono(Mono.fromRunnable(() -> {
+        reactorUtils.unwrapMono(Mono.fromRunnable(() -> {
             ProcessBuilder processBuilder = null;
 
             if (SystemUtils.IS_OS_WINDOWS) {

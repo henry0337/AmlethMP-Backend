@@ -23,14 +23,15 @@ import reactor.core.publisher.Mono;
  */
 @RestController
 @RequestMapping(AuthRoute.BASE_AUTH_PATH)
-@RequiredArgsConstructor
 @Validated
+@RequiredArgsConstructor
 @Tag(name = "Auth", description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
-public class AuthController implements AmlethMPController {
+public class AuthController extends AmlethMPController {
     private final AuthService service;
 
     /**
      * Phương thức đại diện request <b>POST</b> dùng để xác thực thông tin đăng nhập của người dùng.
+     *
      * @param request Đối tượng {@link LoginRequest} chứa email và mật khẩu.
      * @return {@link ResponseEntity} chứa token JWT nếu đăng nhập thành công, hoặc {@code 401 Unauthorized} nếu thất bại.
      */
@@ -43,9 +44,10 @@ public class AuthController implements AmlethMPController {
 
     /**
      * Phương thức đại diện request <b>POST</b> dùng để đăng ký tài khoản người dùng mới.
+     *
      * @param user Đối tượng {@link RegisterRequest} chứa thông tin cần thiết để tạo người dùng.
      * @return {@link ResponseEntity} chứa {@link UserDto} của người dùng vừa được tạo (status 201 Created) nếu thành công,
-     *         hoặc 400 Bad Request nếu thất bại.
+     * hoặc 400 Bad Request nếu thất bại.
      */
     @PostMapping("/register")
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {

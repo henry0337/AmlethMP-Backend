@@ -8,11 +8,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import reactor.core.publisher.Mono;
 
 /**
+ * <p>Lớp cung cấp thông tin về người dùng hiện tại (Auditor) cho hệ thống.</p>
+ * <p>Được sử dụng trong việc tự động lưu trữ người tạo hoặc người cập nhật thực thể.</p>
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration
 public class AuditorAware implements ReactiveAuditorAware<String> {
 
+    /**
+     * <p>Lấy tên người dùng hiện tại từ <b>SecurityContext</b>.</p>
+     *
+     * @return <b>Mono</b> chứa tên người dùng hiện tại hoặc "Unknown User" nếu không xác thực.
+     */
     @Override
     public Mono<String> getCurrentAuditor() {
         return ReactiveSecurityContextHolder.getContext().map(securityContext -> {

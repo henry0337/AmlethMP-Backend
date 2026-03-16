@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.auth.service;
 
 import dev.sh1on.amlethmp.common.shared.utils.RedisUtils;
+import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -10,7 +11,7 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-public class TokenBlacklistService {
+public class TokenBlacklistService extends AmlethMPService {
     private final RedisUtils redisUtils;
 
     public Mono<Boolean> blacklistToken(String token) {

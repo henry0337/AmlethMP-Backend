@@ -4,8 +4,8 @@ spring:
       enabled: true
   data:
     redis:
-      host: ${REDIS_HOST}
-      port: ${REDIS_PORT}
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
       password: ${REDIS_PASSWORD}
       database: 0
   mail:
@@ -19,10 +19,13 @@ spring:
           auth: true
           starttls:
             enable: true
+  output:
+    ansi:
+      enabled: always
   r2dbc:
-    url: ${DB_HOST}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${DB_HOST:8080}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
   liquibase:
     url: ${LIQUIBASE_HOST}
     user: ${DB_USERNAME}
@@ -32,7 +35,5 @@ spring:
     multipart:
       max-file-size: 20MB
       max-request-size: 20MB
-jwt:
-  secret: ${JWT_SECRET}
 server:
   shutdown: immediate

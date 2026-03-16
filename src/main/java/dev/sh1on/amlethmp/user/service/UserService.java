@@ -24,12 +24,15 @@ import java.util.Objects;
 
 /**
  * Lớp xử lý <b>logic nghiệp vụ</b> cho mô-đun {@link User}.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService implements AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto>, Reversible<String> {
+public class UserService
+        extends AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto>
+        implements Reversible<String> {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;

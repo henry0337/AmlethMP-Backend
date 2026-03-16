@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Lớp cấu hình chức năng
- * <a href="https://docs.spring.io/spring-boot/reference/features/internationalization.html">quốc tế hóa ngôn ngữ - Internationalization</a>
+ * <p>Lớp cấu hình chức năng <b>quốc tế hóa (i18n)</b> cho ứng dụng.</p>
+ * <p>Quản lý việc thay đổi ngôn ngữ dựa trên <b>Accept-Language</b> từ phía người dùng.</p>
+ *
+ * @see <a href="https://docs.spring.io/spring-boot/reference/features/internationalization.html">Internationalization</a>
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration

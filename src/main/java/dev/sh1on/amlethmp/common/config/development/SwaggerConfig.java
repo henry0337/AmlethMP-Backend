@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Profile;
 import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
 
 /**
- * Lớp cấu hình cho <b>Swagger</b>.
+ * <p>Lớp cấu hình cho <b>Swagger/OpenAPI</b> trong môi trường phát triển (development).</p>
+ *
  * @see <a href="https://swagger.io/">Swagger</a>
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */

@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  *     {@link SoftDeletableEntity} để kích hoạt chức năng vô hiệu hóa.</li>
  * </ul>
  *
- * @author <a href="https://github.com/henry0337">Amleth</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  */
 @FunctionalInterface

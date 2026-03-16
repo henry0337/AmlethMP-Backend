@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
  * <b>[Service-only, Standard CRUD]</b> <br>
  * Giao diện hàm cung cấp khả năng <b>thêm mới</b> dữ liệu thuộc tác vụ CRUD tiêu chuẩn.
  *
- * @author <a href="https://github.com/henry0337">Amleth</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
  * @param <CD> DTO riêng biệt dùng để thêm mới dữ liệu
  */

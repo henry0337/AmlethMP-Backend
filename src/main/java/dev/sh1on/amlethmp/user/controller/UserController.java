@@ -1,7 +1,6 @@
 package dev.sh1on.amlethmp.user.controller;
 
 import dev.sh1on.amlethmp.common.template.controller.AmlethMPRestController;
-import dev.sh1on.amlethmp.common.shared.utils.ControllerUtils;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
@@ -26,7 +25,7 @@ import static dev.sh1on.amlethmp.user.UserRoute.BASE_USER_PATH;
 @RequestMapping(BASE_USER_PATH)
 @RequiredArgsConstructor
 @Tag(name = "User", description = "Mô-đun xử lý thông tin liên quan tới người dùng")
-public class UserController implements AmlethMPRestController<UserDto, String, UserCreateDto, UserUpdateDto> {
+public class UserController extends AmlethMPRestController<UserDto, String, UserCreateDto, UserUpdateDto> {
     private final UserService service;
 
     /**
@@ -53,7 +52,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
         }
 
         var pageRequest = PageRequest.of(offset, limit, sort);
-        return ControllerUtils.awaitOk(service.findAll(pageRequest));
+        return controllerUtils.awaitOk(service.findAll(pageRequest));
     }
 
     /**
@@ -65,7 +64,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @GetMapping("/{id}")
     public Mono<ResponseEntity<Mono<UserDto>>> findByKey(@PathVariable String id) {
-        return ControllerUtils.awaitOk(service.findByKey(id));
+        return controllerUtils.awaitOk(service.findByKey(id));
     }
 
     /**
@@ -77,7 +76,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @PostMapping
     public Mono<ResponseEntity<Mono<UserDto>>> create(@RequestBody UserCreateDto dto) {
-        return ControllerUtils.awaitCreated(service.save(dto));
+        return controllerUtils.awaitCreated(service.save(dto));
     }
 
     /**
@@ -90,7 +89,7 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @PutMapping("/{id}")
     public Mono<ResponseEntity<Mono<UserDto>>> update(@PathVariable String id, @RequestBody UserUpdateDto dto) {
-        return ControllerUtils.awaitOk(service.update(id, dto));
+        return controllerUtils.awaitOk(service.update(id, dto));
     }
 
     /**
@@ -102,6 +101,12 @@ public class UserController implements AmlethMPRestController<UserDto, String, U
     @Override
     @DeleteMapping("/{id}")
     public Mono<ResponseEntity<Mono<Void>>> delete(@PathVariable String id) {
-        return ControllerUtils.awaitOk(service.deleteById(id));
+        return controllerUtils.awaitOk(service.deleteById(id));
+    }
+
+    @Override
+    @DeleteMapping("/{id}/disable")
+    public Mono<ResponseEntity<Mono<Void>>> disable(@PathVariable String id) {
+        return controllerUtils.awaitOk(service.disableById(id));
     }
 }

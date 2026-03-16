@@ -1,7 +1,6 @@
 plugins {
 	java
 	idea
-	eclipse
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.dependency.management)
 	id("org.sonarqube") version "7.2.2.6593"
@@ -33,13 +32,6 @@ configurations {
 idea {
 	module {
 		isDownloadJavadoc = false
-		isDownloadSources = true
-	}
-}
-
-eclipse {
-	classpath {
-		isDownloadJavadoc = true
 		isDownloadSources = true
 	}
 }

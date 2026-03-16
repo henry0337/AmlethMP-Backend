@@ -7,7 +7,7 @@ import reactor.core.publisher.Mono;
  * Giao diện hàm cung cấp khả năng <b>xóa</b> dữ liệu thuộc tác vụ CRUD tiêu chuẩn.
  *
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
- * @author <a href="https://github.com/henry0337">Amleth</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @FunctionalInterface
 public interface Deletable<K> {

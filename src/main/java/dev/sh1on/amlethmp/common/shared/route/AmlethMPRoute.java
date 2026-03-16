@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AmlethMPRoute {
