@@ -19,6 +19,9 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import reactor.core.publisher.Mono;
 
 /**
+ * <p>Lớp cấu hình bảo mật cho hệ thống, sử dụng <b>Spring Security Reactive</b>.</p>
+ * <p>Cấu hình các bộ lọc bảo mật, quản lý quyền truy cập và xác thực dựa trên JWT.</p>
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @EnableReactiveSecurityCustomization

@@ -9,6 +9,9 @@ import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 /**
+ * <p>Lớp cấu hình cho <b>Redis</b> trong môi trường phát triển (development).</p>
+ * <p>Cung cấp cấu hình cho các thao tác với dữ liệu trên <b>Redis</b> thông qua Reactive API.</p>
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration

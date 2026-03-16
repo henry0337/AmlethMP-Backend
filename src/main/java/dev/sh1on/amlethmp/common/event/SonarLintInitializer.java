@@ -30,15 +30,16 @@ public class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
     private final MessageUtils messageUtils;
+    private final ReactorUtils reactorUtils;
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (!(event instanceof ApplicationReadyEvent)) return;
 
-        ReactorUtils.unwrapMono(Mono.fromRunnable(() -> {
+        reactorUtils.unwrapMono(Mono.fromRunnable(() -> {
             log.info(messageUtils.obtainStaticLocalizedMessage("sonar.check"));
             try {
-                if (Boolean.TRUE.equals(ReactorUtils.unwrapMono(isSonarLintRunning()))) {
+                if (Boolean.TRUE.equals(reactorUtils.unwrapMono(isSonarLintRunning()))) {
                     log.info(messageUtils.obtainLocalizedMessage("sonar.running", SONAR_URL));
                     openBrowser();
                 } else {

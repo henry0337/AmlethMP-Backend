@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Profile;
 import javax.sql.DataSource;
 
 /**
+ * <p>Lớp cấu hình <b>DataSource</b> cho môi trường phát triển (development).</p>
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Profile("dev")

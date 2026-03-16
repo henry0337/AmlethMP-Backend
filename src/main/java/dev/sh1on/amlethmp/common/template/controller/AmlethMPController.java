@@ -1,19 +1,28 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
-import dev.sh1on.amlethmp.common.shared.annotation.Marker;
+import dev.sh1on.amlethmp.common.shared.utils.ControllerUtils;
+import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Indexed;
 
 /**
- * <b>[Internal, Marker Interface, Controller-only]</b> <br>
+ * <b>[Internal, Controller-only]</b> <br>
+ * Lớp trừu tượng cơ sở (base class) dành cho mọi <b>Controller</b> trong hệ thống <b>AmlethMP</b>.
  *
- * Giao diện base dành riêng cho tác vụ liên quan tới <b>xác thực (authentication)</b> trong nội bộ backend
- * của ứng dụng <a href="https://github.com/henry0337/AmlethMP">AmlethMP</a>. <br><br>
- *
- * Giao diện này là giao diện dạng marker (đánh dấu), lí do là vì ngoài cách đăng nhập bằng cách dùng email & mật khẩu và JWT
- * ra thì có rất nhiều cách đăng nhập khác như <b>OAuth2</b>, <b>Single Sign-On (SSO)</b>, <b>Passwordless</b>,
- * <b>Multi-Factor Authentication (MFA)</b>, <b>vv.</b> và chỉ với cách định nghĩa 2 phương thức cơ bản là {@code register()}
- * và {@code login()} đôi khi sẽ không hợp với ngữ cảnh xác thực khác, nên định nghĩa là marker interface là hợp lý nhất.
- *
- * @author <a href="https://github.com/AdorableDandelion25">Stella</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  */
-@Marker
-public interface AmlethMPController { }
+@Indexed
+public abstract class AmlethMPController {
+    protected ControllerUtils controllerUtils;
+    protected MessageUtils messageUtils;
+
+    @Autowired
+    public void setControllerUtils(ControllerUtils controllerUtils) {
+        this.controllerUtils = controllerUtils;
+    }
+
+    @Autowired
+    public void setMessageUtils(MessageUtils messageUtils) {
+        this.messageUtils = messageUtils;
+    }
+}

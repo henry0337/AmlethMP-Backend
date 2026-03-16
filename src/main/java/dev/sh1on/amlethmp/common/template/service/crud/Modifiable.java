@@ -6,7 +6,7 @@ import reactor.core.publisher.Mono;
  * <b>[Service-only, Standard CRUD]</b> <br>
  * Giao diện hàm cung cấp khả năng <b>cập nhật dữ liệu</b> mới cho dữ liệu đang tồn tại.
  *
- * @author <a href="https://github.com/henry0337">Amleth</a>
+ * @author <a href="https://github.com/henry0337">S3lena</a>
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  * @param <UD> DTO riêng biệt dùng để cập nhật dữ liệu

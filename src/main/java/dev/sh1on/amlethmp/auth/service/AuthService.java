@@ -1,6 +1,8 @@
 package dev.sh1on.amlethmp.auth.service;
 
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
+import dev.sh1on.amlethmp.auth.service.base.JwtAuthenticationService;
+import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.User;
@@ -21,7 +23,7 @@ import java.util.Objects;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class AuthService implements JwtAuthenticationService {
+public class AuthService extends AmlethMPService implements JwtAuthenticationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;

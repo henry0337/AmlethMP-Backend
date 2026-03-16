@@ -50,12 +50,12 @@ public class RestClient {
      */
     @Retry(name = "unwrapGet", fallbackMethod = "retryFallback")
     @CircuitBreaker(name = "unwrapGet", fallbackMethod = "circuitBreakerFallback")
-    public <T> Mono<T> doGetAndUnwrap(String uri,
-                                      ParameterizedTypeReference<T> responseType,
-                                      @Nullable Map<String, String> params,
-                                      @Nullable Map<String, ?> headers,
-                                      @Nullable Predicate<HttpStatusCode> statusPredicate,
-                                      @Nullable Function<ClientResponse, Mono<? extends Throwable>> responseHandler) {
+    public <T> Mono<T> doGet(String uri,
+                             ParameterizedTypeReference<T> responseType,
+                             @Nullable Map<String, String> params,
+                             @Nullable Map<String, ?> headers,
+                             @Nullable Predicate<HttpStatusCode> statusPredicate,
+                             @Nullable Function<ClientResponse, Mono<? extends Throwable>> responseHandler) {
         WebClient.ResponseSpec responseSpec = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(uri)
@@ -104,12 +104,12 @@ public class RestClient {
      */
     @Retry(name = "unwrapPost", fallbackMethod = "retryFallback")
     @CircuitBreaker(name = "unwrapPost", fallbackMethod = "circuitBreakerFallback")
-    public <I, O> Mono<O> doPostAndUnwrap(String uri,
-                                          I body,
-                                          ParameterizedTypeReference<O> responseType,
-                                          @Nullable Map<String, ?> headers,
-                                          @Nullable Predicate<HttpStatusCode> statusPredicate,
-                                          @Nullable Function<ClientResponse, Mono<? extends Throwable>> responseHandler) {
+    public <I, O> Mono<O> doPost(String uri,
+                                 I body,
+                                 ParameterizedTypeReference<O> responseType,
+                                 @Nullable Map<String, ?> headers,
+                                 @Nullable Predicate<HttpStatusCode> statusPredicate,
+                                 @Nullable Function<ClientResponse, Mono<? extends Throwable>> responseHandler) {
         WebClient.ResponseSpec responseSpec = webClient.post()
                 .uri(uri)
                 .headers(httpHeaders -> {

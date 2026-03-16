@@ -3,13 +3,14 @@ package dev.sh1on.amlethmp.common.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
 
-import java.time.Duration;
 import java.util.List;
 
+/**
+ * <p>Lớp cấu hình cho <b>WebClient</b>.</p>
+ * <p>Cấu hình các tiêu đề mặc định cho các yêu cầu HTTP.</p>
+ */
 @Configuration
 public class HttpClientConfig {
     @Bean
@@ -24,11 +25,6 @@ public class HttpClientConfig {
 
                     httpHeaders.addAll(headers);
                 })
-                .clientConnector(new ReactorClientHttpConnector(
-                        HttpClient.create()
-                                .responseTimeout(Duration.ofSeconds(10))
-                                .compress(true)
-                ))
                 .build();
     }
 }
