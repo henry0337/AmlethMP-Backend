@@ -59,12 +59,11 @@ public class RedisUtils {
      * @return Giá trị tương ứng hoặc {@code null} nếu không tồn tại.
      * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
      */
-    public Mono<String> get(String key) {
+    public Mono<String> getValueFrom(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
     public Mono<Boolean> contains(String key) {
-        // TODO
-        return Mono.just(true);
+        return redisTemplate.hasKey(key);
     }
 }

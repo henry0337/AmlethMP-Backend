@@ -24,8 +24,7 @@ public class TokenBlacklistService extends AmlethMPService {
      * @return Trả về {@code true}/{@code false} tương ứng.
      */
     public Mono<Boolean> isBlacklisted(String token) {
-//        return redisTemplate.hasKey(token);
-        return Mono.just(false);
+        return redisUtils.contains("");
     }
 
 }

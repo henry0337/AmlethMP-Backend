@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  */
-public interface ReadableWithKey<OD, K> extends Readable<OD> {
+public interface ReadableWithKey<OD, K> extends Readable<OD> { // NOSONAR
     /**
      * Tìm kiếm bản ghi được chỉ định bởi {@code key}.
      * @param key Điều kiện được sử dụng để tìm kiếm bản ghi

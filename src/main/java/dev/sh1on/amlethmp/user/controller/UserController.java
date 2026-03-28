@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.user.controller;
 
 import dev.sh1on.amlethmp.common.template.controller.AmlethMPRestController;
+import dev.sh1on.amlethmp.user.UserRoute;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
@@ -14,15 +15,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-import static dev.sh1on.amlethmp.user.UserRoute.BASE_USER_PATH;
-
 /**
  * Lớp tiếp nhận các <b>request HTTP</b> liên quan tới mô-đun {@link dev.sh1on.amlethmp.user.model.User User}.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @RestController
-@RequestMapping(BASE_USER_PATH)
+@RequestMapping(UserRoute.BASE_USER_PATH)
 @RequiredArgsConstructor
 @Tag(name = "User", description = "Mô-đun xử lý thông tin liên quan tới người dùng")
 public class UserController extends AmlethMPRestController<UserDto, String, UserCreateDto, UserUpdateDto> {

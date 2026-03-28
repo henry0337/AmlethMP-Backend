@@ -8,6 +8,9 @@ import dev.sh1on.amlethmp.user.model.User;
 import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
 
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
@@ -25,4 +28,12 @@ public interface UserMapper {
     UserDto toUserDto(UserUpdateDto userDto);
 
     User toUser(UserDto userDto);
+
+    default LocalDateTime map(OffsetDateTime offsetDateTime) {
+        return offsetDateTime == null ? null : offsetDateTime.toLocalDateTime();
+    }
+
+    default OffsetDateTime map(LocalDateTime localDateTime) {
+        return localDateTime == null ? null : localDateTime.atOffset(java.time.ZoneOffset.UTC);
+    }
 }

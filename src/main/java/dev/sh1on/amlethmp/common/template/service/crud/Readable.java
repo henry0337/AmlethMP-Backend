@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
  */
 @FunctionalInterface
-public interface Readable<OD> {
+public interface Readable<OD> { // NOSONAR
 
     /**
      * Hiển thị toàn bộ dữ liệu trong cơ sở dữ liệu.

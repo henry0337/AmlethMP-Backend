@@ -1,7 +1,9 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,7 +15,8 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements ReactiveUserDetailsService {
+@Slf4j
+public class CustomUserDetailsService extends AmlethMPService implements ReactiveUserDetailsService {
     private final UserRepository userRepository;
 
     @Override

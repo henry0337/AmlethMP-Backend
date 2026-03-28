@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @FunctionalInterface
-public interface Deletable<K> {
+public interface Deletable<K> { // NOSONAR
 
     /**
      * Xóa một bản ghi dựa trên {@code id} được chỉ định.

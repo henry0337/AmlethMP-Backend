@@ -1,11 +1,12 @@
 package dev.sh1on.amlethmp.common.template.model;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
+
+import java.time.OffsetDateTime;
 
 /**
  * <b>[Internal, Model-only]</b> <br>
@@ -20,7 +21,6 @@ import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
  */
 @Getter
 @Setter
-@NoArgsConstructor
 public abstract class AmlethMPEntity {
     /**
      * Khóa chính của thực thể.
@@ -40,7 +40,7 @@ public abstract class AmlethMPEntity {
     @Column("created_at")
     @CreatedDate
     @InsertOnlyProperty
-    protected String createdAt;
+    protected OffsetDateTime createdAt;
 
     /**
      * Đối tượng thực hiện tạo lập bản ghi này.
@@ -55,7 +55,7 @@ public abstract class AmlethMPEntity {
      */
     @Column("last_updated_at")
     @LastModifiedDate
-    protected String lastUpdatedAt;
+    protected OffsetDateTime lastUpdatedAt;
 
     /**
      * Đối tượng thực hiện cập nhật bản ghi này lần cuối.

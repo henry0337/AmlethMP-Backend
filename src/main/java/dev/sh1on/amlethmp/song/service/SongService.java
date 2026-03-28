@@ -18,8 +18,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SongService
-        extends AmlethMPRestService<SongDto, String, SongCreateDto, SongUpdateDto>
+public class SongService extends AmlethMPRestService<SongDto, String, SongCreateDto, SongUpdateDto>
         implements Reversible<String> {
     public Mono<Void> deleteById(String key) {
         return null;

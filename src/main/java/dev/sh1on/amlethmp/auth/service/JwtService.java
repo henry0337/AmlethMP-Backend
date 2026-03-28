@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -16,7 +17,7 @@ import java.util.function.Function;
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
-public class JwtService {
+public class JwtService extends AmlethMPService {
     private static final int EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
     private final SecretKey key;

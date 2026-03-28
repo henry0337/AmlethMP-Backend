@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
@@ -44,7 +45,7 @@ public abstract class SoftDeletableEntity extends AmlethMPEntity {
      * Thời điểm thực hiện vô hiệu hóa bản ghi này.
      */
     @Column("last_disabled_at")
-    protected String lastDisabledAt;
+    protected OffsetDateTime lastDisabledAt;
 
     @Override
     public boolean equals(Object o) {

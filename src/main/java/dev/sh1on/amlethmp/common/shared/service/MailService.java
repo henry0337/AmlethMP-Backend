@@ -23,12 +23,11 @@ public class MailService {
     private final Environment environment;
 
     public void sendMail(String[] to,
-                         String @Nullable [] cc,
-                         String @Nullable [] bcc,
                          String subject,
                          String body,
+                         String @Nullable [] cc,
+                         String @Nullable [] bcc,
                          @Nullable String replyTo) {
-
         var message = new SimpleMailMessage();
         message.setFrom(environment.getProperty("mail.from"));
         message.setTo(to);
@@ -41,6 +40,7 @@ public class MailService {
 
         try {
             mailSender.send(message);
+            log.info("Email đã được gửi tới {} thành công", to);
         } catch (MailException e) {
             log.warn(e.getLocalizedMessage());
         }

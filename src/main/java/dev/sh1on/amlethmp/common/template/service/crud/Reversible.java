@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  */
 @FunctionalInterface
-public interface Reversible<K> {
+public interface Reversible<K> { // NOSONAR
 
     /**
      * Vô hiệu hóa bản ghi dựa trên {@code id} được chỉ định.

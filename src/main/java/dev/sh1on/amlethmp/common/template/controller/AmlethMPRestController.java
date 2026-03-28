@@ -21,7 +21,6 @@ import reactor.core.publisher.Mono;
  * @param <UD> Update DTO (Dùng để cập nhật dữ liệu)
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
-@SuppressWarnings("unused")
 public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPController {
 
     /**
@@ -33,6 +32,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param prop   Tên trường dữ liệu dùng để sắp xếp
      * @return Một {@link Mono} chứa kết quả phân trang {@link Page}
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, String order, String prop);
 
     /**
@@ -41,6 +41,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param key Khóa tìm kiếm
      * @return Một {@link Mono} chứa thông tin DTO của bản ghi nếu tìm thấy
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<OD>>> findByKey(K key);
 
     /**
@@ -49,6 +50,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param dto DTO chứa thông tin cần tạo
      * @return Một {@link Mono} chứa thông tin của bản ghi vừa tạo thành công
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<OD>>> create(CD dto);
 
     /**
@@ -58,6 +60,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param dto DTO chứa thông tin cập nhật mới
      * @return Một {@link Mono} chứa thông tin của bản ghi sau khi đã cập nhật
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<OD>>> update(K key, UD dto);
 
     /**
@@ -66,6 +69,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param key Khóa xác định bản ghi cần xóa
      * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<Void>>> delete(K key);
 
     /**
@@ -74,5 +78,6 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param key Khóa xác định bản ghi cần vô hiệu hóa
      * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
      */
+    @SuppressWarnings("unused")
     public abstract Mono<ResponseEntity<Mono<Void>>> disable(K key);
 }

@@ -19,20 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /**
- * Lớp xử lý <b>logic nghiệp vụ</b> cho mô-đun {@link User}.
+ * Lớp trừu tượng xử lý <b>logic nghiệp vụ cơ bản</b> cho mô-đun {@link User}.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService
-        extends AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto>
-        implements Reversible<String> {
+public class UserService extends AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto> implements Reversible<String> {
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
@@ -56,32 +54,26 @@ public class UserService
 
     @Override
     public Mono<UserDto> save(UserCreateDto dto) {
-        UserDto newUserDto = mapper.toUserDto(dto);
-        User user = mapper.toUser(newUserDto);
-        String encodedPassword = encoder.encode(user.getPassword());
-        user.setAccountPassword(Objects.requireNonNull(encodedPassword));
-        repository.save(user);
-        return Mono.just(newUserDto);
+        User user = mapper.toUser(mapper.toUserDto(dto));
+        user.setAccountPassword(Objects.requireNonNull(encoder.encode(user.getPassword())));
+        return repository.save(user).map(mapper::toUserDto);
     }
 
     @Override
     public Mono<UserDto> update(String key, UserUpdateDto dto) {
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
-                .map(user -> {
+                .flatMap(user -> {
                     if (dto.getEmail() != null) user.setEmail(dto.getEmail());
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
                     if (dto.getRole() != null) user.setRole(dto.getRole().toString());
-                    user.setAccountPassword(Objects.requireNonNull(encoder.encode(dto.getPassword())));
-                    user.setExpired(false);
-                    user.setLocked(false);
-                    user.setCredExpired(false);
-                    user.setLastUpdatedAt(dto.getUpdatedAt().toString());
+                    if (dto.getPassword() != null) {
+                        user.setAccountPassword(Objects.requireNonNull(encoder.encode(dto.getPassword())));
+                    }
+                    user.setLastUpdatedAt(OffsetDateTime.now());
                     user.setLastUpdatedBy(dto.getUpdatedBy());
-
-                    return user;
+                    return repository.save(user);
                 })
-                .flatMap(repository::save)
                 .map(mapper::toUserDto);
     }
 
@@ -96,8 +88,8 @@ public class UserService
                 .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
                 .flatMap(user -> {
                     user.setDisabled(true);
-                    user.setLastDisabledAt(LocalDateTime.now().toString());
-                    user.setLastUpdatedAt(LocalDateTime.now().toString());
+                    user.setLastDisabledAt(OffsetDateTime.now());
+                    user.setLastUpdatedAt(OffsetDateTime.now());
                     return repository.save(user);
                 })
                 .then();
