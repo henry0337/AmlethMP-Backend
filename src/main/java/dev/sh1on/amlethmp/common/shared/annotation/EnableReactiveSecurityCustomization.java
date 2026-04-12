@@ -6,6 +6,9 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import java.lang.annotation.*;
 
 /**
+ * Annotation tiện ích kết hợp {@link Configuration @Configuration} và {@link EnableWebFluxSecurity @EnableWebFluxSecurity}
+ * để kích hoạt và thiết lập các cấu hình bảo mật tùy chỉnh cho ứng dụng Spring Boot trong môi trường <b>Reactive</b>.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration

@@ -9,6 +9,7 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Date;
 
 /**
@@ -40,7 +41,7 @@ public class MailService {
 
         try {
             mailSender.send(message);
-            log.info("Email đã được gửi tới {} thành công", to);
+            log.info("Email đã được gửi tới {} thành công", Arrays.toString(to));
         } catch (MailException e) {
             log.warn(e.getLocalizedMessage());
         }

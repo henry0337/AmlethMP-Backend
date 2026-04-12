@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
 /**
- * <b>[Internal, Controller-only]</b> <br>
+ * <b>[Internal API, Controller-only]</b> <br>
  * Giao diện nền được tùy chỉnh dành riêng cho hệ thống <b>AmlethMP</b>, giúp lập trình viên khởi tạo các lớp
  * {@linkplain RestController REST API Controller} cho dự án nhanh hơn.
  * <p>
@@ -33,7 +33,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} chứa kết quả phân trang {@link Page}
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<Page<OD>>>> findAll(Integer offset, Integer limit, String order, String prop);
+    public abstract Mono<ResponseEntity<Page<OD>>> findAll(Integer offset, Integer limit, String order, String prop);
 
     /**
      * Tìm kiếm thông tin chi tiết của một bản ghi dựa trên khóa chính hoặc điều kiện xác định.
@@ -42,7 +42,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} chứa thông tin DTO của bản ghi nếu tìm thấy
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<OD>>> findByKey(K key);
+    public abstract Mono<ResponseEntity<OD>> findByKey(K key);
 
     /**
      * Thêm mới một bản ghi vào hệ thống.
@@ -51,7 +51,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} chứa thông tin của bản ghi vừa tạo thành công
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<OD>>> create(CD dto);
+    public abstract Mono<ResponseEntity<OD>> create(CD dto);
 
     /**
      * Cập nhật thông tin của một bản ghi hiện có dựa trên khóa xác định.
@@ -61,7 +61,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} chứa thông tin của bản ghi sau khi đã cập nhật
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<OD>>> update(K key, UD dto);
+    public abstract Mono<ResponseEntity<OD>> update(K key, UD dto);
 
     /**
      * Xóa vĩnh viễn một bản ghi khỏi hệ thống (Hard Delete).
@@ -70,7 +70,7 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<Void>>> delete(K key);
+    public abstract Mono<ResponseEntity<Void>> delete(K key);
 
     /**
      * Vô hiệu hóa hoặc tạm ẩn một bản ghi mà không xóa khỏi cơ sở dữ liệu (Soft Delete).
@@ -79,5 +79,5 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
      */
     @SuppressWarnings("unused")
-    public abstract Mono<ResponseEntity<Mono<Void>>> disable(K key);
+    public abstract Mono<ResponseEntity<Void>> disable(K key);
 }

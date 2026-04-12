@@ -20,32 +20,32 @@ import reactor.core.publisher.Mono;
 public class SongController extends AmlethMPRestController<SongDto, String, SongCreateDto, SongUpdateDto> {
 
     @Override
-    public Mono<ResponseEntity<Mono<Page<SongDto>>>> findAll(Integer offset, Integer limit, String order, String prop) {
+    public Mono<ResponseEntity<Page<SongDto>>> findAll(Integer offset, Integer limit, String order, String prop) {
         return null;
     }
 
     @Override
-    public Mono<ResponseEntity<Mono<SongDto>>> findByKey(String key) {
+    public Mono<ResponseEntity<SongDto>> findByKey(String key) {
         return null;
     }
 
     @Override
-    public Mono<ResponseEntity<Mono<SongDto>>> create(SongCreateDto dto) {
+    public Mono<ResponseEntity<SongDto>> create(SongCreateDto dto) {
         return null;
     }
 
     @Override
-    public Mono<ResponseEntity<Mono<SongDto>>> update(String key, SongUpdateDto dto) {
+    public Mono<ResponseEntity<SongDto>> update(String key, SongUpdateDto dto) {
         return null;
     }
 
     @Override
-    public Mono<ResponseEntity<Mono<Void>>> delete(String key) {
+    public Mono<ResponseEntity<Void>> delete(String key) {
         return null;
     }
 
     @Override
-    public Mono<ResponseEntity<Mono<Void>>> disable(String key) {
+    public Mono<ResponseEntity<Void>> disable(String key) {
         return null;
     }
 }

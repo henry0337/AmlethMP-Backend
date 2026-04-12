@@ -2,7 +2,6 @@ package dev.sh1on.amlethmp.common.shared.utils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.Nullable;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -14,6 +13,7 @@ import java.time.Duration;
 @Slf4j
 public class RedisUtils {
     private final ReactiveRedisTemplate<String, String> redisTemplate;
+    private final ReactorUtils reactorUtils;
 
     /**
      * Lưu giá trị vào Redis với key vĩnh viễn (không hết hạn).
@@ -28,25 +28,19 @@ public class RedisUtils {
     }
 
     /**
-     * Lưu giá trị vào Redis với thời gian sống (TTL) xác định. <br>
-     * Nếu {@code ttl} null, zero hoặc âm → không lưu và trả về {@code false}.
+     * Lưu cặp key-value vào Redis với thời hạn được xác định bởi {@code ttl}. <br>
      *
-     * @param key   Khóa Redis
-     * @param value Giá trị cần lưu
-     * @param ttl   Thời gian sống (có thể null)
+     * @param key   Khóa được lưu trong Redis
+     * @param value Giá trị cần lưu vào {@code key}
+     * @param ttl   Thời hạn hiệu lực của dữ liệu trên
      * @return {@code true} nếu lưu thành công, {@code false} nếu tham số {@code ttl} không hợp lệ hoặc không lưu
      * thành công.
      * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
      */
-    public Mono<Boolean> setTemporal(String key, String value, @Nullable Duration ttl) {
-        if (ttl == null) {
-            log.warn("");
-            return Mono.just(false);
-        }
-
+    public Mono<Boolean> setTemporal(String key, String value, Duration ttl) {
         if (ttl.isZero() || ttl.isNegative()) {
-            log.warn("");
-            return Mono.just(false);
+            log.warn("Invalid TTL provided for Redis key [{}]: {}", key, ttl);
+            return reactorUtils.single(false);
         }
 
         return redisTemplate.opsForValue().set(key, value, ttl);
@@ -59,7 +53,7 @@ public class RedisUtils {
      * @return Giá trị tương ứng hoặc {@code null} nếu không tồn tại.
      * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
      */
-    public Mono<String> getValueFrom(String key) {
+    public Mono<String> getValueFor(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 

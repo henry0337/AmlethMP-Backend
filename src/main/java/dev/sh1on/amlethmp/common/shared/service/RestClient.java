@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.common.shared.service;
 
-import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
+import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
+import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ import java.util.function.Predicate;
 @Slf4j
 public class RestClient {
     private final WebClient webClient;
-    private final MessageUtils messageUtils;
+    private final I18NUtils i18NUtils;
 
     /**
      * Thực hiện gửi một yêu cầu HTTP GET đến URI đã chỉ định và "unwrap" (giải nén) body phản hồi
@@ -59,9 +60,7 @@ public class RestClient {
         WebClient.ResponseSpec responseSpec = webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path(uri)
-                        .queryParams(params != null
-                                ? MultiValueMap.fromSingleValue(params)
-                                : MultiValueMap.fromSingleValue(new HashMap<>()))
+                        .queryParams(MultiValueMap.fromSingleValue(CommonUtils.asNonNullable(params, new HashMap<>())))
                         .build())
                 .headers(httpHeaders -> {
                     if (headers != null) {
@@ -135,18 +134,13 @@ public class RestClient {
         return responseSpec.bodyToMono(responseType);
     }
 
-    /**
-     * Phương thức dự phòng sẽ được gọi ra khi các phương thức HTTP được truy vấn gặp lỗi.
-     *
-     * @return Một thông báo dự phòng được bản địa hóa thu được từ {@link MessageUtils}.
-     */
     @SuppressWarnings("unused")
     private String retryFallback() {
-        return messageUtils.obtainStaticLocalizedMessage("httpClient.fallback");
+        return i18NUtils.translateMessage("httpClient.fallback");
     }
 
     @SuppressWarnings("unused")
     private String circuitBreakerFallback() {
-        return messageUtils.obtainStaticLocalizedMessage("httpClient.fallback");
+        return i18NUtils.translateMessage("httpClient.fallback");
     }
 }

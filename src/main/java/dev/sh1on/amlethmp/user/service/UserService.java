@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.user.service;
 
 import dev.sh1on.amlethmp.common.shared.exception.UserNotFoundException;
+import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPRestService;
 import dev.sh1on.amlethmp.common.template.service.crud.Reversible;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
@@ -20,10 +21,10 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 /**
- * Lớp trừu tượng xử lý <b>logic nghiệp vụ cơ bản</b> cho mô-đun {@link User}.
+ * <b>[Domain Service]</b> <br>
+ * Lớp xử lý nghiệp vụ cho mô-đun {@link User}.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
@@ -55,7 +56,8 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
     @Override
     public Mono<UserDto> save(UserCreateDto dto) {
         User user = mapper.toUser(mapper.toUserDto(dto));
-        user.setAccountPassword(Objects.requireNonNull(encoder.encode(user.getPassword())));
+        String encodedPassword = CommonUtils.asNonNullable(encoder.encode(user.getPassword()));
+        user.setAccountPassword(encodedPassword); // NOSONAR
         return repository.save(user).map(mapper::toUserDto);
     }
 
@@ -64,12 +66,12 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
                 .flatMap(user -> {
+                    String encodedPassword = CommonUtils.asNonNullable(encoder.encode(dto.getPassword()));
+
                     if (dto.getEmail() != null) user.setEmail(dto.getEmail());
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
                     if (dto.getRole() != null) user.setRole(dto.getRole().toString());
-                    if (dto.getPassword() != null) {
-                        user.setAccountPassword(Objects.requireNonNull(encoder.encode(dto.getPassword())));
-                    }
+                    if (dto.getPassword() != null) user.setAccountPassword(encodedPassword);
                     user.setLastUpdatedAt(OffsetDateTime.now());
                     user.setLastUpdatedBy(dto.getUpdatedBy());
                     return repository.save(user);

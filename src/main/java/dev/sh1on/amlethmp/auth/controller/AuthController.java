@@ -37,8 +37,7 @@ public class AuthController extends AmlethMPController {
      */
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
-        return service.login(request.getEmail(), request.getPassword())
-                .map(ResponseEntity::ok)
+        return controllerUtils.awaitOk(service.login(request.getEmail(), request.getPassword()))
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
@@ -51,8 +50,7 @@ public class AuthController extends AmlethMPController {
      */
     @PostMapping("/register")
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {
-        return service.register(user)
-                .map(saved -> ResponseEntity.status(HttpStatus.CREATED).body(saved))
+        return controllerUtils.awaitCreated(service.register(user))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));
     }
 }

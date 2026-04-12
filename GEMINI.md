@@ -78,3 +78,6 @@ You can build a Docker (OCI) image of the application using the Spring Boot plug
 *   **Security:** Spring Security is configured for JWT-based authentication.
 *   **Configuration:** The `dev` profile is active by default (specified in `application.yaml`). Environment variables are used extensively for sensitive configurations in `application-dev.yaml`.
 *   **API Documentation:** Swagger UI is available for API exploration, typically at `/swagger-ui.html` or `/webjars/swagger-ui/index.html`.
+
+# Note for this project
+- Always use Context7 MCP when I need library/API documentation, code generation, setup or configuration steps without me having to explicitly ask.

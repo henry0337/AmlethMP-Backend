@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
+import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
 import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +29,24 @@ import java.io.IOException;
 public class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
-    private final MessageUtils messageUtils;
+    private final I18NUtils i18NUtils;
     private final ReactorUtils reactorUtils;
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         if (!(event instanceof ApplicationReadyEvent)) return;
 
-        reactorUtils.unwrapMono(Mono.fromRunnable(() -> {
-            log.info(messageUtils.obtainStaticLocalizedMessage("sonar.check"));
+        reactorUtils.awaitMono(Mono.fromRunnable(() -> {
+            log.info(i18NUtils.translateMessage("sonar.check"));
             try {
-                if (Boolean.TRUE.equals(reactorUtils.unwrapMono(isSonarLintRunning()))) {
-                    log.info(messageUtils.obtainLocalizedMessage("sonar.running", SONAR_URL));
+                if (Boolean.TRUE.equals(reactorUtils.awaitMono(isSonarLintRunning()))) {
+                    log.info(i18NUtils.translateDynamicMessage("sonar.running", SONAR_URL));
                     openBrowser();
                 } else {
-                    log.info(messageUtils.obtainStaticLocalizedMessage("sonar.not_running"));
+                    log.info(i18NUtils.translateMessage("sonar.not_running"));
                 }
             } catch (Exception e) {
-                log.error(messageUtils.obtainStaticLocalizedMessage("sonar.error"), e);
+                log.error(i18NUtils.translateMessage("sonar.error"), e);
             }
         }));
     }
@@ -58,7 +58,7 @@ public class SonarLintInitializer implements GenericApplicationListener {
                 .responseSingle((response, bytes) -> Mono.just(response.status().equals(HttpResponseStatus.OK)))
                 .onErrorResume(e -> {
                     log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
-                    return Mono.just(false);
+                    return reactorUtils.single(false);
                 });
     }
 
@@ -69,10 +69,10 @@ public class SonarLintInitializer implements GenericApplicationListener {
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
                 new ProcessBuilder("sh", "-c", "xdg-open " + SonarLintInitializer.SONAR_URL).start(); // xdg-open for Linux, 'open' for Mac
             } else {
-                log.warn(messageUtils.obtainStaticLocalizedMessage("os.unsupported"));
+                log.warn(i18NUtils.translateMessage("os.unsupported"));
             }
         } catch (IOException e) {
-            log.error(messageUtils.obtainStaticLocalizedMessage("browser.open.error"), e);
+            log.error(i18NUtils.translateMessage("browser.open.error"), e);
         }
     }
 

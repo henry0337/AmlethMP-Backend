@@ -18,7 +18,7 @@ import java.util.Locale;
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Configuration
-public class InternationalizationConfig {
+public class I18NConfig {
 
     @Bean
     MessageSource messageSource() {

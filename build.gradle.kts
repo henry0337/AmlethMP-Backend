@@ -1,5 +1,6 @@
 plugins {
 	java
+	checkstyle
 	idea
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.dependency.management)
@@ -36,6 +37,12 @@ idea {
 	}
 }
 
+checkstyle {
+	toolVersion = "13.4.0"
+	configFile = file("config/checkstyle/checkstyle.xml")
+	isIgnoreFailures = true
+}
+
 extra["sentryVersion"] = "8.27.0"
 extra["springCloudAzureVersion"] = "7.0.0"
 
@@ -63,7 +70,7 @@ dependencies {
 	implementation(libs.mapstruct.spring.annotations)
 	implementation(libs.therapi.runtime.javadoc)
 	implementation(libs.bundles.jjwt)
-	implementation(libs.bundles.poi)
+//	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
 	implementation(libs.resilience4j.spring.boot4)
 
@@ -78,6 +85,7 @@ dependencies {
 	runtimeOnly(libs.r2dbc.postgresql)
 
 	compileOnly(libs.lombok)
+	compileOnly("org.jetbrains:annotations:26.0.2")
 
 	developmentOnly(libs.spring.boot.devtools)
 //	developmentOnly(libs.spring.boot.docker.compose)
@@ -107,14 +115,22 @@ tasks {
 	}
 
 	withType<JavaCompile> {
-		options.compilerArgs.addAll(listOf(
-			"-Amapstruct.suppressGeneratorTimestamp=true",
-			"-Amapstruct.suppressGeneratorVersionInfoComment=true",
-			"-Amapstruct.verbose=true",
+		val mapstructArgs = mutableListOf(
 			"-Amapstruct.defaultComponentModel=spring",
 			"-Amapstruct.defaultInjectionStrategy=constructor",
 			"-parameters"
-		))
+		)
+
+		// Nếu như có thuộc tính "-Pdev" trong lệnh build thì sẽ thực hiện thêm 3 dòng dưới vào tham số dùng để biên dịch
+		if (project.hasProperty("dev")) {
+			mapstructArgs.addAll(listOf(
+				"-Amapstruct.suppressGeneratorTimestamp=true",
+				"-Amapstruct.suppressGeneratorVersionInfoComment=true",
+				"-Amapstruct.verbose=true"
+			))
+		}
+
+		options.compilerArgs.addAll(mapstructArgs)
 	}
 
 	bootBuildImage {

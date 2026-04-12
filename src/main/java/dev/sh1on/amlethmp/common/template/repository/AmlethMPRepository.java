@@ -6,7 +6,7 @@ import org.springframework.data.repository.NoRepositoryBean;
 import reactor.core.publisher.Flux;
 
 /**
- * <b>[Internal, Repository-only]</b> <br>
+ * <b>[Domain Repository's Specific]</b> <br>
  * Repository đặc thù chứa các phương thức truy vấn có thể được sử dụng nhiều trong dự án <b>AmlethMP</b>.
  *
  * @param <T> Kiểu domain mà repository này sẽ quản lý

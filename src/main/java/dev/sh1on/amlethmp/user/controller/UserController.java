@@ -41,10 +41,10 @@ public class UserController extends AmlethMPRestController<UserDto, String, User
      */
     @Override
     @GetMapping
-    public Mono<ResponseEntity<Mono<Page<UserDto>>>> findAll(@RequestParam(defaultValue = "0") Integer offset,
-                                                             @RequestParam(defaultValue = "10") Integer limit,
-                                                             @RequestParam(defaultValue = "ASC") String order,
-                                                             @RequestParam(defaultValue = "") String prop) {
+    public Mono<ResponseEntity<Page<UserDto>>> findAll(@RequestParam(defaultValue = "0") Integer offset,
+                                                       @RequestParam(defaultValue = "10") Integer limit,
+                                                       @RequestParam(defaultValue = "ASC") String order,
+                                                       @RequestParam(defaultValue = "") String prop) {
         Sort sort = Sort.unsorted();
         if (!order.isBlank() && !prop.isBlank()) {
             sort = Sort.by(Sort.Direction.fromString(order), prop);
@@ -62,19 +62,19 @@ public class UserController extends AmlethMPRestController<UserDto, String, User
      */
     @Override
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<Mono<UserDto>>> findByKey(@PathVariable String id) {
-        return controllerUtils.awaitOk(service.findByKey(id));
+    public Mono<ResponseEntity<UserDto>> findByKey(@PathVariable String id) {
+        return controllerUtils.awaitOrNotFound(service.findByKey(id));
     }
 
     /**
      * Phương thức đại diện request <b>POST</b> dùng để tạo mới một bản ghi người dùng trong cơ sở dữ liệu.
      *
      * @param dto Đối tượng {@link UserCreateDto} chứa thông tin cần thiết để tạo người dùng mới.
-     * @return Đối tượng {@link ResponseEntity} chứa {@link Mono} của {@link UserDto} vừa được tạo.
+     * @return Đối tượng {@link ResponseEntity} chứa {@link UserDto} vừa được tạo.
      */
     @Override
     @PostMapping
-    public Mono<ResponseEntity<Mono<UserDto>>> create(@RequestBody UserCreateDto dto) {
+    public Mono<ResponseEntity<UserDto>> create(@RequestBody UserCreateDto dto) {
         return controllerUtils.awaitCreated(service.save(dto));
     }
 
@@ -83,11 +83,11 @@ public class UserController extends AmlethMPRestController<UserDto, String, User
      *
      * @param id  ID của người dùng cần cập nhật.
      * @param dto Đối tượng {@link UserUpdateDto} chứa các thông tin muốn thay đổi.
-     * @return Đối tượng {@link ResponseEntity} chứa {@link Mono} của {@link UserDto} sau khi cập nhật.
+     * @return Đối tượng {@link ResponseEntity} chứa {@link UserDto} sau khi cập nhật.
      */
     @Override
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<Mono<UserDto>>> update(@PathVariable String id, @RequestBody UserUpdateDto dto) {
+    public Mono<ResponseEntity<UserDto>> update(@PathVariable String id, @RequestBody UserUpdateDto dto) {
         return controllerUtils.awaitOk(service.update(id, dto));
     }
 
@@ -95,17 +95,17 @@ public class UserController extends AmlethMPRestController<UserDto, String, User
      * Phương thức đại diện request <b>DELETE</b> dùng để xóa bản ghi người dùng theo {@code id}.
      *
      * @param id ID của người dùng cần xóa.
-     * @return Đối tượng {@link ResponseEntity} chứa {@link Mono} của {@link Void} khi xóa thành công.
+     * @return Đối tượng {@link ResponseEntity} trống khi xóa thành công.
      */
     @Override
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Mono<Void>>> delete(@PathVariable String id) {
-        return controllerUtils.awaitOk(service.deleteById(id));
+    public Mono<ResponseEntity<Void>> delete(@PathVariable String id) {
+        return controllerUtils.awaitNoContent(service.deleteById(id));
     }
 
     @Override
     @DeleteMapping("/{id}/disable")
-    public Mono<ResponseEntity<Mono<Void>>> disable(@PathVariable String id) {
-        return controllerUtils.awaitOk(service.disableById(id));
+    public Mono<ResponseEntity<Void>> disable(@PathVariable String id) {
+        return controllerUtils.awaitNoContent(service.disableById(id));
     }
 }

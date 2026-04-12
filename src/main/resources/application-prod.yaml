@@ -24,6 +24,7 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
   liquibase:
+    enabled: ${LIQUIBASE_ENABLE:false}
     url: ${LIQUIBASE_HOST}
     user: ${DB_USERNAME}
     password: ${DB_PASSWORD}

@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.auth.service;
 
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
-import dev.sh1on.amlethmp.auth.service.base.JwtAuthenticationService;
+import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
@@ -14,8 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
@@ -32,19 +30,23 @@ public class AuthService extends AmlethMPService implements JwtAuthenticationSer
     @Override
     @Transactional(readOnly = true)
     public Mono<String> login(String email, String password) {
-        return userRepository.findByEmail(email)
-                .switchIfEmpty(Mono.error(new UsernameNotFoundException("User not found")))
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .switchIfEmpty(Mono.error(new BadCredentialsException("Invalid credentials")))
-                .map(jwtService::generateToken);
+        Mono<User> userMono = reactorUtils.errorIfEmpty(
+                userRepository.findByEmail(email),
+                () -> new UsernameNotFoundException("User not found"));
+
+        return reactorUtils.ensure(
+                userMono,
+                user -> passwordEncoder.matches(password, user.getPassword()),
+                () -> new BadCredentialsException("Invalid credentials")
+        ).map(jwtService::generateToken);
     }
 
     @Override
     public Mono<UserDto> register(RegisterRequest dto) {
         UserDto responseData = userMapper.toUserDto(dto);
         User user = userMapper.toUser(responseData);
-        user.setAccountPassword(Objects.requireNonNull(passwordEncoder.encode(user.getAccountPassword())));
-        userRepository.save(user);
-        return Mono.just(responseData);
+        String encryptedPassword = CommonUtils.asNonNullable(passwordEncoder.encode(dto.getPassword()));
+        user.setAccountPassword(encryptedPassword);
+        return userRepository.save(user).map(u -> responseData);
     }
 }

@@ -12,6 +12,9 @@ import java.util.Collection;
 import java.util.List;
 
 /**
+ * <b>[Aggregate Root]</b> <br>
+ * Thực thể nghiệp vụ đại diện cho <b>thông tin người dùng</b>.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
  */
 @Data

@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.auth.service.base;
+package dev.sh1on.amlethmp.auth.service;
 
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.user.dto.UserDto;

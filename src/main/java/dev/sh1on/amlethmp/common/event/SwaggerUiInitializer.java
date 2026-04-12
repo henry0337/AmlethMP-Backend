@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.shared.utils.MessageUtils;
+import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
 import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -24,12 +24,12 @@ import java.io.IOException;
 @Profile("dev")
 @Slf4j
 public class SwaggerUiInitializer implements GenericApplicationListener {
-    private final MessageUtils messageUtils;
+    private final I18NUtils i18NUtils;
     private final ReactorUtils reactorUtils;
     private final String url;
 
-    public SwaggerUiInitializer(Environment env, MessageUtils messageUtils, ReactorUtils reactorUtils) {
-        this.messageUtils = messageUtils;
+    public SwaggerUiInitializer(Environment env, I18NUtils i18NUtils, ReactorUtils reactorUtils) {
+        this.i18NUtils = i18NUtils;
         this.reactorUtils = reactorUtils;
         String port = env.getProperty("server.port", "8080");
         this.url = "http://localhost:" + port + "/swagger-ui.html";
@@ -42,7 +42,7 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
 
         // Ghi chú: Nếu bạn (người đọc mã) mà thấy phương thức markAsSynchronous bị đánh dấu là deprecated, yên tâm vì nó
         // là chủ đích của tôi thôi, đọc Javadoc của phương thức là sẽ rõ
-        reactorUtils.unwrapMono(Mono.fromRunnable(() -> {
+        reactorUtils.awaitMono(Mono.fromRunnable(() -> {
             ProcessBuilder processBuilder = null;
 
             if (SystemUtils.IS_OS_WINDOWS) {
@@ -50,7 +50,7 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
                 processBuilder = new ProcessBuilder("sh", "-c", url);
             } else {
-                log.warn(messageUtils.obtainStaticLocalizedMessage("os.unsupported"));
+                log.warn(i18NUtils.translateMessage("os.unsupported"));
             }
 
             try {
