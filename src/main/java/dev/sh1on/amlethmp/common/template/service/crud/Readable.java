@@ -12,7 +12,8 @@ import reactor.core.publisher.Mono;
  * @param <OD> DTO riêng biệt dùng để hiển thị thông tin cho phía client
  */
 @FunctionalInterface
-public interface Readable<OD> { // NOSONAR
+@SuppressWarnings("java:S1711")
+public interface Readable<OD> {
 
     /**
      * Hiển thị toàn bộ dữ liệu trong cơ sở dữ liệu.

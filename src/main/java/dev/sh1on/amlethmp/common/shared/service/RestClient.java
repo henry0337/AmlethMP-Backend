@@ -24,7 +24,7 @@ import java.util.function.Predicate;
  * Một <b>REST client</b> được tùy biến bằng {@link WebClient} của Spring Boot sử dụng trong môi trường <b>Reactive</b> để thực
  * hiện các tác vụ gửi yêu cầu HTTP.
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 @RequiredArgsConstructor

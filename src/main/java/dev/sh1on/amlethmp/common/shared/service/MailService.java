@@ -14,7 +14,7 @@ import java.util.Date;
 
 /**
  * Lớp nghiệp vụ đảm nhiệm tác vụ gửi mail tự động.
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 @RequiredArgsConstructor

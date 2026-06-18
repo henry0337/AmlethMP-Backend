@@ -21,7 +21,7 @@ public class RedisUtils {
      * @param key   Khóa Redis
      * @param value Giá trị cần lưu
      * @return {@code true} nếu lưu thành công, không thì {@code false}.
-     * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+     * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
      */
     public Mono<Boolean> setPermanent(String key, String value) {
         return redisTemplate.opsForValue().set(key, value);
@@ -35,7 +35,7 @@ public class RedisUtils {
      * @param ttl   Thời hạn hiệu lực của dữ liệu trên
      * @return {@code true} nếu lưu thành công, {@code false} nếu tham số {@code ttl} không hợp lệ hoặc không lưu
      * thành công.
-     * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+     * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
      */
     public Mono<Boolean> setTemporal(String key, String value, Duration ttl) {
         if (ttl.isZero() || ttl.isNegative()) {
@@ -51,7 +51,7 @@ public class RedisUtils {
      *
      * @param key Khóa Redis cần truy vấn
      * @return Giá trị tương ứng hoặc {@code null} nếu không tồn tại.
-     * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+     * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
      */
     public Mono<String> getValueFor(String key) {
         return redisTemplate.opsForValue().get(key);

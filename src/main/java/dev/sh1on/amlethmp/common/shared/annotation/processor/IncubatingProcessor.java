@@ -23,12 +23,12 @@ import java.util.concurrent.ConcurrentHashMap;
 @Aspect
 @Component
 @Slf4j
+@SuppressWarnings("unused")
 public class IncubatingProcessor {
-
     /**
      * Cache để lưu trữ các phương thức đã được log để tránh spam log.
      */
-    private final Set<String> loggedMethods = Collections.newSetFromMap(new ConcurrentHashMap<>());
+    private static final Set<String> loggedMethods = Collections.newSetFromMap(new ConcurrentHashMap<>());
 
     @Pointcut("@annotation(dev.sh1on.amlethmp.common.shared.annotation.Incubating) " +
             "|| @within(dev.sh1on.amlethmp.common.shared.annotation.Incubating)")
@@ -36,7 +36,7 @@ public class IncubatingProcessor {
 
     @Before("incubatingPointcut()")
     public void logIncubatingUsage(@NonNull JoinPoint joinPoint) {
-        String methodName = joinPoint.getSignature().toShortString();
+        var methodName = joinPoint.getSignature().toShortString();
         
         // Chỉ log một lần cho mỗi phương thức trong suốt vòng đời ứng dụng để tránh làm đầy console
         if (loggedMethods.add(methodName)) {

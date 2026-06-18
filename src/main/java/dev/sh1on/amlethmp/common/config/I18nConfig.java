@@ -15,10 +15,10 @@ import java.util.Locale;
  * <p>Quản lý việc thay đổi ngôn ngữ dựa trên <b>Accept-Language</b> từ phía người dùng.</p>
  *
  * @see <a href="https://docs.spring.io/spring-boot/reference/features/internationalization.html">Internationalization</a>
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-@Configuration
-public class I18NConfig {
+@Configuration(proxyBeanMethods = false)
+class I18nConfig {
 
     @Bean
     MessageSource messageSource() {

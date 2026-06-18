@@ -12,11 +12,11 @@ import javax.sql.DataSource;
 /**
  * <p>Lớp cấu hình <b>DataSource</b> cho môi trường phát triển (development).</p>
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Profile("dev")
 @Configuration(proxyBeanMethods = false)
-public class ConnectionPoolDevelopmentConfig {
+class ConnectionPoolDevelopmentConfig {
     @Value("${spring.liquibase.url}")
     private String url;
 

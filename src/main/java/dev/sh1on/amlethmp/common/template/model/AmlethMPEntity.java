@@ -2,7 +2,12 @@ package dev.sh1on.amlethmp.common.template.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.*;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 
@@ -21,6 +26,7 @@ import java.time.OffsetDateTime;
  */
 @Getter
 @Setter
+@SuppressWarnings("java:S1694")
 public abstract class AmlethMPEntity {
     /**
      * Khóa chính của thực thể.

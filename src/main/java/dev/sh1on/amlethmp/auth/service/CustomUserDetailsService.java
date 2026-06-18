@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class CustomUserDetailsService extends AmlethMPService implements ReactiveUserDetailsService {
+class CustomUserDetailsService extends AmlethMPService implements ReactiveUserDetailsService {
     private final UserRepository userRepository;
 
     @Override

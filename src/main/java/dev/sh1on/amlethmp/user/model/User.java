@@ -1,7 +1,11 @@
 package dev.sh1on.amlethmp.user.model;
 
 import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,7 +19,7 @@ import java.util.List;
  * <b>[Aggregate Root]</b> <br>
  * Thực thể nghiệp vụ đại diện cho <b>thông tin người dùng</b>.
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Data
 @Builder
@@ -23,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @Table("users")
+@SuppressWarnings("java:S2057")
 public class User extends SoftDeletableEntity implements UserDetails {
     private String email;
 

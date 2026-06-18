@@ -14,11 +14,11 @@ import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
  * <p>Lớp cấu hình cho <b>Swagger/OpenAPI</b> trong môi trường phát triển (development).</p>
  *
  * @see <a href="https://swagger.io/">Swagger</a>
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Profile("dev")
 @Configuration(proxyBeanMethods = false)
-public class SwaggerConfig {
+class SwaggerConfig {
     @Bean
     OpenAPI swagger() {
         var instance = new OpenAPI();

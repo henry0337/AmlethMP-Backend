@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.relational.core.mapping.Column;
 
+import java.io.Serial;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 
@@ -24,6 +25,9 @@ import java.util.Objects;
 @Setter
 public abstract class SoftDeletableEntity extends AmlethMPEntity {
 
+    @Serial
+    private static final long serialVersionUID = 1L;
+
     /**
      * Trạng thái vô hiệu hóa của bản ghi.
      * <p>
@@ -33,7 +37,7 @@ public abstract class SoftDeletableEntity extends AmlethMPEntity {
      * <b>Giá trị mặc định:</b> {@code false}
      */
     @Column("is_disabled")
-    protected boolean isDisabled = false;
+    protected boolean isDisabled;
 
     /**
      * Định danh của đối tượng thực hiện vô hiệu hóa bản ghi này.

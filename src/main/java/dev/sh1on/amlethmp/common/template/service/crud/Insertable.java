@@ -11,7 +11,8 @@ import reactor.core.publisher.Mono;
  * @param <CD> DTO riêng biệt dùng để thêm mới dữ liệu
  */
 @FunctionalInterface
-public interface Insertable<OD, CD> { // NOSONAR
+@SuppressWarnings("java:S1711")
+public interface Insertable<OD, CD> {
 
     /**
      * Thêm dữ liệu mới vào một bản ghi và lưu vào cơ sở dữ liệu.

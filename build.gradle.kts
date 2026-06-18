@@ -85,7 +85,7 @@ dependencies {
 	runtimeOnly(libs.r2dbc.postgresql)
 
 	compileOnly(libs.lombok)
-	compileOnly("org.jetbrains:annotations:26.0.2")
+	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
 //	developmentOnly(libs.spring.boot.docker.compose)
@@ -115,25 +115,31 @@ tasks {
 	}
 
 	withType<JavaCompile> {
-		val mapstructArgs = mutableListOf(
-			"-Amapstruct.defaultComponentModel=spring",
-			"-Amapstruct.defaultInjectionStrategy=constructor",
-			"-parameters"
-		)
-
-		// Nếu như có thuộc tính "-Pdev" trong lệnh build thì sẽ thực hiện thêm 3 dòng dưới vào tham số dùng để biên dịch
-		if (project.hasProperty("dev")) {
-			mapstructArgs.addAll(listOf(
-				"-Amapstruct.suppressGeneratorTimestamp=true",
-				"-Amapstruct.suppressGeneratorVersionInfoComment=true",
-				"-Amapstruct.verbose=true"
-			))
-		}
-
-		options.compilerArgs.addAll(mapstructArgs)
+		options.compilerArgs.addAll(mapstructCompilerArgs())
 	}
 
 	bootBuildImage {
 		runImage = "paketobuildpacks/ubuntu-noble-run:latest"
 	}
+}
+
+/**
+ * Tạo danh sách tham số trình biên dịch cho MapStruct.
+ */
+private fun mapstructCompilerArgs(): List<String> {
+	val args = mutableListOf(
+		"-Amapstruct.defaultComponentModel=spring",
+		"-Amapstruct.defaultInjectionStrategy=constructor",
+		"-parameters"
+	)
+
+	if (project.hasProperty("dev")) {
+		args.addAll(listOf(
+			"-Amapstruct.suppressGeneratorTimestamp=true",
+			"-Amapstruct.suppressGeneratorVersionInfoComment=true",
+			"-Amapstruct.verbose=true"
+		))
+	}
+
+	return args
 }

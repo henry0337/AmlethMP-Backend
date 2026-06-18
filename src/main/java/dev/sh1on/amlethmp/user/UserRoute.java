@@ -3,10 +3,12 @@ package dev.sh1on.amlethmp.user;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import static dev.sh1on.amlethmp.common.shared.route.AmlethMPRoute.*;
+import static dev.sh1on.amlethmp.common.shared.route.AmlethMPRoute.BASE_PATH;
+import static dev.sh1on.amlethmp.common.shared.route.AmlethMPRoute.USER_ENDPOINT;
+import static dev.sh1on.amlethmp.common.shared.route.AmlethMPRoute.USER_ENDPOINT_VERSION;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class UserRoute {
