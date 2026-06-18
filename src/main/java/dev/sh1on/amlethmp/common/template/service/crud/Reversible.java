@@ -20,7 +20,8 @@ import reactor.core.publisher.Mono;
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  */
 @FunctionalInterface
-public interface Reversible<K> { // NOSONAR
+@SuppressWarnings("java:S1711")
+public interface Reversible<K> {
 
     /**
      * Vô hiệu hóa bản ghi dựa trên {@code id} được chỉ định.

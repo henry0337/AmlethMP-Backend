@@ -19,14 +19,14 @@ import reactor.netty.http.client.HttpClient;
 import java.io.IOException;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 @Profile("dev")
 @Order(4)
 @RequiredArgsConstructor
 @Slf4j
-public class SonarLintInitializer implements GenericApplicationListener {
+class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
     private final I18NUtils i18NUtils;
@@ -56,7 +56,7 @@ public class SonarLintInitializer implements GenericApplicationListener {
                 .get()
                 .uri(SonarLintInitializer.SONAR_URL)
                 .responseSingle((response, bytes) -> Mono.just(response.status().equals(HttpResponseStatus.OK)))
-                .onErrorResume(e -> {
+                .onErrorResume((Throwable e) -> {
                     log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
                     return reactorUtils.single(false);
                 });

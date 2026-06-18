@@ -12,16 +12,17 @@ import org.springframework.stereotype.Indexed;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @Indexed
+@SuppressWarnings("java:S1694")
 public abstract class AmlethMPController {
     protected ControllerUtils controllerUtils;
     protected I18NUtils i18NUtils;
 
-    @Autowired
+    @Autowired(required = false)
     public void setControllerUtils(ControllerUtils controllerUtils) {
         this.controllerUtils = controllerUtils;
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setMessageUtils(I18NUtils i18NUtils) {
         this.i18NUtils = i18NUtils;
     }

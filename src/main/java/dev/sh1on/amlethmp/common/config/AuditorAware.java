@@ -12,14 +12,14 @@ import reactor.core.publisher.Mono;
  * <p>Lớp cung cấp thông tin về người dùng hiện tại (Auditor) cho hệ thống.</p>
  * <p>Được sử dụng trong việc tự động lưu trữ người tạo hoặc người cập nhật thực thể.</p>
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
-public class AuditorAware implements ReactiveAuditorAware<String> {
+class AuditorAware implements ReactiveAuditorAware<String> {
     @Override
     public Mono<String> getCurrentAuditor() {
         return ReactiveSecurityContextHolder.getContext()
-                .map(SecurityContext::getAuthentication)
+                .mapNotNull(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
                 .map(principal -> principal instanceof User user ? user.getId() : "")

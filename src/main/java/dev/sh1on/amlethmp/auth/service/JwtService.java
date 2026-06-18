@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
 @Slf4j
@@ -33,7 +33,7 @@ public class JwtService extends AmlethMPService {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(UserDetails userDetails) {
+    String generateToken(UserDetails userDetails) {
         String username = userDetails.getUsername();
         String role = userDetails.getAuthorities().isEmpty()
                 ? null

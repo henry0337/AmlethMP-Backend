@@ -1,7 +1,11 @@
 package dev.sh1on.amlethmp.user.dto;
 
 import dev.sh1on.amlethmp.user.model.Role;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Normalized;
@@ -19,7 +23,7 @@ public class UserCreateDto {
     @Normalized(form = Normalizer.Form.NFKC)
     private String displayName;
 
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?])(?=.{12,}).*$")
+    @Pattern(regexp = "^(?=.*\\p{Lu})(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?])(?=.{12,}).*$")
     @Length(min = 12, max = 255)
     @NotBlank
     private String password;

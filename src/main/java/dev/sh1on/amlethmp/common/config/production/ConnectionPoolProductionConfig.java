@@ -16,7 +16,7 @@ import javax.sql.DataSource;
  */
 @Profile("prod")
 @Configuration(proxyBeanMethods = false)
-public class ConnectionPoolProductionConfig {
+class ConnectionPoolProductionConfig {
     @Value("${spring.liquibase.url}")
     private String url;
 

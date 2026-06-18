@@ -14,7 +14,7 @@ import static dev.sh1on.amlethmp.common.shared.constant.AppConstant.BLANK;
  * Lớp tiện ích hỗ trợ việc trích xuất và xử lý các thông báo đa ngôn ngữ (i18n)
  * một cách an toàn thông qua {@link MessageSource}.
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 @RequiredArgsConstructor

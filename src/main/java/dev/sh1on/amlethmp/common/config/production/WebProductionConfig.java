@@ -11,4 +11,4 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  */
 @Configuration
 @Profile("prod")
-public class WebProductionConfig implements WebFluxConfigurer { }
+class WebProductionConfig implements WebFluxConfigurer { }

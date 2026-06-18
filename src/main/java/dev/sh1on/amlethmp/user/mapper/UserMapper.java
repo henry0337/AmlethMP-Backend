@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Mapper
 @Javadoc(
         value = "Giao diện cung cấp các phương thức mapping cho mô-đun {@link User}.",
-        authors = {"<a href=\"https://github.com/AdorableDandelion25\">Patricia</a>", "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
+        authors = {"<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>", "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
 public interface UserMapper {
     UserDto toUserDto(User user);
 

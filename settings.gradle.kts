@@ -17,5 +17,3 @@ dependencyResolutionManagement {
         maven { url = uri("https://central.sonatype.com/repository/maven-snapshots") }
     }
 }
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

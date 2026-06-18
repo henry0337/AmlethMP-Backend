@@ -5,7 +5,7 @@ import dev.sh1on.amlethmp.user.model.User;
 import reactor.core.publisher.Mono;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 public interface UserRepository extends AmlethMPRepository<User, String> {
     Mono<User> findByEmail(String email);

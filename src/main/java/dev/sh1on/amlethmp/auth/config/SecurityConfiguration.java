@@ -16,17 +16,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * <p>Lớp cấu hình bảo mật cho hệ thống, sử dụng <b>Spring Security Reactive</b>.</p>
- * <p>Cấu hình các bộ lọc bảo mật, quản lý quyền truy cập và xác thực dựa trên JWT.</p>
- *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @EnableReactiveSecurityCustomization
 @RequiredArgsConstructor
-public class SecurityConfiguration {
+class SecurityConfiguration {
+    private static final String BEARER_PREFIX = "Bearer ";
+
     private final JwtService jwtService;
     private final ReactiveUserDetailsService userDetailsService;
 
@@ -62,11 +62,11 @@ public class SecurityConfiguration {
 
     @Bean
     ServerAuthenticationConverter jwtAuthenticationConverter() {
-        return exchange -> {
+        return (ServerWebExchange exchange) -> {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) return Mono.empty();
+            if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) return Mono.empty();
 
-            var token = authHeader.substring(7);
+            var token = authHeader.substring(BEARER_PREFIX.length());
             String username = jwtService.extractUsername(token);
 
             return userDetailsService.findByUsername(username)

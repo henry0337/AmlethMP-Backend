@@ -12,6 +12,7 @@ import org.springframework.stereotype.Indexed;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @Indexed
+@SuppressWarnings("java:S1694")
 public abstract class AmlethMPService {
     protected ReactorUtils reactorUtils;
     protected I18NUtils i18NUtils;

@@ -26,7 +26,7 @@ import java.time.OffsetDateTime;
  * <b>[Domain Service]</b> <br>
  * Lớp xử lý nghiệp vụ cho mô-đun {@link User}.
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
 @Transactional
@@ -39,7 +39,7 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
     @Override
     @Transactional(readOnly = true)
     public Mono<Page<UserDto>> findAll(Pageable pageable) {
-        return repository.findAllBy(pageable)
+        return repository.findAll(pageable)
                 .switchIfEmpty(Flux.empty())
                 .map(mapper::toUserDto)
                 .collectList()
@@ -65,7 +65,7 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
     public Mono<UserDto> update(String key, UserUpdateDto dto) {
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
-                .flatMap(user -> {
+                .flatMap((User user) -> {
                     String encodedPassword = CommonUtils.asNonNullable(encoder.encode(dto.getPassword()));
 
                     if (dto.getEmail() != null) user.setEmail(dto.getEmail());
@@ -88,7 +88,7 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
     public Mono<Void> disableById(String key) {
         return repository.findById(key)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
-                .flatMap(user -> {
+                .flatMap((User user) -> {
                     user.setDisabled(true);
                     user.setLastDisabledAt(OffsetDateTime.now());
                     user.setLastUpdatedAt(OffsetDateTime.now());

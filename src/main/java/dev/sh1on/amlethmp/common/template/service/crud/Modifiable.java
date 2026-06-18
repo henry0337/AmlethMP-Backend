@@ -12,7 +12,8 @@ import reactor.core.publisher.Mono;
  * @param <UD> DTO riêng biệt dùng để cập nhật dữ liệu
  */
 @FunctionalInterface
-public interface Modifiable<OD, K, UD> { // NOSONAR
+@SuppressWarnings("java:S1711")
+public interface Modifiable<OD, K, UD> {
 
     /**
      * Cập nhật dữ liệu mới cho bản ghi được tìm thấy bởi {@code key}, nếu có.

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
 
 /**
  * @author <a href="https://github.com/henry0337">S3lena</a>
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 public class ReactorUtils {
@@ -116,7 +116,7 @@ public class ReactorUtils {
      * @param publisher Đối tượng {@link Mono} cần lấy giá trị được wrap tương ứng
      * @param <T>       Kiểu dữ liệu được wrap trong {@link Mono}
      * @return Giá trị được wrap bên trong nếu tồn tại, nếu như {@link Mono#empty()} thì trả về {@code null}.
-     * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+     * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
      */
     public <T> @Nullable T awaitMono(Mono<T> publisher) {
         return publisher.block();

@@ -10,7 +10,7 @@ import java.util.Objects;
 /**
  * Lớp tiện ích chung cung cấp các phương thức hỗ trợ xử lý dữ liệu cơ bản.
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class CommonUtils {
@@ -39,6 +39,6 @@ public final class CommonUtils {
      */
     @Contract(value = "!null, _ -> param1", pure = true)
     public static <T> T asNonNullable(@Nullable T instance, T defaultValue) {
-        return Objects.requireNonNullElse(instance, defaultValue); // NOSONAR
+        return Objects.requireNonNullElse(instance, defaultValue);
     }
 }

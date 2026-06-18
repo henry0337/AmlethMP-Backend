@@ -17,18 +17,18 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 
 /**
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
 @Order(3)
 @Profile("dev")
 @Slf4j
-public class SwaggerUiInitializer implements GenericApplicationListener {
+class SwaggerUiInitializer implements GenericApplicationListener {
     private final I18NUtils i18NUtils;
     private final ReactorUtils reactorUtils;
     private final String url;
 
-    public SwaggerUiInitializer(Environment env, I18NUtils i18NUtils, ReactorUtils reactorUtils) {
+    SwaggerUiInitializer(Environment env, I18NUtils i18NUtils, ReactorUtils reactorUtils) {
         this.i18NUtils = i18NUtils;
         this.reactorUtils = reactorUtils;
         String port = env.getProperty("server.port", "8080");
@@ -53,10 +53,12 @@ public class SwaggerUiInitializer implements GenericApplicationListener {
                 log.warn(i18NUtils.translateMessage("os.unsupported"));
             }
 
-            try {
-                if (processBuilder != null) processBuilder.start();
-            } catch (IOException e) {
-                throw new UnsupportedOperationException(e);
+            if (processBuilder != null) {
+                try {
+                    processBuilder.start();
+                } catch (IOException e) {
+                    throw new UnsupportedOperationException(e);
+                }
             }
         }));
     }

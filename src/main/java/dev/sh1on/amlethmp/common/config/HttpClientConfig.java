@@ -11,12 +11,12 @@ import java.util.List;
  * <p>Lớp cấu hình cho <b>WebClient</b>.</p>
  * <p>Cấu hình các tiêu đề mặc định cho các yêu cầu HTTP.</p>
  */
-@Configuration
-public class HttpClientConfig {
+@Configuration(proxyBeanMethods = false)
+class HttpClientConfig {
     @Bean
     WebClient webClient(WebClient.Builder builder) {
         return builder
-                .defaultHeaders(httpHeaders -> {
+                .defaultHeaders((HttpHeaders httpHeaders) -> {
                     var headers = new HttpHeaders();
                     headers.add(HttpHeaders.ACCEPT, "*/*");
                     headers.addAll(HttpHeaders.ACCEPT_LANGUAGE, List.of("vi-VN", "en-US", "ja-JP"));

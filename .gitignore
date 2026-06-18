@@ -37,3 +37,8 @@ out/
 
 ### Other ###
 .env
+.claude/
+CLAUDE.md
+.gemini/
+.antigravitycli/
+GEMINI.md

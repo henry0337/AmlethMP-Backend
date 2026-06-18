@@ -18,7 +18,7 @@ public class UserUpdateDto {
     @Normalized(form = Normalizer.Form.NFKC)
     private String displayName;
 
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?])(?=.{12,}).*$")
+    @Pattern(regexp = "^(?=.*\\p{Lu})(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?])(?=.{12,}).*$")
     @Length(min = 12, max = 255)
     private String password;
 

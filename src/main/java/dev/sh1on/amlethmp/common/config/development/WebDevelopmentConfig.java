@@ -8,11 +8,11 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
 /**
  * <p>Lớp cấu hình Web cho môi trường phát triển (development).</p>
  *
- * @author <a href="https://github.com/AdorableDandelion25">Patricia</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Configuration
 @Profile("dev")
-public class WebDevelopmentConfig implements WebFluxConfigurer {
+class WebDevelopmentConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
