@@ -21,5 +21,5 @@ public interface AmlethMPRepository<T, ID> extends R2dbcRepository<T, ID> {
      * @param pageable Đối tượng chứa thông tin phân trang và sắp xếp
      * @return Một {@link Flux} chứa danh sách các thực thể tìm thấy
      */
-    Flux<T> findAll(Pageable pageable);
+    Flux<T> findAllBy(Pageable pageable);
 }

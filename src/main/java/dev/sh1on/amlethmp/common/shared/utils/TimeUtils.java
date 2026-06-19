@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jspecify.annotations.Nullable;
 
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Month;

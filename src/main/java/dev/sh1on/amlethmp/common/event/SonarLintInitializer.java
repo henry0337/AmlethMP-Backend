@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
+import dev.sh1on.amlethmp.common.shared.service.I18nService;
 import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ import java.io.IOException;
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
-    private final I18NUtils i18NUtils;
+    private final I18nService i18NService;
     private final ReactorUtils reactorUtils;
 
     @Override
@@ -37,16 +37,16 @@ class SonarLintInitializer implements GenericApplicationListener {
         if (!(event instanceof ApplicationReadyEvent)) return;
 
         reactorUtils.awaitMono(Mono.fromRunnable(() -> {
-            log.info(i18NUtils.translateMessage("sonar.check"));
+            log.info(i18NService.translateMessage("sonar.check"));
             try {
                 if (Boolean.TRUE.equals(reactorUtils.awaitMono(isSonarLintRunning()))) {
-                    log.info(i18NUtils.translateDynamicMessage("sonar.running", SONAR_URL));
+                    log.info(i18NService.translateDynamicMessage("sonar.running", new Object[]{SONAR_URL}));
                     openBrowser();
                 } else {
-                    log.info(i18NUtils.translateMessage("sonar.not_running"));
+                    log.info(i18NService.translateMessage("sonar.not_running"));
                 }
             } catch (Exception e) {
-                log.error(i18NUtils.translateMessage("sonar.error"), e);
+                log.error(i18NService.translateMessage("sonar.error"), e);
             }
         }));
     }
@@ -69,10 +69,10 @@ class SonarLintInitializer implements GenericApplicationListener {
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
                 new ProcessBuilder("sh", "-c", "xdg-open " + SonarLintInitializer.SONAR_URL).start(); // xdg-open for Linux, 'open' for Mac
             } else {
-                log.warn(i18NUtils.translateMessage("os.unsupported"));
+                log.warn(i18NService.translateMessage("os.unsupported"));
             }
         } catch (IOException e) {
-            log.error(i18NUtils.translateMessage("browser.open.error"), e);
+            log.error(i18NService.translateMessage("browser.open.error"), e);
         }
     }
 

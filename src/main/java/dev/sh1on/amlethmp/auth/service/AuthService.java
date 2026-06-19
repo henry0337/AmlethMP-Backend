@@ -5,6 +5,7 @@ import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
+import dev.sh1on.amlethmp.user.model.Role;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -32,22 +33,23 @@ public class AuthService extends AmlethMPService implements JwtAuthenticationSer
     public Mono<String> login(String email, String password) {
         Mono<User> userMono = reactorUtils.errorIfEmpty(
                 userRepository.findByEmail(email),
-                () -> new UsernameNotFoundException("User not found"));
+                () -> new UsernameNotFoundException(i18NService.translateMessage("error.user.not_found")));
 
         return reactorUtils.ensure(
                 userMono,
                 user -> passwordEncoder.matches(password, user.getPassword()),
-                () -> new BadCredentialsException("Invalid credentials")
+                () -> new BadCredentialsException(i18NService.translateMessage("error.auth.invalid_credentials"))
         ).map(jwtService::generateToken);
     }
 
     @Override
     public Mono<UserDto> register(RegisterRequest dto) {
-        UserDto responseData = userMapper.toUserDto(dto);
-        User user = userMapper.toUser(responseData);
-        String encryptedPassword = CommonUtils.asNonNullable(passwordEncoder.encode(dto.getPassword()));
-        user.setAccountPassword(encryptedPassword);
-        return userRepository.save(user).map(u -> responseData);
+        User user = userMapper.toUser(userMapper.toUserDto(dto));
+        user.setAccountPassword(CommonUtils.asNonNullable(passwordEncoder.encode(dto.getPassword())));
+        // Người dùng tự đăng ký luôn nhận vai trò USER (cột role là NOT NULL)
+        user.setRole(Role.USER.name());
+        // Map lại từ entity đã lưu để response có id + createdAt/createdBy do DB/Auditing sinh ra
+        return userRepository.save(user).map(userMapper::toUserDto);
     }
 }
 

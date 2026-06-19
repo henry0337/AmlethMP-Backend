@@ -3,7 +3,7 @@ package dev.sh1on.amlethmp.common.config;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.web.server.i18n.AcceptHeaderLocaleContextResolver;
 import org.springframework.web.server.i18n.LocaleContextResolver;
 
@@ -18,11 +18,11 @@ import java.util.Locale;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Configuration(proxyBeanMethods = false)
-class I18nConfig {
+class LocalizationConfig {
 
     @Bean
     MessageSource messageSource() {
-        var messageSource = new ResourceBundleMessageSource();
+        var messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:i18n/messages");
         messageSource.setDefaultEncoding("UTF-8");
         return messageSource;

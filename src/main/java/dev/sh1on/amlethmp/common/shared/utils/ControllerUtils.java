@@ -1,8 +1,10 @@
 package dev.sh1on.amlethmp.common.shared.utils;
 
 import dev.sh1on.amlethmp.common.config.ServerWebExchangeContextFilter;
+import dev.sh1on.amlethmp.common.shared.dto.PagedResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
@@ -25,6 +27,27 @@ public class ControllerUtils {
      */
     public <T> Mono<ResponseEntity<T>> awaitOk(Mono<T> source) {
         return source.map(ResponseEntity::ok);
+    }
+
+    /**
+     * Trả về phản hồi 200 OK với body rỗng sau khi luồng {@code Mono<Void>} hoàn tất.
+     *
+     * @param source Luồng xử lý (thường là Mono<Void>)
+     * @return {@link Mono} chứa {@link ResponseEntity} 200 OK không có body
+     */
+    public Mono<ResponseEntity<Void>> awaitOkEmpty(Mono<Void> source) {
+        return source.then(Mono.just(ResponseEntity.ok().build()));
+    }
+
+    /**
+     * Trả về phản hồi 200 OK với dữ liệu phân trang đã được rút gọn thành {@link PagedResponse}.
+     *
+     * @param source Luồng dữ liệu chứa {@link Page} cần trả về
+     * @param <T>    Kiểu dữ liệu của mỗi bản ghi
+     * @return {@link Mono} chứa {@link ResponseEntity} bọc {@link PagedResponse}
+     */
+    public <T> Mono<ResponseEntity<PagedResponse<T>>> awaitPaged(Mono<Page<T>> source) {
+        return source.map(page -> ResponseEntity.ok(PagedResponse.from(page)));
     }
 
     /**

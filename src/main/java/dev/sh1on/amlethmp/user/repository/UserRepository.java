@@ -4,9 +4,11 @@ import dev.sh1on.amlethmp.common.template.repository.AmlethMPRepository;
 import dev.sh1on.amlethmp.user.model.User;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-public interface UserRepository extends AmlethMPRepository<User, String> {
+public interface UserRepository extends AmlethMPRepository<User, UUID> {
     Mono<User> findByEmail(String email);
 }

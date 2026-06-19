@@ -14,13 +14,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
 /**
  * <b>[Domain Service]</b> <br>
@@ -30,15 +32,18 @@ import java.time.OffsetDateTime;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserService extends AmlethMPRestService<UserDto, String, UserCreateDto, UserUpdateDto> implements Reversible<String> {
+public class UserService extends AmlethMPRestService<UserDto, UUID, UserCreateDto, UserUpdateDto> implements Reversible<UUID> {
+    private static final String USER_NOT_FOUND = "error.user.not_found";
+
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder encoder;
+    private final ReactiveAuditorAware<String> auditorAware;
 
     @Override
     @Transactional(readOnly = true)
     public Mono<Page<UserDto>> findAll(Pageable pageable) {
-        return repository.findAll(pageable)
+        return repository.findAllBy(pageable)
                 .switchIfEmpty(Flux.empty())
                 .map(mapper::toUserDto)
                 .collectList()
@@ -48,49 +53,59 @@ public class UserService extends AmlethMPRestService<UserDto, String, UserCreate
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<UserDto> findByKey(String key) {
+    public Mono<UserDto> findByKey(UUID key) {
         return repository.findById(key).map(mapper::toUserDto);
     }
 
     @Override
+    @SuppressWarnings("java:S4449")
     public Mono<UserDto> save(UserCreateDto dto) {
-        User user = mapper.toUser(mapper.toUserDto(dto));
-        String encodedPassword = CommonUtils.asNonNullable(encoder.encode(user.getPassword()));
-        user.setAccountPassword(encodedPassword); // NOSONAR
+        var user = mapper.toUser(dto);
+        user.setAccountPassword(CommonUtils.asNonNullable(encoder.encode(dto.getPassword())));
         return repository.save(user).map(mapper::toUserDto);
     }
 
     @Override
-    public Mono<UserDto> update(String key, UserUpdateDto dto) {
+    public Mono<UserDto> update(UUID key, UserUpdateDto dto) {
         return repository.findById(key)
-                .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(i18NService.translateMessage(USER_NOT_FOUND))))
                 .flatMap((User user) -> {
-                    String encodedPassword = CommonUtils.asNonNullable(encoder.encode(dto.getPassword()));
-
                     if (dto.getEmail() != null) user.setEmail(dto.getEmail());
                     if (dto.getDisplayName() != null) user.setDisplayName(dto.getDisplayName());
                     if (dto.getRole() != null) user.setRole(dto.getRole().toString());
-                    if (dto.getPassword() != null) user.setAccountPassword(encodedPassword);
-                    user.setLastUpdatedAt(OffsetDateTime.now());
-                    user.setLastUpdatedBy(dto.getUpdatedBy());
+                    if (dto.getPassword() != null) {
+                        user.setAccountPassword(CommonUtils.asNonNullable(encoder.encode(dto.getPassword())));
+                    }
                     return repository.save(user);
                 })
                 .map(mapper::toUserDto);
     }
 
     @Override
-    public Mono<Void> deleteById(String key) {
+    public Mono<Void> deleteById(UUID key) {
         return repository.deleteById(key);
     }
 
     @Override
-    public Mono<Void> disableById(String key) {
+    public Mono<Void> disableById(UUID key) {
         return repository.findById(key)
-                .switchIfEmpty(Mono.error(new UserNotFoundException("User not found")))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(i18NService.translateMessage(USER_NOT_FOUND))))
+                .flatMap((User user) -> auditorAware.getCurrentAuditor()
+                        .flatMap((String auditor) -> {
+                            user.setDisabled(true);
+                            user.setLastDisabledAt(Instant.now());
+                            user.setLastDisabledBy(auditor);
+                            return repository.save(user);
+                        }))
+                .then();
+    }
+
+    @Override
+    public Mono<Void> enableById(UUID key) {
+        return repository.findById(key)
+                .switchIfEmpty(Mono.error(new UserNotFoundException(i18NService.translateMessage(USER_NOT_FOUND))))
                 .flatMap((User user) -> {
-                    user.setDisabled(true);
-                    user.setLastDisabledAt(OffsetDateTime.now());
-                    user.setLastUpdatedAt(OffsetDateTime.now());
+                    user.setDisabled(false);
                     return repository.save(user);
                 })
                 .then();

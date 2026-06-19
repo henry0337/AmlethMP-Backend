@@ -38,6 +38,7 @@ public final class CommonUtils {
      * @return đối tượng ban đầu hoặc giá trị mặc định
      */
     @Contract(value = "!null, _ -> param1", pure = true)
+    @SuppressWarnings("java:S2637")
     public static <T> T asNonNullable(@Nullable T instance, T defaultValue) {
         return Objects.requireNonNullElse(instance, defaultValue);
     }

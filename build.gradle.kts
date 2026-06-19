@@ -88,7 +88,7 @@ dependencies {
 	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
-//	developmentOnly(libs.spring.boot.docker.compose)
+	developmentOnly(libs.spring.boot.docker.compose)
 
 	testImplementation(libs.spring.boot.starter.test.webflux)
 	testImplementation(libs.spring.boot.starter.test.security)

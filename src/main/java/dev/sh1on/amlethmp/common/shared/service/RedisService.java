@@ -1,5 +1,6 @@
-package dev.sh1on.amlethmp.common.shared.utils;
+package dev.sh1on.amlethmp.common.shared.service;
 
+import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
@@ -11,7 +12,7 @@ import java.time.Duration;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class RedisUtils {
+public class RedisService {
     private final ReactiveRedisTemplate<String, String> redisTemplate;
     private final ReactorUtils reactorUtils;
 

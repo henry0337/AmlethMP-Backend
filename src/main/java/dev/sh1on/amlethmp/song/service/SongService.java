@@ -12,15 +12,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.UUID;
+
 /**
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SongService extends AmlethMPRestService<SongDto, String, SongCreateDto, SongUpdateDto>
-        implements Reversible<String> {
-    public Mono<Void> deleteById(String key) {
+public class SongService extends AmlethMPRestService<SongDto, UUID, SongCreateDto, SongUpdateDto>
+        implements Reversible<UUID> {
+    public Mono<Void> deleteById(UUID key) {
         return null;
     }
 
@@ -28,11 +30,11 @@ public class SongService extends AmlethMPRestService<SongDto, String, SongCreate
         return null;
     }
 
-    public Mono<SongDto> update(String key, SongUpdateDto dto) {
+    public Mono<SongDto> update(UUID key, SongUpdateDto dto) {
         return null;
     }
 
-    public Mono<SongDto> findByKey(String key) {
+    public Mono<SongDto> findByKey(UUID key) {
         return null;
     }
 
@@ -40,7 +42,11 @@ public class SongService extends AmlethMPRestService<SongDto, String, SongCreate
         return null;
     }
 
-    public Mono<Void> disableById(String key) {
+    public Mono<Void> disableById(UUID key) {
+        return null;
+    }
+
+    public Mono<Void> enableById(UUID key) {
         return null;
     }
 }

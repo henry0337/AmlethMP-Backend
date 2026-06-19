@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  * @param <K> Điều kiện tìm kiếm dữ liệu cho entity đang tương tác
  */
-@FunctionalInterface
 @SuppressWarnings("java:S1711")
 public interface Reversible<K> {
 
@@ -28,4 +27,10 @@ public interface Reversible<K> {
      * @param key Điều kiện được chỉ định để tìm kiếm dữ liệu.
      */
     Mono<Void> disableById(K key);
+
+    /**
+     * Kích hoạt lại bản ghi đã bị vô hiệu hóa dựa trên {@code id} được chỉ định.
+     * @param key Điều kiện được chỉ định để tìm kiếm dữ liệu.
+     */
+    Mono<Void> enableById(K key);
 }
