@@ -3,14 +3,15 @@ package dev.sh1on.amlethmp.user.dto;
 import dev.sh1on.amlethmp.user.model.Role;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
 @Data
 public class UserDto {
-    private String id;
+    private UUID id;
     private String email;
     private String displayName;
     private Role role;
-    private LocalDateTime createdAt;
+    private Instant createdAt;
     private String createdBy;
 }

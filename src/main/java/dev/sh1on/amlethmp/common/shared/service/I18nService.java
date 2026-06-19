@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.utils;
+package dev.sh1on.amlethmp.common.shared.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,8 @@ import static dev.sh1on.amlethmp.common.shared.constant.AppConstant.BLANK;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class I18NUtils {
+@SuppressWarnings("java:S1166")
+public class I18nService {
     private final MessageSource messageSource;
 
     /**
@@ -61,7 +62,7 @@ public class I18NUtils {
      * @param args danh sách các tham số động dùng để truyền vào và định dạng chuỗi thông báo
      * @return nội dung thông báo đã được bản địa hóa và thay thế tham số, hoặc một chuỗi rỗng nếu không tìm thấy mã
      */
-    public String translateDynamicMessage(String code, Object... args) {
+    public String translateDynamicMessage(String code, Object[] args) {
         try {
             return messageSource.getMessage(code, args, Locale.getDefault());
         } catch (NoSuchMessageException e) {

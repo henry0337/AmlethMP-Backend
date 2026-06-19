@@ -11,7 +11,8 @@ import org.springframework.data.annotation.Version;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.InsertOnlyProperty;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.util.UUID;
 
 /**
  * <b>[Internal, Model-only]</b> <br>
@@ -32,7 +33,7 @@ public abstract class AmlethMPEntity {
      * Khóa chính của thực thể.
      */
     @Id
-    protected String id;
+    protected UUID id;
 
     /**
      * Phiên bản của thực thể, dùng để hỗ trợ cơ chế <b>Optimistic Locking</b>.
@@ -46,7 +47,7 @@ public abstract class AmlethMPEntity {
     @Column("created_at")
     @CreatedDate
     @InsertOnlyProperty
-    protected OffsetDateTime createdAt;
+    protected Instant createdAt;
 
     /**
      * Đối tượng thực hiện tạo lập bản ghi này.
@@ -61,7 +62,7 @@ public abstract class AmlethMPEntity {
      */
     @Column("last_updated_at")
     @LastModifiedDate
-    protected OffsetDateTime lastUpdatedAt;
+    protected Instant lastUpdatedAt;
 
     /**
      * Đối tượng thực hiện cập nhật bản ghi này lần cuối.

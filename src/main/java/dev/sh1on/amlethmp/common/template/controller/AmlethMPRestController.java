@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
-import org.springframework.data.domain.Page;
+import dev.sh1on.amlethmp.common.shared.dto.PagedResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
@@ -30,9 +30,9 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @param limit  Số lượng bản ghi tối đa trên mỗi trang
      * @param order  Thứ tự sắp xếp (asc hoặc desc)
      * @param prop   Tên trường dữ liệu dùng để sắp xếp
-     * @return Một {@link Mono} chứa kết quả phân trang {@link Page}
+     * @return Một {@link Mono} chứa kết quả phân trang dưới dạng {@link PagedResponse}
      */
-    public abstract Mono<ResponseEntity<Page<OD>>> findAll(Integer offset, Integer limit, String order, String prop);
+    public abstract Mono<ResponseEntity<PagedResponse<OD>>> findAll(Integer offset, Integer limit, String order, String prop);
 
     /**
      * Tìm kiếm thông tin chi tiết của một bản ghi dựa trên khóa chính hoặc điều kiện xác định.
@@ -74,4 +74,12 @@ public abstract class AmlethMPRestController<OD, K, CD, UD> extends AmlethMPCont
      * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
      */
     public abstract Mono<ResponseEntity<Void>> disable(K key);
+
+    /**
+     * Kích hoạt lại một bản ghi đã bị vô hiệu hóa trước đó (Re-enable / Restore).
+     *
+     * @param key Khóa xác định bản ghi cần kích hoạt lại
+     * @return Một {@link Mono} rỗng biểu thị trạng thái hoàn thành
+     */
+    public abstract Mono<ResponseEntity<Void>> enable(K key);
 }

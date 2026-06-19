@@ -1,7 +1,6 @@
 package dev.sh1on.amlethmp.common.shared.service;
 
 import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
-import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +30,7 @@ import java.util.function.Predicate;
 @Slf4j
 public class RestClient {
     private final WebClient webClient;
-    private final I18NUtils i18NUtils;
+    private final I18nService i18NService;
 
     /**
      * Thực hiện gửi một yêu cầu HTTP GET đến URI đã chỉ định và "unwrap" (giải nén) body phản hồi
@@ -71,7 +70,7 @@ public class RestClient {
 
         if (statusPredicate == null) {
             if (responseHandler != null) {
-                throw new IllegalArgumentException("Tham số \"responseHandler\" phải là null nếu như \"statusPredicate\" null!");
+                throw new IllegalArgumentException(i18NService.translateMessage("error.rest_client.handler_requires_predicate"));
             }
 
             return responseSpec.bodyToMono(responseType);
@@ -121,7 +120,7 @@ public class RestClient {
 
         if (statusPredicate == null) {
             if (responseHandler != null) {
-                throw new IllegalArgumentException("Tham số \"responseHandler\" phải là null nếu như \"statusPredicate\" null!");
+                throw new IllegalArgumentException(i18NService.translateMessage("error.rest_client.handler_requires_predicate"));
             }
 
             return responseSpec.bodyToMono(responseType);
@@ -136,11 +135,11 @@ public class RestClient {
 
     @SuppressWarnings("unused")
     private String retryFallback() {
-        return i18NUtils.translateMessage("httpClient.fallback");
+        return i18NService.translateMessage("httpClient.fallback");
     }
 
     @SuppressWarnings("unused")
     private String circuitBreakerFallback() {
-        return i18NUtils.translateMessage("httpClient.fallback");
+        return i18NService.translateMessage("httpClient.fallback");
     }
 }

@@ -1,16 +1,17 @@
 services:
   postgres:
-    image: 'postgres:17-alpine'
+    image: 'postgres:18-alpine'
     container_name: amlethmp-postgres
     environment:
       - 'POSTGRES_DB=${POSTGRES_DB:-amlethmp}'
       - 'POSTGRES_USER=${DB_USERNAME:-postgres}'
       - 'POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}'
     ports:
-      # host:container — cố định port để app/IDE bên ngoài kết nối được
       - '${POSTGRES_PORT:-5432}:5432'
     volumes:
-      - 'amlethmp-postgres-data:/var/lib/postgresql/data'
+      # PG 18+: mount tại /var/lib/postgresql (data nằm trong subdir theo major version),
+      # không còn dùng /var/lib/postgresql/data như PG 17 trở về trước
+      - 'amlethmp-postgres-data:/var/lib/postgresql'
     healthcheck:
       test: [ 'CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres} -d ${POSTGRES_DB:-amlethmp}' ]
       interval: 5s

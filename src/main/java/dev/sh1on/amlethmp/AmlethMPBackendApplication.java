@@ -4,6 +4,7 @@ import dev.sh1on.amlethmp.common.template.controller.AmlethMPController;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
@@ -14,7 +15,7 @@ import org.springframework.data.r2dbc.config.EnableR2dbcAuditing;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-@SpringBootApplication
+@SpringBootApplication(exclude = DataSourceTransactionManagerAutoConfiguration.class)
 @ComponentScan(basePackages = "dev.sh1on.amlethmp", includeFilters = @ComponentScan.Filter(
         type = FilterType.ASSIGNABLE_TYPE,
         classes = {AmlethMPController.class, AmlethMPService.class}

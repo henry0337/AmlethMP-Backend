@@ -8,7 +8,6 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Normalized;
 
 import java.text.Normalizer;
-import java.time.LocalDateTime;
 
 @Data
 public class UserUpdateDto {
@@ -23,8 +22,4 @@ public class UserUpdateDto {
     private String password;
 
     private Role role;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
-    private LocalDateTime lastDisabledAt;
-    private String lastDisabledBy;
 }

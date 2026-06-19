@@ -1,7 +1,7 @@
 package dev.sh1on.amlethmp.common.template.controller;
 
 import dev.sh1on.amlethmp.common.shared.utils.ControllerUtils;
-import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
+import dev.sh1on.amlethmp.common.shared.service.I18nService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Indexed;
 
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Indexed;
 @SuppressWarnings("java:S1694")
 public abstract class AmlethMPController {
     protected ControllerUtils controllerUtils;
-    protected I18NUtils i18NUtils;
+    protected I18nService i18NService;
 
     @Autowired(required = false)
     public void setControllerUtils(ControllerUtils controllerUtils) {
@@ -23,7 +23,7 @@ public abstract class AmlethMPController {
     }
 
     @Autowired(required = false)
-    public void setMessageUtils(I18NUtils i18NUtils) {
-        this.i18NUtils = i18NUtils;
+    public void setMessageUtils(I18nService i18NService) {
+        this.i18NService = i18NService;
     }
 }

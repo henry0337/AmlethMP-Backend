@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.shared.utils.I18NUtils;
+import dev.sh1on.amlethmp.common.shared.service.I18nService;
 import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -24,12 +24,12 @@ import java.io.IOException;
 @Profile("dev")
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
-    private final I18NUtils i18NUtils;
+    private final I18nService i18NService;
     private final ReactorUtils reactorUtils;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, I18NUtils i18NUtils, ReactorUtils reactorUtils) {
-        this.i18NUtils = i18NUtils;
+    SwaggerUiInitializer(Environment env, I18nService i18NService, ReactorUtils reactorUtils) {
+        this.i18NService = i18NService;
         this.reactorUtils = reactorUtils;
         String port = env.getProperty("server.port", "8080");
         this.url = "http://localhost:" + port + "/swagger-ui.html";
@@ -50,7 +50,7 @@ class SwaggerUiInitializer implements GenericApplicationListener {
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
                 processBuilder = new ProcessBuilder("sh", "-c", url);
             } else {
-                log.warn(i18NUtils.translateMessage("os.unsupported"));
+                log.warn(i18NService.translateMessage("os.unsupported"));
             }
 
             if (processBuilder != null) {

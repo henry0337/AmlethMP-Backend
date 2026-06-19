@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.auth.config;
 
+import dev.sh1on.amlethmp.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.auth.service.JwtService;
 import dev.sh1on.amlethmp.common.shared.annotation.EnableReactiveSecurityCustomization;
 import lombok.RequiredArgsConstructor;
@@ -38,11 +39,11 @@ class SecurityConfiguration {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
-                                "/api/auth/v1/**",
-                                "/api/user/v1/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "swagger-ui.html").permitAll()
+                                AmlethMPEndpoint.Auth.BASE + "/**",
+                                AmlethMPEndpoint.User.BASE + "/**",
+                                AmlethMPEndpoint.Docs.API_DOCS,
+                                AmlethMPEndpoint.Docs.SWAGGER_UI,
+                                AmlethMPEndpoint.Docs.SWAGGER_UI_HTML).permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAt(jwtAuthenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)

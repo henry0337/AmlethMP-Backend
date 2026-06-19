@@ -7,9 +7,7 @@ import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
 import dev.sh1on.amlethmp.user.model.User;
 import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
-
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
+import org.mapstruct.Mapping;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
@@ -21,6 +19,9 @@ import java.time.OffsetDateTime;
 public interface UserMapper {
     UserDto toUserDto(User user);
 
+    @Mapping(target = "accountPassword", ignore = true)
+    User toUser(UserCreateDto dto);
+
     UserDto toUserDto(UserCreateDto dto);
 
     UserDto toUserDto(RegisterRequest request);
@@ -28,12 +29,4 @@ public interface UserMapper {
     UserDto toUserDto(UserUpdateDto userDto);
 
     User toUser(UserDto userDto);
-
-    default LocalDateTime map(OffsetDateTime offsetDateTime) {
-        return offsetDateTime == null ? null : offsetDateTime.toLocalDateTime();
-    }
-
-    default OffsetDateTime map(LocalDateTime localDateTime) {
-        return localDateTime == null ? null : localDateTime.atOffset(java.time.ZoneOffset.UTC);
-    }
 }

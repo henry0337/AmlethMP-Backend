@@ -22,7 +22,7 @@ class AuditorAware implements ReactiveAuditorAware<String> {
                 .mapNotNull(SecurityContext::getAuthentication)
                 .filter(Authentication::isAuthenticated)
                 .map(Authentication::getPrincipal)
-                .map(principal -> principal instanceof User user ? user.getId() : "")
+                .map(principal -> principal instanceof User user ? user.getId().toString() : "")
                 .switchIfEmpty(Mono.just("system"));
     }
 }
