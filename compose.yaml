@@ -1,9 +1,46 @@
 services:
   postgres:
-    image: 'postgres:latest'
+    image: 'postgres:17-alpine'
+    container_name: amlethmp-postgres
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      - 'POSTGRES_DB=${POSTGRES_DB:-amlethmp}'
+      - 'POSTGRES_USER=${DB_USERNAME:-postgres}'
+      - 'POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}'
     ports:
-      - '5432'
+      # host:container — cố định port để app/IDE bên ngoài kết nối được
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - 'amlethmp-postgres-data:/var/lib/postgresql/data'
+    healthcheck:
+      test: [ 'CMD-SHELL', 'pg_isready -U ${DB_USERNAME:-postgres} -d ${POSTGRES_DB:-amlethmp}' ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  redis:
+    image: 'redis:7-alpine'
+    container_name: amlethmp-redis
+    labels:
+      # Spring Boot Docker Compose vẫn start/stop container này, nhưng KHÔNG tự
+      # tạo RedisConnectionDetails (vì không parse được password từ --requirepass).
+      # Nhờ vậy app dùng spring.data.redis.* lấy từ .env (đã có password).
+      org.springframework.boot.ignore: 'true'
+    # Redis bắt buộc có password vì profile dev yêu cầu REDIS_PASSWORD
+    command: [ 'redis-server', '--requirepass', '${REDIS_PASSWORD:-redis}' ]
+    environment:
+      - 'REDIS_PASSWORD=${REDIS_PASSWORD:-redis}'
+    ports:
+      - '${REDIS_PORT:-6379}:6379'
+    volumes:
+      - 'amlethmp-redis-data:/data'
+    healthcheck:
+      test: [ 'CMD-SHELL', 'redis-cli -a "$$REDIS_PASSWORD" ping | grep -q PONG' ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  amlethmp-postgres-data:
+  amlethmp-redis-data:

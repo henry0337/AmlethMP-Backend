@@ -8,7 +8,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.*;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.API_VERSION;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.AUTHORIZATION_BUTTON_NAME;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.OPENAPI_DESCRIPTION;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.OPENAPI_TITLE;
+import static dev.sh1on.amlethmp.common.shared.constant.SwaggerConstant.OPENAPI_VERSION;
 
 /**
  * <p>Lớp cấu hình cho <b>Swagger/OpenAPI</b> trong môi trường phát triển (development).</p>

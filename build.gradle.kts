@@ -44,7 +44,7 @@ checkstyle {
 }
 
 extra["sentryVersion"] = "8.27.0"
-extra["springCloudAzureVersion"] = "7.0.0"
+extra["springCloudAzureVersion"] = "7.3.0"
 
 dependencies {
 	implementation(libs.spring.boot.starter.actuator)
