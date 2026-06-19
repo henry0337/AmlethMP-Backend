@@ -50,3 +50,8 @@ public class AuthService extends AmlethMPService implements JwtAuthenticationSer
         return userRepository.save(user).map(u -> responseData);
     }
 }
+
+interface JwtAuthenticationService {
+    Mono<String> login(String email, String password);
+    Mono<UserDto> register(RegisterRequest dto);
+}

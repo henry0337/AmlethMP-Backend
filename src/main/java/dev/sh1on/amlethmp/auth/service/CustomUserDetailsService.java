@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +15,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-class CustomUserDetailsService extends AmlethMPService implements ReactiveUserDetailsService {
+class CustomUserDetailsService implements ReactiveUserDetailsService {
     private final UserRepository userRepository;
 
     @Override

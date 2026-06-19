@@ -4,6 +4,7 @@ import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
 import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
 import dev.sh1on.amlethmp.user.model.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Date;
 import java.util.function.Function;
 
@@ -22,7 +25,7 @@ import java.util.function.Function;
 @Service
 @Slf4j
 public class JwtService extends AmlethMPService {
-    private static final int EXPIRATION_TIME = 1000 * 60 * 60 * 10;
+    private static final Duration EXPIRATION_TIME = Duration.ofHours(10);
 
     private final SecretKey key;
 
@@ -39,11 +42,13 @@ public class JwtService extends AmlethMPService {
                 ? null
                 : userDetails.getAuthorities().iterator().next().getAuthority();
 
+        var now = Instant.now();
+
         return Jwts.builder()
                 .subject(username)
                 .claim("role", CommonUtils.asNonNullable(role, Role.USER.toString()))
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(now.plus(EXPIRATION_TIME)))
                 .signWith(key)
                 .compact();
     }
@@ -56,14 +61,14 @@ public class JwtService extends AmlethMPService {
         try {
             String username = extractUsername(token);
             return username.equals(userDetails.getUsername());
-        } catch (Exception e) {
-            log.warn(e.getLocalizedMessage());
+        } catch (JwtException | IllegalArgumentException e) {
+            log.warn("Token không hợp lệ: {}", e.getMessage(), e);
             return false;
         }
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
+        var claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 

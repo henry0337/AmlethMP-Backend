@@ -17,12 +17,12 @@ public abstract class AmlethMPService {
     protected ReactorUtils reactorUtils;
     protected I18NUtils i18NUtils;
 
-    @Autowired
+    @Autowired(required = false)
     public void setReactorUtils(ReactorUtils reactorUtils) {
         this.reactorUtils = reactorUtils;
     }
 
-    @Autowired
+    @Autowired(required = false)
     public void setMessageUtils(I18NUtils i18NUtils) {
         this.i18NUtils = i18NUtils;
     }

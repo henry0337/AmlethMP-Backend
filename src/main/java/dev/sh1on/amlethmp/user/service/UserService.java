@@ -25,7 +25,6 @@ import java.time.OffsetDateTime;
 /**
  * <b>[Domain Service]</b> <br>
  * Lớp xử lý nghiệp vụ cho mô-đun {@link User}.
- *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
