@@ -37,8 +37,6 @@ class SwaggerUiInitializer implements GenericApplicationListener {
         // Đảm bảo event này chỉ được xử lý sau khi ứng dụng được khởi động đúng cách.
         if (!(event instanceof ApplicationReadyEvent)) return;
 
-        // Ghi chú: Nếu bạn (người đọc mã) mà thấy phương thức markAsSynchronous bị đánh dấu là deprecated, yên tâm vì nó
-        // là chủ đích của tôi thôi, đọc Javadoc của phương thức là sẽ rõ
         Mono.fromRunnable(() -> {
             ProcessBuilder processBuilder = null;
 
@@ -53,8 +51,8 @@ class SwaggerUiInitializer implements GenericApplicationListener {
             if (processBuilder != null) {
                 try {
                     processBuilder.start();
-                } catch (IOException e) {
-                    throw new UnsupportedOperationException(e);
+                } catch (IOException _) {
+                    throw new UnsupportedOperationException();
                 }
             }
         }).block();

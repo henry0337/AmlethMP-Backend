@@ -43,8 +43,8 @@ class SonarLintInitializer implements GenericApplicationListener {
                 } else {
                     log.info(i18nService.translate("sonar.not_running"));
                 }
-            } catch (Exception e) {
-                log.error(i18nService.translate("sonar.error"), e);
+            } catch (Exception _) {
+                log.error(i18nService.translate("sonar.error"));
             }
         }).block();
     }
@@ -65,7 +65,7 @@ class SonarLintInitializer implements GenericApplicationListener {
             if (SystemUtils.IS_OS_WINDOWS) {
                 new ProcessBuilder("cmd.exe", "/c", "start " + SonarLintInitializer.SONAR_URL).start();
             } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
-                new ProcessBuilder("sh", "-c", "xdg-open " + SonarLintInitializer.SONAR_URL).start();
+                new ProcessBuilder("xdg-open", SonarLintInitializer.SONAR_URL).start();
             } else {
                 log.warn(i18nService.translate("os.unsupported"));
             }
