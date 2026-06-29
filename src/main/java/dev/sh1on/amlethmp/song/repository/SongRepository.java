@@ -1,11 +1,14 @@
 package dev.sh1on.amlethmp.song.repository;
 
-import dev.sh1on.amlethmp.common.template.repository.AmlethMPRepository;
+import dev.myrlennia237.template.repository.ModifiedR2dbcRepository;
 import dev.sh1on.amlethmp.song.model.Song;
-
-import java.util.UUID;
+import org.springframework.stereotype.Repository;
 
 /**
- * @author <a href="https://github.com/henry0337">S3lena</a>
+ * <b>[Domain Repository]</b> <br>
+ * Repository cho mô-đun {@code Song}.
+ *
+ * @author <a href="https://github.com/henry0337">Muharux</a>
  */
-public interface SongRepository extends AmlethMPRepository<Song, UUID> { }
+@Repository
+public interface SongRepository extends ModifiedR2dbcRepository<Song> { }

@@ -1,6 +1,8 @@
 package dev.sh1on.amlethmp.user.model;
 
-import dev.sh1on.amlethmp.common.template.model.SoftDeletableEntity;
+import dev.myrlennia237.contract.UserPrincipal;
+import dev.myrlennia237.template.entity.Entity;
+import dev.myrlennia237.util.CommonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,11 +16,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 /**
- * <b>[Aggregate Root]</b> <br>
- * Thực thể nghiệp vụ đại diện cho <b>thông tin người dùng</b>.
- *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Data
@@ -28,7 +28,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Table("users")
 @SuppressWarnings("java:S2057")
-public class User extends SoftDeletableEntity implements UserDetails {
+public class User extends Entity implements UserDetails, UserPrincipal {
     private String email;
 
     @Column("display_name")
@@ -46,7 +46,7 @@ public class User extends SoftDeletableEntity implements UserDetails {
     private boolean locked;
 
     @Column("is_credentials_expired")
-    private boolean credExpired;
+    private boolean credentialExpired;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -75,11 +75,16 @@ public class User extends SoftDeletableEntity implements UserDetails {
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return !credExpired;
+        return !credentialExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return !isDisabled;
+        return true;
+    }
+
+    @Override
+    public UUID getUserId() {
+        return CommonUtils.requireNonNull(super.getId());
     }
 }

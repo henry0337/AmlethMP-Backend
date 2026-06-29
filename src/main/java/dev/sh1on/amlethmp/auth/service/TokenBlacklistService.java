@@ -1,7 +1,6 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.sh1on.amlethmp.common.shared.service.RedisService;
-import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
+import dev.myrlennia237.service.ReactiveRedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -11,11 +10,11 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-public class TokenBlacklistService extends AmlethMPService {
-    private final RedisService redisService;
+public class TokenBlacklistService {
+    private final ReactiveRedisService redisService;
 
     public Mono<Boolean> blacklistToken(String token) {
-        return redisService.setPermanent("", token);
+        return redisService.set("", token);
     }
 
     /**
@@ -24,7 +23,6 @@ public class TokenBlacklistService extends AmlethMPService {
      * @return Trả về {@code true}/{@code false} tương ứng.
      */
     public Mono<Boolean> isBlacklisted(String token) {
-        return redisService.contains("");
+        return redisService.get("").hasElement();
     }
-
 }

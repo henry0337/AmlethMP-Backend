@@ -1,32 +1,35 @@
 package dev.sh1on.amlethmp.auth.controller;
 
-import dev.sh1on.amlethmp.AmlethMPEndpoint;
+import dev.myrlennia237.annotation.spring.ApiController;
+import dev.myrlennia237.annotation.spring.ApiMethod;
+import dev.myrlennia237.template.controller.ReactiveRestController;
+import dev.myrlennia237.helper.ResponseHelper;
+import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.auth.dto.LoginRequest;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.auth.service.AuthService;
-import dev.sh1on.amlethmp.common.template.controller.AmlethMPController;
 import dev.sh1on.amlethmp.user.dto.UserDto;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
 import reactor.core.publisher.Mono;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-@RestController
-@RequestMapping(AmlethMPEndpoint.Auth.BASE)
+@ApiController(
+        path = AmlethMPEndpoint.Auth.BASE,
+        moduleName = "Auth",
+        description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng"
+)
 @Validated
 @RequiredArgsConstructor
-@Tag(name = "Auth", description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
-public class AuthController extends AmlethMPController {
+public class AuthController extends ReactiveRestController {
+    private final ResponseHelper responseHelper;
     private final AuthService service;
 
     /**
@@ -35,9 +38,9 @@ public class AuthController extends AmlethMPController {
      * @param request Đối tượng {@link LoginRequest} chứa email và mật khẩu.
      * @return {@link ResponseEntity} chứa token JWT nếu đăng nhập thành công, hoặc {@code 401 Unauthorized} nếu thất bại.
      */
-    @PostMapping(AmlethMPEndpoint.Auth.LOGIN)
+    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.LOGIN, endpointSummary ="Đăng nhập")
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
-        return controllerUtils.awaitOk(service.login(request.getEmail(), request.getPassword()))
+        return responseHelper.awaitOk(service.login(request.getEmail(), request.getPassword()))
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
@@ -48,9 +51,9 @@ public class AuthController extends AmlethMPController {
      * @return {@link ResponseEntity} chứa {@link UserDto} của người dùng vừa được tạo (status 201 Created) nếu thành công,
      * hoặc 400 Bad Request nếu thất bại.
      */
-    @PostMapping(AmlethMPEndpoint.Auth.REGISTER)
+    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.REGISTER, endpointSummary ="Đăng ký")
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {
-        return controllerUtils.awaitCreated(service.register(user))
+        return responseHelper.awaitCreated(service.register(user))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));
     }
 }

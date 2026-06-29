@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp;
+package dev.sh1on.amlethmp.common;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * </p>
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
- * @author <a href="https://github.com/henry0337">S3lena</a>
+ * @author <a href="https://github.com/henry0337">Muharux</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AmlethMPEndpoint {
@@ -22,6 +22,9 @@ public final class AmlethMPEndpoint {
 
     /** Phiên bản API hiện hành. */
     public static final String V1 = "/v1";
+
+    /** Constant đại diện cho tất cả các path con trong một path cha. */
+    public static final String WILDCARD_PATH = "/**";
 
     /**
      * Nhóm endpoint cho mô-đun <b>xác thực</b> (auth).
@@ -66,6 +69,12 @@ public final class AmlethMPEndpoint {
         public static final String SEGMENT = "/song";
         /** Đường dẫn gốc: {@code /api/song/v1}. */
         public static final String BASE = API_PREFIX + SEGMENT + V1;
+        /** Thao tác trên một bản ghi theo id. */
+        public static final String BY_ID = "/{id}";
+        /** Vô hiệu hóa (soft-delete) một bản ghi. */
+        public static final String DISABLE = "/{id}/disable";
+        /** Kích hoạt lại một bản ghi đã bị vô hiệu hóa. */
+        public static final String ENABLE = "/{id}/enable";
     }
 
     /**

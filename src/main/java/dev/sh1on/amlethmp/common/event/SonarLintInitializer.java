@@ -1,7 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.sh1on.amlethmp.common.shared.service.I18nService;
-import dev.sh1on.amlethmp.common.shared.utils.ReactorUtils;
+import dev.myrlennia237.component.service.I18nService;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +13,9 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
+import reactor.netty.ByteBufMono;
 import reactor.netty.http.client.HttpClient;
+import reactor.netty.http.client.HttpClientResponse;
 
 import java.io.IOException;
 
@@ -29,50 +30,53 @@ import java.io.IOException;
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
-    private final I18nService i18NService;
-    private final ReactorUtils reactorUtils;
+    private final I18nService i18nService;
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        if (!(event instanceof ApplicationReadyEvent)) return;
-
-        reactorUtils.awaitMono(Mono.fromRunnable(() -> {
-            log.info(i18NService.translateMessage("sonar.check"));
+        Mono.fromRunnable(() -> {
+            log.info(i18nService.translate("sonar.check"));
             try {
-                if (Boolean.TRUE.equals(reactorUtils.awaitMono(isSonarLintRunning()))) {
-                    log.info(i18NService.translateDynamicMessage("sonar.running", new Object[]{SONAR_URL}));
+                if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
+                    log.info(i18nService.translate("sonar.running", new Object[]{SONAR_URL}));
                     openBrowser();
                 } else {
-                    log.info(i18NService.translateMessage("sonar.not_running"));
+                    log.info(i18nService.translate("sonar.not_running"));
                 }
-            } catch (Exception e) {
-                log.error(i18NService.translateMessage("sonar.error"), e);
+            } catch (Exception _) {
+                log.error(i18nService.translate("sonar.error"));
             }
-        }));
+        }).block();
     }
 
     private Mono<Boolean> isSonarLintRunning() {
-        return HttpClient.create()
-                .get()
+        return HttpClient.create().get()
                 .uri(SonarLintInitializer.SONAR_URL)
-                .responseSingle((response, bytes) -> Mono.just(response.status().equals(HttpResponseStatus.OK)))
+                .responseSingle((HttpClientResponse response, ByteBufMono _) ->
+                        Mono.just(response.status().equals(HttpResponseStatus.OK)))
                 .onErrorResume((Throwable e) -> {
                     log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
-                    return reactorUtils.single(false);
+                    return Mono.just(false);
                 });
     }
 
     private void openBrowser() {
         try {
+            ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
-                new ProcessBuilder("cmd.exe", "/c", "start " + SonarLintInitializer.SONAR_URL).start();
-            } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
-                new ProcessBuilder("sh", "-c", "xdg-open " + SonarLintInitializer.SONAR_URL).start(); // xdg-open for Linux, 'open' for Mac
+                String comSpec = System.getenv("ComSpec");
+                pb = new ProcessBuilder(comSpec, "/c", "start", SONAR_URL);
+            } else if (SystemUtils.IS_OS_MAC) {
+                pb = new ProcessBuilder("/usr/bin/open", SONAR_URL);
+            } else if (SystemUtils.IS_OS_LINUX) {
+                pb = new ProcessBuilder("/usr/bin/xdg-open", SONAR_URL);
             } else {
-                log.warn(i18NService.translateMessage("os.unsupported"));
+                log.warn(i18nService.translate("os.unsupported"));
+                return;
             }
+            pb.start();
         } catch (IOException e) {
-            log.error(i18NService.translateMessage("browser.open.error"), e);
+            log.error(i18nService.translate("browser.open.error"), e);
         }
     }
 
