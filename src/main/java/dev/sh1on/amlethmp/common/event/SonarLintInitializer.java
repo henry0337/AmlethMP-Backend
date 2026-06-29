@@ -62,13 +62,19 @@ class SonarLintInitializer implements GenericApplicationListener {
 
     private void openBrowser() {
         try {
+            ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
-                new ProcessBuilder("cmd.exe", "/c", "start " + SonarLintInitializer.SONAR_URL).start();
-            } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
-                new ProcessBuilder("xdg-open", SonarLintInitializer.SONAR_URL).start();
+                String comSpec = System.getenv("ComSpec");
+                pb = new ProcessBuilder(comSpec, "/c", "start", SONAR_URL);
+            } else if (SystemUtils.IS_OS_MAC) {
+                pb = new ProcessBuilder("/usr/bin/open", SONAR_URL);
+            } else if (SystemUtils.IS_OS_LINUX) {
+                pb = new ProcessBuilder("/usr/bin/xdg-open", SONAR_URL);
             } else {
                 log.warn(i18nService.translate("os.unsupported"));
+                return;
             }
+            pb.start();
         } catch (IOException e) {
             log.error(i18nService.translate("browser.open.error"), e);
         }
