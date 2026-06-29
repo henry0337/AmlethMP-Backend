@@ -1,7 +1,6 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.sh1on.amlethmp.common.shared.utils.CommonUtils;
-import dev.sh1on.amlethmp.common.template.service.AmlethMPService;
+import dev.myrlennia237.util.CommonUtils;
 import dev.sh1on.amlethmp.user.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -24,7 +23,7 @@ import java.util.function.Function;
  */
 @Service
 @Slf4j
-public class JwtService extends AmlethMPService {
+public class JwtService {
     private static final Duration EXPIRATION_TIME = Duration.ofHours(10);
 
     private final SecretKey key;
@@ -46,7 +45,7 @@ public class JwtService extends AmlethMPService {
 
         return Jwts.builder()
                 .subject(username)
-                .claim("role", CommonUtils.asNonNullable(role, Role.USER.toString()))
+                .claim("role", CommonUtils.requireNonNull(role, Role.USER.toString()))
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plus(EXPIRATION_TIME)))
                 .signWith(key)

@@ -13,7 +13,7 @@ description = "Backend for Amleth's music player application"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(21)
+		languageVersion = JavaLanguageVersion.of(25)
 	}
 }
 
@@ -25,6 +25,12 @@ sonar {
 }
 
 configurations {
+	all {
+		// Tự động cache module và phiên bản mới nhất (áp dụng cho thư viện được lấy từ mavenLocal())
+		resolutionStrategy.cacheChangingModulesFor(0, TimeUnit.SECONDS)
+		resolutionStrategy.cacheDynamicVersionsFor(0, TimeUnit.SECONDS)
+	}
+
 	compileOnly {
 		extendsFrom(configurations.annotationProcessor.get())
 	}
@@ -73,6 +79,8 @@ dependencies {
 //	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
 	implementation(libs.resilience4j.spring.boot4)
+	implementation("dev.myrlennia237:webflux:0.1.0-SNAPSHOT")
+	implementation("io.github.openfeign.querydsl:querydsl-r2dbc:7.4.0")
 
 	annotationProcessor(libs.mapstruct.processor)
 	annotationProcessor(libs.therapi.runtime.javadoc.scribe)
@@ -88,7 +96,7 @@ dependencies {
 	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
-	developmentOnly(libs.spring.boot.docker.compose)
+//	developmentOnly(libs.spring.boot.docker.compose)
 
 	testImplementation(libs.spring.boot.starter.test.webflux)
 	testImplementation(libs.spring.boot.starter.test.security)

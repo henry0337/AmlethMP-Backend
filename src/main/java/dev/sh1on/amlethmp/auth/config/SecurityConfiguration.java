@@ -1,9 +1,11 @@
 package dev.sh1on.amlethmp.auth.config;
 
-import dev.sh1on.amlethmp.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.auth.service.JwtService;
-import dev.sh1on.amlethmp.common.shared.annotation.EnableReactiveSecurityCustomization;
+import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -39,7 +41,7 @@ class SecurityConfiguration {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
-                                AmlethMPEndpoint.Auth.BASE + "/**",
+                                AmlethMPEndpoint.Auth.BASE + AmlethMPEndpoint.WILDCARD_PATH,
                                 AmlethMPEndpoint.User.BASE + "/**",
                                 AmlethMPEndpoint.Docs.API_DOCS,
                                 AmlethMPEndpoint.Docs.SWAGGER_UI,
@@ -48,8 +50,9 @@ class SecurityConfiguration {
                 )
                 .addFilterAt(jwtAuthenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((swe, e) -> Mono.fromRunnable(() ->
-                                swe.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
+                        .authenticationEntryPoint((exchange, _) ->
+                                Mono.fromRunnable(() ->
+                                        exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
                 )
                 .build();
     }
@@ -65,7 +68,9 @@ class SecurityConfiguration {
     ServerAuthenticationConverter jwtAuthenticationConverter() {
         return (ServerWebExchange exchange) -> {
             String authHeader = exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-            if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) return Mono.empty();
+            if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
+                return Mono.empty();
+            }
 
             var token = authHeader.substring(BEARER_PREFIX.length());
             String username = jwtService.extractUsername(token);

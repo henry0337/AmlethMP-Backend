@@ -1,52 +1,79 @@
 package dev.sh1on.amlethmp.song.service;
 
-import dev.sh1on.amlethmp.common.template.service.AmlethMPRestService;
-import dev.sh1on.amlethmp.common.template.service.crud.Reversible;
+import dev.myrlennia237.component.dto.PagedResponse;
+import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
 import dev.sh1on.amlethmp.song.dto.SongDto;
 import dev.sh1on.amlethmp.song.dto.SongUpdateDto;
+import dev.sh1on.amlethmp.song.mapper.SongMapper;
+import dev.sh1on.amlethmp.song.model.Song;
+import dev.sh1on.amlethmp.song.repository.SongRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 /**
- * @author <a href="https://github.com/henry0337">S3lena</a>
+ * @author <a href="https://github.com/henry0337">Muharux</a>
  */
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Slf4j
-public class SongService extends AmlethMPRestService<SongDto, UUID, SongCreateDto, SongUpdateDto>
-        implements Reversible<UUID> {
-    public Mono<Void> deleteById(UUID key) {
-        return null;
+public class SongService extends AbstractCrudService<SongDto, SongCreateDto, SongUpdateDto> {
+    private final SongRepository repository;
+    private final SongMapper mapper;
+
+    public Mono<PagedResponse<SongDto>> findAll(Pageable pageable) {
+        return repository.findAllBy(pageable)
+                .switchIfEmpty(Flux.empty())
+                .map(mapper::toSongDto)
+                .collectList()
+                .zipWith(repository.count())
+                .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    public Mono<SongDto> save(SongCreateDto dto) {
-        return null;
+    public Mono<SongDto> findById(UUID id) {
+        return repository.findById(id).map(mapper::toSongDto);
     }
 
-    public Mono<SongDto> update(UUID key, SongUpdateDto dto) {
-        return null;
+    @Transactional
+    public Mono<SongDto> insert(SongCreateDto dto) {
+        return repository.save(mapper.toSong(dto)).map(mapper::toSongDto);
     }
 
-    public Mono<SongDto> findByKey(UUID key) {
-        return null;
+    @Transactional
+    public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
+        return repository.findById(id)
+                .flatMap(repository::save)
+                .map(mapper::toSongDto);
     }
 
-    public Mono<Page<SongDto>> findAll(Pageable pageable) {
-        return null;
+    @Transactional
+    public Mono<Void> deleteById(UUID id) {
+        return repository.deleteById(id);
     }
 
-    public Mono<Void> disableById(UUID key) {
-        return null;
+    @Transactional
+    public Mono<Void> disable(UUID id) {
+        return repository.findById(id)
+                .flatMap((Song song) -> auditorAware.getCurrentAuditor()
+                        .flatMap((UUID auditor) -> {
+                            song.markAsDeleted(auditor);
+                            return reactorHelper.ignoreReturnValue(repository.save(song));
+                        }));
     }
 
-    public Mono<Void> enableById(UUID key) {
-        return null;
+    @Transactional
+    public Mono<Void> enable(UUID id) {
+        return repository.findById(id)
+                .flatMap((Song song) -> {
+                    song.restore();
+                    return reactorHelper.ignoreReturnValue(repository.save(song));
+                });
     }
 }

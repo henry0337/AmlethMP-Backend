@@ -1,0 +1,21 @@
+spring:
+  profiles:
+    active: test
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: ""
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/test
+    username: test
+    password: test
+  liquibase:
+    enabled: false
+  mail:
+    host: localhost
+    port: 25
+    username: test
+    password: test
+jwt:
+  secret: test-secret-key-for-unit-tests-must-be-at-least-32-characters-long
