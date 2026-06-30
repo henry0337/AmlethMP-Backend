@@ -13,7 +13,7 @@ description = "Backend for Amleth's music player application"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
+		languageVersion = JavaLanguageVersion.of(21)
 	}
 }
 
@@ -96,7 +96,7 @@ dependencies {
 	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
-//	developmentOnly(libs.spring.boot.docker.compose)
+	developmentOnly(libs.spring.boot.docker.compose)
 
 	testImplementation(libs.spring.boot.starter.test.webflux)
 	testImplementation(libs.spring.boot.starter.test.security)

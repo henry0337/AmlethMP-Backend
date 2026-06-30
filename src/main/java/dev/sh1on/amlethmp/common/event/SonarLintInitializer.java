@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
 import dev.myrlennia237.component.service.I18nService;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,16 +36,16 @@ class SonarLintInitializer implements GenericApplicationListener {
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         Mono.fromRunnable(() -> {
-            log.info(i18nService.translate("sonar.check"));
+            log.info(i18nService.translate(AppConstant.MessageCode.SONAR_CHECK));
             try {
                 if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
-                    log.info(i18nService.translate("sonar.running", new Object[]{SONAR_URL}));
+                    log.info(i18nService.translate(AppConstant.MessageCode.SONAR_RUNNING, new String[]{SONAR_URL}));
                     openBrowser();
                 } else {
-                    log.info(i18nService.translate("sonar.not_running"));
+                    log.info(i18nService.translate(AppConstant.MessageCode.SONAR_NOT_RUNNING));
                 }
-            } catch (Exception _) {
-                log.error(i18nService.translate("sonar.error"));
+            } catch (Exception e) {
+                log.error(i18nService.translate(AppConstant.MessageCode.SONAR_ERROR));
             }
         }).block();
     }
@@ -52,7 +53,7 @@ class SonarLintInitializer implements GenericApplicationListener {
     private Mono<Boolean> isSonarLintRunning() {
         return HttpClient.create().get()
                 .uri(SonarLintInitializer.SONAR_URL)
-                .responseSingle((HttpClientResponse response, ByteBufMono _) ->
+                .responseSingle((HttpClientResponse response, ByteBufMono mono) ->
                         Mono.just(response.status().equals(HttpResponseStatus.OK)))
                 .onErrorResume((Throwable e) -> {
                     log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
@@ -64,19 +65,19 @@ class SonarLintInitializer implements GenericApplicationListener {
         try {
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
-                String comSpec = System.getenv("ComSpec");
+                String comSpec = System.getenv(AppConstant.COM_SPEC);
                 pb = new ProcessBuilder(comSpec, "/c", "start", SONAR_URL);
             } else if (SystemUtils.IS_OS_MAC) {
-                pb = new ProcessBuilder("/usr/bin/open", SONAR_URL);
+                pb = new ProcessBuilder(AppConstant.OPEN_MACOS, SONAR_URL);
             } else if (SystemUtils.IS_OS_LINUX) {
-                pb = new ProcessBuilder("/usr/bin/xdg-open", SONAR_URL);
+                pb = new ProcessBuilder(AppConstant.OPEN_LINUX, SONAR_URL);
             } else {
-                log.warn(i18nService.translate("os.unsupported"));
+                log.warn(i18nService.translate(AppConstant.MessageCode.OS_UNSUPPORTED));
                 return;
             }
             pb.start();
         } catch (IOException e) {
-            log.error(i18nService.translate("browser.open.error"), e);
+            log.error(i18nService.translate(AppConstant.MessageCode.BROWSER_OPEN_ERROR), e);
         }
     }
 

@@ -3,6 +3,7 @@ package dev.sh1on.amlethmp.user.service;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.myrlennia237.util.CommonUtils;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import dev.sh1on.amlethmp.common.shared.exception.UserNotFoundException;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
@@ -31,8 +32,6 @@ import java.util.UUID;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
-    private static final String USER_NOT_FOUND = "error.user.not_found";
-
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
@@ -53,7 +52,8 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<UserDto> update(UUID id, UserUpdateDto body) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(
+                        i18nService.translate(AppConstant.MessageCode.ERROR_USER_NOT_FOUND))))
                 .flatMap((User user) -> {
                     if (body.getEmail() != null) user.setEmail(body.getEmail());
                     if (body.getDisplayName() != null) user.setDisplayName(body.getDisplayName());
@@ -83,7 +83,8 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(
+                        i18nService.translate(AppConstant.MessageCode.ERROR_USER_NOT_FOUND))))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
                     user.markAsDeleted(auditor);
                     return reactorHelper.ignoreReturnValue(repository.save(user));
@@ -93,7 +94,8 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException(
+                        i18nService.translate(AppConstant.MessageCode.ERROR_USER_NOT_FOUND))))
                 .flatMap((User user) -> {
                     user.restore();
                     return reactorHelper.ignoreReturnValue(repository.save(user));

@@ -20,6 +20,7 @@ import java.util.UUID;
 
 /**
  * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
 @Transactional(readOnly = true)

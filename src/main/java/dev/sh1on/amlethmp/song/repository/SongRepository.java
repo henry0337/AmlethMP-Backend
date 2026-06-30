@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
  * Repository cho mô-đun {@code Song}.
  *
  * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Repository
 public interface SongRepository extends ModifiedR2dbcRepository<Song> { }

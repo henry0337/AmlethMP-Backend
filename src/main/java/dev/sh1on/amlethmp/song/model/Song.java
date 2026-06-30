@@ -10,6 +10,7 @@ import org.springframework.data.relational.core.mapping.Table;
 
 /**
  * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Getter
 @Setter
@@ -17,6 +18,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("songs")
+@SuppressWarnings("java:S2057")
 public class Song extends Entity {
     private String name;
     private String description;

@@ -23,12 +23,14 @@ import java.util.UUID;
 
 /**
  * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @ApiController(
         path = AmlethMPEndpoint.Song.BASE,
         moduleName = "Song",
         description = "Mô-đun xử lý thông tin liên quan tới bài hát")
 @RequiredArgsConstructor
+@SuppressWarnings("java:S6856")
 public class SongController extends AbstractCrudController<SongDto, SongCreateDto, SongUpdateDto> {
     private final SongService service;
 
