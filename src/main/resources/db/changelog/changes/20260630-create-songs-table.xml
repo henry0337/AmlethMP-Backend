@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-songs-table" author="Himekawa">
+        <createTable tableName="songs">
+            <column name="id" type="UUID" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="version" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="duration_ms" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="audio_url" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <!-- nullable: bài có thể override cover của album, hoặc không thuộc album nào -->
+            <column name="cover_url" type="varchar(1024)"/>
+            <!-- nullable: bài đơn không thuộc album nào -->
+            <column name="album_id" type="UUID"/>
+            <column name="track_number" type="integer"/>
+            <column name="explicit" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="play_count" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_disabled" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_disabled_by" type="varchar(255)"/>
+            <column name="last_disabled_at" type="timestamp with time zone"/>
+            <column name="created_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_by" type="varchar(255)"/>
+            <column name="last_updated_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_updated_by" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex tableName="songs" indexName="idx_songs_album_id">
+            <column name="album_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

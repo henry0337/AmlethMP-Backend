@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-listening-history-table" author="Himekawa">
+        <createTable tableName="listening_history">
+            <column name="id" type="UUID" defaultValueComputed="uuidv7()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="song_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="played_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <!-- số ms thực sự nghe được, dùng để tính "đã nghe xong chưa" -->
+            <column name="duration_played_ms" type="integer"/>
+            <!-- PLAYLIST | ALBUM | ARTIST | SEARCH -->
+            <column name="context_type" type="varchar(20)"/>
+            <column name="context_id" type="UUID"/>
+        </createTable>
+
+        <createIndex tableName="listening_history" indexName="idx_listening_history_user_id">
+            <column name="user_id"/>
+        </createIndex>
+
+        <!-- query "lịch sử gần đây của user" sẽ dùng index này -->
+        <createIndex tableName="listening_history" indexName="idx_listening_history_user_played_at">
+            <column name="user_id"/>
+            <column name="played_at" descending="true"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -2,9 +2,13 @@ package dev.sh1on.amlethmp.song.mapper;
 
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
 import dev.sh1on.amlethmp.song.dto.SongDto;
+import dev.sh1on.amlethmp.song.dto.SongUpdateDto;
 import dev.sh1on.amlethmp.song.model.Song;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
  * Giao diện cung cấp các phương thức mapping cho mô-đun {@link Song}.
@@ -24,4 +28,7 @@ public interface SongMapper {
     SongDto toSongDto(Song song);
 
     Song toSong(SongCreateDto dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateSong(SongUpdateDto dto, @MappingTarget Song song);
 }

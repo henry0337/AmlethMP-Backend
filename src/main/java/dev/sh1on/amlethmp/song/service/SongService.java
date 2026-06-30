@@ -50,7 +50,10 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional
     public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
         return repository.findById(id)
-                .flatMap(repository::save)
+                .flatMap(song -> {
+                    mapper.updateSong(dto, song);
+                    return repository.save(song);
+                })
                 .map(mapper::toSongDto);
     }
 

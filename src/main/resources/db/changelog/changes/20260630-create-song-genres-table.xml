@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-song-genres-table" author="Himekawa">
+        <createTable tableName="song_genres">
+            <column name="song_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_song_genres_song_id"
+                             references="songs(id)"/>
+            </column>
+            <column name="genre_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_song_genres_genre_id"
+                             references="genres(id)"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="song_genres"
+                       columnNames="song_id, genre_id"
+                       constraintName="pk_song_genres"/>
+    </changeSet>
+
+</databaseChangeLog>

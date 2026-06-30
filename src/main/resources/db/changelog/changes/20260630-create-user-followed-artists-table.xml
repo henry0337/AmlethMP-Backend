@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-user-followed-artists-table" author="Himekawa">
+        <createTable tableName="user_followed_artists">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_user_followed_artists_user_id"
+                             references="users(id)"/>
+            </column>
+            <column name="artist_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_user_followed_artists_artist_id"
+                             references="artists(id)"/>
+            </column>
+            <column name="followed_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="user_followed_artists"
+                       columnNames="user_id, artist_id"
+                       constraintName="pk_user_followed_artists"/>
+    </changeSet>
+
+</databaseChangeLog>

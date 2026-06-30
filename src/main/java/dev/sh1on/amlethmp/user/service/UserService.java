@@ -42,6 +42,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     }
 
     @Transactional
+    @SuppressWarnings("java:S4449")
     public Mono<UserDto> insert(UserCreateDto dto) {
         var user = mapper.toUser(dto);
         String encodedPassword = CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword()));
