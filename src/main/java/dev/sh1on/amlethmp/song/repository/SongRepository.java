@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * <b>[Domain Repository]</b> <br>
- * Repository cho mô-đun {@code Song}.
+ * Repository cho module {@code Song}.
  *
  * @author <a href="https://github.com/henry0337">Muharux</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>

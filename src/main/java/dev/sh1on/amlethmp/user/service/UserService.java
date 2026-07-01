@@ -29,7 +29,6 @@ import java.util.UUID;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
     private final UserRepository repository;
@@ -68,10 +67,12 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(mapper::toUserDto);
     }
 
+    @Transactional(readOnly = true)
     public Mono<UserDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toUserDto);
     }
 
+    @Transactional(readOnly = true)
     public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(Flux.empty())

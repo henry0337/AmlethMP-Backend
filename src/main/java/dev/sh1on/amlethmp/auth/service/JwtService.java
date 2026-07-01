@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.auth.service;
 
-import dev.myrlennia237.util.CommonUtils;
 import dev.sh1on.amlethmp.user.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -15,7 +14,6 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Date;
 import java.util.function.Function;
 
 /**
@@ -42,12 +40,13 @@ public class JwtService {
                 : userDetails.getAuthorities().iterator().next().getAuthority();
 
         var now = Instant.now();
+        var expiry = now.plus(EXPIRATION_TIME);
 
         return Jwts.builder()
                 .subject(username)
-                .claim("role", CommonUtils.requireNonNull(role, Role.USER.toString()))
-                .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plus(EXPIRATION_TIME)))
+                .claim("role", role != null ? role : Role.USER.toString())
+                .issuedAt(java.util.Date.from(now))
+                .expiration(java.util.Date.from(expiry))
                 .signWith(key)
                 .compact();
     }

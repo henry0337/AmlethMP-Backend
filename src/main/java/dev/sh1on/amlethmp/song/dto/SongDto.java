@@ -1,12 +1,12 @@
 package dev.sh1on.amlethmp.song.dto;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 import java.util.UUID;
 
-@Getter
-@Setter
+@Data
+@AllArgsConstructor
 public class SongDto {
     private UUID id;
     private String title;

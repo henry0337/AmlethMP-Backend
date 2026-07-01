@@ -11,14 +11,14 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 /**
- * Giao diện cung cấp các phương thức mapping cho mô-đun {@link Song}.
+ * Mô hình cung cấp các phương thức mapping cho mô-đun {@link Song}.
  *
  * @author <a href="https://github.com/henry0337">Muharux</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Mapper
 @Javadoc(
-        value = "Giao diện cung cấp các phương thức mapping cho mô-đun {@link Song}.",
+        value = "Mô hình cung cấp phiên bản triển khai cho các phương thức mapping thuộc module {@link Song}.",
         authors = {
                 "<a href=\"https://github.com/henry0337\">Muharux</a>",
                 "<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>",

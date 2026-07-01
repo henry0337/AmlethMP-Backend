@@ -22,6 +22,9 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 /**
+ * <b>[API Controller]</b> <br>
+ * Lớp giao tiếp với các yêu cầu HTTP thuộc module {@link dev.sh1on.amlethmp.song.model.Song Song}.
+ *
  * @author <a href="https://github.com/henry0337">Muharux</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */

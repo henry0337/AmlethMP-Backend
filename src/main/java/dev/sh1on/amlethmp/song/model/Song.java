@@ -12,6 +12,9 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.util.UUID;
 
 /**
+ * <b>[Domain Entity]</b> <br>
+ * Entity chứa thông tin liên quan tới các <b>bài hát</b>.
+ *
  * @author <a href="https://github.com/henry0337">Muharux</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
@@ -61,7 +64,7 @@ public class Song extends Entity {
     /**
      * Đánh dấu bài hát này không phù hợp cho mọi đối tượng nghe.
      */
-    private boolean explicit = false;
+    private boolean explicit;
 
     /**
      * Số lượt nghe bài hát này (Tổng).

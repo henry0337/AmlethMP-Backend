@@ -50,7 +50,7 @@ class SecurityConfiguration {
                 )
                 .addFilterAt(jwtAuthenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((exchange, _) ->
+                        .authenticationEntryPoint((exchange, e) ->
                                 Mono.fromRunnable(() ->
                                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
                 )

@@ -24,10 +24,10 @@ import reactor.core.publisher.Mono;
 @ApiController(
         path = AmlethMPEndpoint.Auth.BASE,
         moduleName = "Auth",
-        description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng"
-)
+        description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
 @Validated
 @RequiredArgsConstructor
+@SuppressWarnings("java:S6856")
 public class AuthController extends ReactiveRestController {
     private final ResponseHelper responseHelper;
     private final AuthService service;

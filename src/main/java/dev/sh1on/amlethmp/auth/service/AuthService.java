@@ -7,7 +7,6 @@ import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.Role;
-import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -21,7 +20,6 @@ import reactor.core.publisher.Mono;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AuthService extends BaseReactiveService implements JwtAuthenticationService {
     private final UserRepository userRepository;
@@ -42,12 +40,12 @@ public class AuthService extends BaseReactiveService implements JwtAuthenticatio
                 .map(jwtService::generateToken);
     }
 
+    @Transactional
+    @SuppressWarnings("java:S4449")
     public Mono<UserDto> register(RegisterRequest dto) {
-        User user = userMapper.toUser(userMapper.toUserDto(dto));
+        var user = userMapper.toUser(userMapper.toUserDto(dto));
         user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword())));
-        // Người dùng tự đăng ký luôn nhận vai trò USER (cột role là NOT NULL)
         user.setRole(Role.USER.name());
-        // Map lại từ entity đã lưu để response có id + createdAt/createdBy do DB/Auditing sinh ra
         return userRepository.save(user).map(userMapper::toUserDto);
     }
 }

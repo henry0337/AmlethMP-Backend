@@ -26,6 +26,7 @@ import java.util.UUID;
         moduleName = "User",
         description = "Mô-đun xử lý thông tin liên quan tới người dùng")
 @RequiredArgsConstructor
+@SuppressWarnings("java:S6856")
 public class UserController extends AbstractCrudController<UserDto, UserCreateDto, UserUpdateDto> {
     private final UserService service;
 

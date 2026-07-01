@@ -19,16 +19,19 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 /**
+ * <b>[Domain Service]</b> <br>
+ * Lớp xử lý logic API và nghiệp vụ cho module {@link Song}.
+ *
  * @author <a href="https://github.com/henry0337">Muharux</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class SongService extends AbstractCrudService<SongDto, SongCreateDto, SongUpdateDto> {
     private final SongRepository repository;
     private final SongMapper mapper;
 
+    @Transactional(readOnly = true)
     public Mono<PagedResponse<SongDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(Flux.empty())
@@ -38,6 +41,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
+    @Transactional(readOnly = true)
     public Mono<SongDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toSongDto);
     }
@@ -50,7 +54,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional
     public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
         return repository.findById(id)
-                .flatMap(song -> {
+                .flatMap((Song song) -> {
                     mapper.updateSong(dto, song);
                     return repository.save(song);
                 })

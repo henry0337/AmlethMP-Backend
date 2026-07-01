@@ -76,7 +76,7 @@ class SonarLintInitializer implements GenericApplicationListener {
                 return;
             }
             pb.start();
-        } catch (IOException e) {
+        } catch (IOException | RuntimeException e) {
             log.error(i18nService.translate(AppConstant.MessageCode.BROWSER_OPEN_ERROR), e);
         }
     }
