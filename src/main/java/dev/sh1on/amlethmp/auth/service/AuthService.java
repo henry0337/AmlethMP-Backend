@@ -43,7 +43,7 @@ public class AuthService extends BaseReactiveService implements JwtAuthenticatio
     @Transactional
     @SuppressWarnings("java:S4449")
     public Mono<UserDto> register(RegisterRequest dto) {
-        var user = userMapper.toUser(userMapper.toUserDto(dto));
+        var user = userMapper.toUser(dto);
         user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword())));
         user.setRole(Role.USER.name());
         return userRepository.save(user).map(userMapper::toUserDto);

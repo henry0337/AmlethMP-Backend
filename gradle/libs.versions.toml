@@ -8,7 +8,6 @@ hikari = "7.0.2"
 mapstruct = "1.6.3"
 therapi = "0.15.0"
 jjwt = "0.13.0"
-poi = "5.5.0"
 spring-boot-aop = "4.0.0-M2"
 mapstruct-spring-ext = "2.0.0"
 resilience4j = "2.4.0"
@@ -55,9 +54,6 @@ jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
 jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
 
-poi = { module = "org.apache.poi:poi", version.ref = "poi" }
-poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
-
 postgresql = { module = "org.postgresql:postgresql" }
 r2dbc-postgresql = { module = "org.postgresql:r2dbc-postgresql" }
 
@@ -92,4 +88,3 @@ querydsl-r2dbc = { module = "io.github.openfeign.querydsl:querydsl-r2dbc", versi
 
 [bundles]
 jjwt = ["jjwt-api", "jjwt-jackson", "jjwt-impl"]
-poi = ["poi", "poi-ooxml"]

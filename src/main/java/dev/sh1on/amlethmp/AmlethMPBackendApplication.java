@@ -12,7 +12,7 @@ import org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerA
  */
 @SpringBootApplication(exclude = DataSourceTransactionManagerAutoConfiguration.class)
 public class AmlethMPBackendApplication {
-    public static void main(String[] args) {
+    static void main(String[] args) {
         SpringApplication.run(AmlethMPBackendApplication.class, args);
     }
 }

@@ -55,12 +55,9 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .switchIfEmpty(Mono.error(new UserNotFoundException(
                         i18nService.translate(AppConstant.MessageCode.ERROR_USER_NOT_FOUND))))
                 .flatMap((User user) -> {
-                    if (body.getEmail() != null) user.setEmail(body.getEmail());
-                    if (body.getDisplayName() != null) user.setDisplayName(body.getDisplayName());
-                    if (body.getRole() != null) user.setRole(body.getRole().toString());
+                    mapper.updateUser(body, user);
                     if (body.getPassword() != null) {
-                        String encodedPassword = CommonUtils.requireNonNull(passwordEncoder.encode(body.getPassword()));
-                        user.setAccountPassword(encodedPassword);
+                        user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(body.getPassword())));
                     }
                     return repository.save(user);
                 })

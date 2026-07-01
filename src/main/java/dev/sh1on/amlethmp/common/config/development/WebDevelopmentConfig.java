@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.common.config.development;
 
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.config.CorsRegistry;
@@ -11,7 +12,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Configuration
-@Profile("dev")
+@Profile(AppConstant.Environment.DEV)
 class WebDevelopmentConfig implements WebFluxConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {

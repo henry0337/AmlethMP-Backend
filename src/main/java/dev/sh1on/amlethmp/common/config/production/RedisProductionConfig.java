@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.common.config.production;
 
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
@@ -9,5 +10,5 @@ import org.springframework.context.annotation.Profile;
  * @author <a href="https://github.com/henry0337">S3lena</a>
  */
 @Configuration
-@Profile("prod")
+@Profile(AppConstant.Environment.PROD)
 class RedisProductionConfig { }
