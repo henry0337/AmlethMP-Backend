@@ -16,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -28,11 +27,8 @@ import java.util.UUID;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
-@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
-    private static final String USER_NOT_FOUND = "error.user.not_found";
-
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
@@ -43,6 +39,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     }
 
     @Transactional
+    @SuppressWarnings("java:S4449")
     public Mono<UserDto> insert(UserCreateDto dto) {
         var user = mapper.toUser(dto);
         String encodedPassword = CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword()));
@@ -53,27 +50,26 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<UserDto> update(UUID id, UserUpdateDto body) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> {
-                    if (body.getEmail() != null) user.setEmail(body.getEmail());
-                    if (body.getDisplayName() != null) user.setDisplayName(body.getDisplayName());
-                    if (body.getRole() != null) user.setRole(body.getRole().toString());
+                    mapper.updateUser(body, user);
                     if (body.getPassword() != null) {
-                        String encodedPassword = CommonUtils.requireNonNull(passwordEncoder.encode(body.getPassword()));
-                        user.setAccountPassword(encodedPassword);
+                        user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(body.getPassword())));
                     }
                     return repository.save(user);
                 })
                 .map(mapper::toUserDto);
     }
 
+    @Transactional(readOnly = true)
     public Mono<UserDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toUserDto);
     }
 
+    @Transactional(readOnly = true)
     public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
-                .switchIfEmpty(Flux.empty())
+                .switchIfEmpty(reactorHelper.emptyFlux())
                 .map(mapper::toUserDto)
                 .collectList()
                 .zipWith(repository.count())
@@ -83,7 +79,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
                     user.markAsDeleted(auditor);
                     return reactorHelper.ignoreReturnValue(repository.save(user));
@@ -93,7 +89,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(new UserNotFoundException(i18nService.translate(USER_NOT_FOUND))))
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> {
                     user.restore();
                     return reactorHelper.ignoreReturnValue(repository.save(user));

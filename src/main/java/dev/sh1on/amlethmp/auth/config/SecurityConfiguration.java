@@ -3,9 +3,7 @@ package dev.sh1on.amlethmp.auth.config;
 import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.auth.service.JwtService;
 import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -50,7 +48,7 @@ class SecurityConfiguration {
                 )
                 .addFilterAt(jwtAuthenticationWebFilter(), SecurityWebFiltersOrder.AUTHENTICATION)
                 .exceptionHandling(exception -> exception
-                        .authenticationEntryPoint((exchange, _) ->
+                        .authenticationEntryPoint((exchange, e) ->
                                 Mono.fromRunnable(() ->
                                         exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED)))
                 )

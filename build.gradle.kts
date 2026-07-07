@@ -79,8 +79,8 @@ dependencies {
 //	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
 	implementation(libs.resilience4j.spring.boot4)
-	implementation("dev.myrlennia237:webflux:0.1.0-SNAPSHOT")
-	implementation("io.github.openfeign.querydsl:querydsl-r2dbc:7.4.0")
+	implementation(libs.myrlennia237.webflux)
+	implementation(libs.querydsl.r2dbc)
 
 	annotationProcessor(libs.mapstruct.processor)
 	annotationProcessor(libs.therapi.runtime.javadoc.scribe)
@@ -96,7 +96,7 @@ dependencies {
 	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
-//	developmentOnly(libs.spring.boot.docker.compose)
+	developmentOnly(libs.spring.boot.docker.compose)
 
 	testImplementation(libs.spring.boot.starter.test.webflux)
 	testImplementation(libs.spring.boot.starter.test.security)

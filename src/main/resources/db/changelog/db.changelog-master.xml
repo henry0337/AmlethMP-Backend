@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="20260204-create-users-table" author="Himekawa">
+    <changeSet id="20260630-create-users-table" author="Himekawa">
         <createTable tableName="users">
             <column name="id" type="UUID" defaultValueComputed="uuidv7()">
                 <constraints primaryKey="true" nullable="false"/>
@@ -14,9 +14,12 @@
                 <constraints nullable="false"/>
             </column>
             <column name="email" type="varchar(255)">
-                <constraints nullable="false"/>
+                <constraints nullable="false"
+                             unique="true"
+                             uniqueConstraintName="uq_users_email"/>
             </column>
-            <column name="display_name" type="varchar(255)" />
+            <column name="display_name" type="varchar(255)"/>
+            <column name="avatar_url" type="varchar(1024)"/>
             <column name="password" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -46,5 +49,32 @@
             </column>
             <column name="last_updated_by" type="varchar(255)"/>
         </createTable>
+
+        <addCheckConstraint tableName="users"
+                            constraintName="chk_users_role"
+                            condition="role IN ('ADMIN', 'USER')"/>
     </changeSet>
+
+    <!-- catalog core: artists → genres → albums → songs -->
+    <include file="changes/20260630-create-artists-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-genres-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-albums-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-songs-table.xml" relativeToChangelogFile="true"/>
+
+    <!-- catalog junctions: phụ thuộc songs, artists, genres -->
+    <include file="changes/20260630-create-song-artists-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-song-genres-table.xml" relativeToChangelogFile="true"/>
+
+    <!-- playlists: phụ thuộc users, songs -->
+    <include file="changes/20260630-create-playlists-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-playlist-songs-table.xml" relativeToChangelogFile="true"/>
+
+    <!-- library (user interactions): phụ thuộc users, songs, albums, artists, playlists -->
+    <include file="changes/20260630-create-user-liked-songs-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-user-liked-albums-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-user-followed-artists-table.xml" relativeToChangelogFile="true"/>
+    <include file="changes/20260630-create-user-followed-playlists-table.xml" relativeToChangelogFile="true"/>
+
+    <!-- history: phụ thuộc users, songs -->
+    <include file="changes/20260630-create-listening-history-table.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

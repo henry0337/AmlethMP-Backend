@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-song-artists-table" author="Himekawa">
+        <createTable tableName="song_artists">
+            <column name="song_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_song_artists_song_id"
+                             references="songs(id)"/>
+            </column>
+            <column name="artist_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_song_artists_artist_id"
+                             references="artists(id)"/>
+            </column>
+            <!-- MAIN | FEATURED -->
+            <column name="role" type="varchar(20)" defaultValue="MAIN">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="song_artists"
+                       columnNames="song_id, artist_id"
+                       constraintName="pk_song_artists"/>
+    </changeSet>
+
+</databaseChangeLog>

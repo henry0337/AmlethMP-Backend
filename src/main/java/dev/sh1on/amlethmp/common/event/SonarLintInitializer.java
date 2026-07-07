@@ -1,8 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.myrlennia237.component.service.I18nService;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -23,61 +22,54 @@ import java.io.IOException;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
-@Profile("dev")
+@Profile(AppConstant.Environment.DEV)
 @Order(4)
-@RequiredArgsConstructor
 @Slf4j
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
-    private final I18nService i18nService;
-
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        Mono.fromRunnable(() -> {
-            log.info(i18nService.translate("sonar.check"));
-            try {
-                if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
-                    log.info(i18nService.translate("sonar.running", new Object[]{SONAR_URL}));
-                    openBrowser();
+        Mono.fromRunnable(this::initSonarLint).block();
+    }
+
+    private void initSonarLint() {
+        log.info("Checking if SonarScanner is running...");
+        try {
+            if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
+                log.info("SonarScanner is running at {}", SONAR_URL);
+
+                ProcessBuilder pb;
+                if (SystemUtils.IS_OS_WINDOWS) {
+                    String comSpec = System.getenv(AppConstant.COM_SPEC);
+                    pb = new ProcessBuilder(comSpec, "/c", "start", SONAR_URL);
+                } else if (SystemUtils.IS_OS_MAC) {
+                    pb = new ProcessBuilder(AppConstant.OPEN_MACOS, SONAR_URL);
+                } else if (SystemUtils.IS_OS_LINUX) {
+                    pb = new ProcessBuilder(AppConstant.OPEN_LINUX, SONAR_URL);
                 } else {
-                    log.info(i18nService.translate("sonar.not_running"));
+                    log.warn("Your current OS you are using is not supported by this backend, please use other supporting OSes.");
+                    return;
                 }
-            } catch (Exception _) {
-                log.error(i18nService.translate("sonar.error"));
+                pb.start();
+
+            } else {
+                log.info("SonarScanner is not running.");
             }
-        }).block();
+        } catch (IOException | RuntimeException _) {
+            log.error("Error while checking or opening SonarScanner URL:");
+        }
     }
 
     private Mono<Boolean> isSonarLintRunning() {
         return HttpClient.create().get()
                 .uri(SonarLintInitializer.SONAR_URL)
-                .responseSingle((HttpClientResponse response, ByteBufMono _) ->
+                .responseSingle((HttpClientResponse response, ByteBufMono mono) ->
                         Mono.just(response.status().equals(HttpResponseStatus.OK)))
                 .onErrorResume((Throwable e) -> {
                     log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
                     return Mono.just(false);
                 });
-    }
-
-    private void openBrowser() {
-        try {
-            ProcessBuilder pb;
-            if (SystemUtils.IS_OS_WINDOWS) {
-                String comSpec = System.getenv("ComSpec");
-                pb = new ProcessBuilder(comSpec, "/c", "start", SONAR_URL);
-            } else if (SystemUtils.IS_OS_MAC) {
-                pb = new ProcessBuilder("/usr/bin/open", SONAR_URL);
-            } else if (SystemUtils.IS_OS_LINUX) {
-                pb = new ProcessBuilder("/usr/bin/xdg-open", SONAR_URL);
-            } else {
-                log.warn(i18nService.translate("os.unsupported"));
-                return;
-            }
-            pb.start();
-        } catch (IOException e) {
-            log.error(i18nService.translate("browser.open.error"), e);
-        }
     }
 
     @Override

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="20260630-create-user-liked-songs-table" author="Himekawa">
+        <createTable tableName="user_liked_songs">
+            <column name="user_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_user_liked_songs_user_id"
+                             references="users(id)"/>
+            </column>
+            <column name="song_id" type="UUID">
+                <constraints nullable="false"
+                             foreignKeyName="fk_user_liked_songs_song_id"
+                             references="songs(id)"/>
+            </column>
+            <column name="liked_at" type="timestamp with time zone" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="user_liked_songs"
+                       columnNames="user_id, song_id"
+                       constraintName="pk_user_liked_songs"/>
+    </changeSet>
+
+</databaseChangeLog>

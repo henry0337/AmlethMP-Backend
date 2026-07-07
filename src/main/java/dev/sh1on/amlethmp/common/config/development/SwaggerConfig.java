@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.common.config.development;
 
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
@@ -14,8 +15,8 @@ import org.springframework.context.annotation.Profile;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  * @see <a href="https://swagger.io/">Swagger</a>
  */
-@Profile("dev")
 @Configuration(proxyBeanMethods = false)
+@Profile(AppConstant.Environment.DEV)
 class SwaggerConfig {
     private static final String OPENAPI_VERSION = "3.1.1";
     private static final String OPENAPI_TITLE = "AmlethMP Backend";

@@ -9,6 +9,8 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 /**
@@ -28,23 +30,12 @@ public interface UserMapper {
     @Mapping(target = "accountPassword", ignore = true)
     User toUser(UserCreateDto dto);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    UserDto toUserDto(UserCreateDto dto);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "role", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    UserDto toUserDto(RegisterRequest request);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "createdBy", ignore = true)
-    UserDto toUserDto(UserUpdateDto userDto);
-
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "accountPassword", ignore = true)
-    User toUser(UserDto userDto);
+    @Mapping(target = "role", ignore = true)
+    User toUser(RegisterRequest dto);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(target = "accountPassword", ignore = true)
+    void updateUser(UserUpdateDto dto, @MappingTarget User user);
 }

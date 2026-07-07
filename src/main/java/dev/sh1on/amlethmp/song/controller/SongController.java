@@ -3,6 +3,7 @@ package dev.sh1on.amlethmp.song.controller;
 import dev.myrlennia237.annotation.spring.ApiController;
 import dev.myrlennia237.annotation.spring.ApiMethod;
 import dev.myrlennia237.annotation.spring.ApiParameter;
+import dev.myrlennia237.annotation.spring.ApiRequestBody;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.controller.java.AbstractCrudController;
 import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
@@ -22,54 +23,59 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 /**
+ * <b>[API Controller]</b> <br>
+ * Lớp giao tiếp với các yêu cầu HTTP thuộc module {@link dev.sh1on.amlethmp.song.model.Song Song}.
+ *
  * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @ApiController(
         path = AmlethMPEndpoint.Song.BASE,
         moduleName = "Song",
         description = "Mô-đun xử lý thông tin liên quan tới bài hát")
 @RequiredArgsConstructor
+@SuppressWarnings("java:S6856")
 public class SongController extends AbstractCrudController<SongDto, SongCreateDto, SongUpdateDto> {
     private final SongService service;
 
     @ApiMethod(method = RequestMethod.GET)
-    public Mono<ResponseEntity<PagedResponse<SongDto>>> findAll(Pageable pageable) {
-        return responseHelper.awaitOk(service.findAll(pageable));
+    public Mono<ResponseEntity<PagedResponse<SongDto>>> findAll(@ApiRequestBody Pageable pageable) {
+        return responseHelper.ok(service.findAll(pageable));
     }
 
     @ApiMethod(method = RequestMethod.GET, path = AmlethMPEndpoint.Song.BY_ID)
     public Mono<ResponseEntity<SongDto>> findById(
-            @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitOrNotFound(service.findById(id));
+            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+        return responseHelper.okOrNotFound(service.findById(id));
     }
 
     @ApiMethod(method = RequestMethod.POST)
     public Mono<ResponseEntity<SongDto>> create(@RequestBody SongCreateDto dto) {
-        return responseHelper.awaitCreated(service.insert(dto));
+        return responseHelper.created(service.insert(dto));
     }
 
     @ApiMethod(method = RequestMethod.PUT, path = AmlethMPEndpoint.Song.BY_ID)
     public Mono<ResponseEntity<SongDto>> update(
-            @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id,
+            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id,
             @RequestBody SongUpdateDto dto) {
-        return responseHelper.awaitOk(service.update(id, dto));
+        return responseHelper.ok(service.update(id, dto));
     }
 
     @ApiMethod(method = RequestMethod.DELETE, path = AmlethMPEndpoint.Song.BY_ID)
     public Mono<ResponseEntity<Void>> delete(
-            @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.deleteById(id));
+            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+        return responseHelper.noContent(service.deleteById(id));
     }
 
-    @ApiMethod(method = RequestMethod.DELETE, path = AmlethMPEndpoint.Song.DISABLE)
+    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Song.DISABLE)
     public Mono<ResponseEntity<Void>> disable(
-            @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.disable(id));
+            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+        return responseHelper.okEmpty(service.disable(id));
     }
 
     @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Song.ENABLE)
     public Mono<ResponseEntity<Void>> enable(
-            @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.enable(id));
+            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+        return responseHelper.okEmpty(service.enable(id));
     }
 }

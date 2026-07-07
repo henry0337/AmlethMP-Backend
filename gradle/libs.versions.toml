@@ -8,11 +8,12 @@ hikari = "7.0.2"
 mapstruct = "1.6.3"
 therapi = "0.15.0"
 jjwt = "0.13.0"
-poi = "5.5.0"
 spring-boot-aop = "4.0.0-M2"
 mapstruct-spring-ext = "2.0.0"
 resilience4j = "2.4.0"
 jetbrains-annotations = "26.1.0"
+myrlennia237-webflux = "0.1.0-SNAPSHOT"
+querydsl = "7.4.0"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -53,9 +54,6 @@ jjwt-api = { module = "io.jsonwebtoken:jjwt-api", version.ref = "jjwt" }
 jjwt-jackson = { module = "io.jsonwebtoken:jjwt-jackson", version.ref = "jjwt" }
 jjwt-impl = { module = "io.jsonwebtoken:jjwt-impl", version.ref = "jjwt" }
 
-poi = { module = "org.apache.poi:poi", version.ref = "poi" }
-poi-ooxml = { module = "org.apache.poi:poi-ooxml", version.ref = "poi" }
-
 postgresql = { module = "org.postgresql:postgresql" }
 r2dbc-postgresql = { module = "org.postgresql:r2dbc-postgresql" }
 
@@ -85,6 +83,8 @@ mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstr
 resilience4j-spring-boot4 = { module = "io.github.resilience4j:resilience4j-spring-boot4", version.ref = "resilience4j" }
 spring-boot-starter-data-redis-reactive-test = { module = "org.springframework.boot:spring-boot-starter-data-redis-reactive-test", version.ref = "spring-boot" }
 
+myrlennia237-webflux = { module = "dev.myrlennia237:webflux", version.ref = "myrlennia237-webflux" }
+querydsl-r2dbc = { module = "io.github.openfeign.querydsl:querydsl-r2dbc", version.ref = "querydsl" }
+
 [bundles]
 jjwt = ["jjwt-api", "jjwt-jackson", "jjwt-impl"]
-poi = ["poi", "poi-ooxml"]

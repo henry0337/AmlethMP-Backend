@@ -1,6 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.myrlennia237.component.service.I18nService;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,15 +19,13 @@ import java.io.IOException;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Component
+@Profile(AppConstant.Environment.DEV)
 @Order(3)
-@Profile("dev")
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
-    private final I18nService i18nService;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, I18nService i18nService) {
-        this.i18nService = i18nService;
+    SwaggerUiInitializer(Environment env) {
         String port = env.getProperty("server.port", "8080");
         this.url = "http://localhost:" + port + "/swagger-ui.html";
     }
@@ -36,30 +34,31 @@ class SwaggerUiInitializer implements GenericApplicationListener {
     public void onApplicationEvent(ApplicationEvent event) {
         // Đảm bảo event này chỉ được xử lý sau khi ứng dụng được khởi động đúng cách.
         if (!(event instanceof ApplicationReadyEvent)) return;
-
-        Mono.fromRunnable(() -> {
-            ProcessBuilder processBuilder = null;
-
-            if (SystemUtils.IS_OS_WINDOWS) {
-                processBuilder = new ProcessBuilder("cmd.exe", "/c", "start " + url);
-            } else if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_LINUX) {
-                processBuilder = new ProcessBuilder("sh", "-c", url);
-            } else {
-                log.warn(i18nService.translate("os.unsupported"));
-            }
-
-            if (processBuilder != null) {
-                try {
-                    processBuilder.start();
-                } catch (IOException _) {
-                    throw new UnsupportedOperationException();
-                }
-            }
-        }).block();
+        Mono.fromRunnable(this::openSwaggerUi).block();
     }
 
     @Override
     public boolean supportsEventType(ResolvableType eventType) {
         return eventType.isAssignableFrom(ApplicationReadyEvent.class);
+    }
+
+    private void openSwaggerUi() {
+        try {
+            ProcessBuilder pb;
+            if (SystemUtils.IS_OS_WINDOWS) {
+                String comSpec = System.getenv(AppConstant.COM_SPEC);
+                pb = new ProcessBuilder(comSpec, "/c", "start", url);
+            } else if (SystemUtils.IS_OS_MAC) {
+                pb = new ProcessBuilder(AppConstant.OPEN_MACOS, url);
+            } else if (SystemUtils.IS_OS_LINUX) {
+                pb = new ProcessBuilder(AppConstant.OPEN_LINUX, url);
+            } else {
+                log.warn("Your current OS you are using is not supported by this backend, please use other supporting OSes.");
+                return;
+            }
+            pb.start();
+        } catch (IOException | RuntimeException e) {
+            log.error("Error opening browser for SonarScanner URL:", e);
+        }
     }
 }
