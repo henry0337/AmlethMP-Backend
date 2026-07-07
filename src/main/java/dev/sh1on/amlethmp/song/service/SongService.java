@@ -13,7 +13,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
@@ -34,7 +33,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional(readOnly = true)
     public Mono<PagedResponse<SongDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
-                .switchIfEmpty(Flux.empty())
+                .switchIfEmpty(reactorHelper.emptyFlux())
                 .map(mapper::toSongDto)
                 .collectList()
                 .zipWith(repository.count())

@@ -32,42 +32,42 @@ public class UserController extends AbstractCrudController<UserDto, UserCreateDt
 
     @ApiMethod(method = RequestMethod.GET)
     public Mono<ResponseEntity<PagedResponse<UserDto>>> findAll(Pageable pageable) {
-        return responseHelper.awaitOk(service.findAll(pageable));
+        return responseHelper.ok(service.findAll(pageable));
     }
 
     @ApiMethod(method = RequestMethod.GET, path = AmlethMPEndpoint.User.BY_ID)
     public Mono<ResponseEntity<UserDto>> findById(
             @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitOrNotFound(service.findById(id));
+        return responseHelper.okOrNotFound(service.findById(id));
     }
 
     @ApiMethod(method = RequestMethod.POST)
     public Mono<ResponseEntity<UserDto>> create(@RequestBody UserCreateDto dto) {
-        return responseHelper.awaitCreated(service.insert(dto));
+        return responseHelper.created(service.insert(dto));
     }
 
     @ApiMethod(method = RequestMethod.PUT, path = AmlethMPEndpoint.User.BY_ID)
     public Mono<ResponseEntity<UserDto>> update(
             @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id,
             @RequestBody UserUpdateDto dto) {
-        return responseHelper.awaitOk(service.update(id, dto));
+        return responseHelper.ok(service.update(id, dto));
     }
 
     @ApiMethod(method = RequestMethod.DELETE, path = AmlethMPEndpoint.User.BY_ID)
     public Mono<ResponseEntity<Void>> delete(
             @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.deleteById(id));
+        return responseHelper.ok(service.deleteById(id));
     }
 
-    @ApiMethod(method = RequestMethod.DELETE, path = AmlethMPEndpoint.User.DISABLE)
+    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.User.DISABLE)
     public Mono<ResponseEntity<Void>> disable(
             @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.disable(id));
+        return responseHelper.ok(service.disable(id));
     }
 
     @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.User.ENABLE)
     public Mono<ResponseEntity<Void>> enable(
             @ApiParameter(name = "id", type = ParameterIn.PATH) @PathVariable UUID id) {
-        return responseHelper.awaitNoContent(service.enable(id));
+        return responseHelper.ok(service.enable(id));
     }
 }

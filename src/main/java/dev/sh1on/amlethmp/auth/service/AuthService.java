@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.template.service.BaseReactiveService;
 import dev.myrlennia237.util.CommonUtils;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
@@ -26,17 +27,15 @@ public class AuthService extends BaseReactiveService implements JwtAuthenticatio
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final ReactorHelper reactorHelper;
 
     @Transactional(readOnly = true)
     public Mono<String> login(String email, String password) {
         return userRepository.findByEmail(email)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(
-                        new UsernameNotFoundException(
-                                i18nService.translate(AppConstant.MessageCode.ERROR_USER_NOT_FOUND)))))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new UsernameNotFoundException(""))))
                 .flatMap(user -> passwordEncoder.matches(password, user.getPassword())
-                        ? Mono.just(user)
-                        : Mono.error(new BadCredentialsException(
-                                i18nService.translate(AppConstant.MessageCode.ERROR_AUTH_INVALID_CREDENTIALS))))
+                        ? reactorHelper.only(user)
+                        : Mono.error(new BadCredentialsException("")))
                 .map(jwtService::generateToken);
     }
 

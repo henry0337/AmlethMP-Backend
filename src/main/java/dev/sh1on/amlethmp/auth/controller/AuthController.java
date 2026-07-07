@@ -27,7 +27,7 @@ import reactor.core.publisher.Mono;
         description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
 @Validated
 @RequiredArgsConstructor
-@SuppressWarnings("java:S6856")
+@SuppressWarnings({"unused", "java:S6856"})
 public class AuthController extends ReactiveRestController {
     private final ResponseHelper responseHelper;
     private final AuthService service;
@@ -40,7 +40,7 @@ public class AuthController extends ReactiveRestController {
      */
     @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.LOGIN, endpointSummary ="Đăng nhập")
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
-        return responseHelper.awaitOk(service.login(request.getEmail(), request.getPassword()))
+        return responseHelper.ok(service.login(request.getEmail(), request.getPassword()))
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
@@ -53,7 +53,7 @@ public class AuthController extends ReactiveRestController {
      */
     @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.REGISTER, endpointSummary ="Đăng ký")
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {
-        return responseHelper.awaitCreated(service.register(user))
+        return responseHelper.created(service.register(user))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));
     }
 }
