@@ -1,7 +1,9 @@
 package dev.sh1on.amlethmp.common.event;
 
+import dev.myrlennia237.helper.ReactorHelper;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,19 +26,23 @@ import java.io.IOException;
 @Component
 @Profile(AppConstant.Environment.DEV)
 @Order(4)
+@RequiredArgsConstructor
 @Slf4j
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
+    private final ReactorHelper reactor;
+
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        Mono.fromRunnable(this::initSonarLint).block();
+        var runnable = Mono.fromRunnable(this::initSonarLint);
+        reactor.waitUntilCompleted(runnable);
     }
 
     private void initSonarLint() {
         log.info("Checking if SonarScanner is running...");
         try {
-            if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
+            if (Boolean.TRUE.equals(reactor.waitUntilCompleted(isSonarLintRunning()))) {
                 log.info("SonarScanner is running at {}", SONAR_URL);
 
                 ProcessBuilder pb;
@@ -52,11 +58,10 @@ class SonarLintInitializer implements GenericApplicationListener {
                     return;
                 }
                 pb.start();
-
             } else {
                 log.info("SonarScanner is not running.");
             }
-        } catch (IOException | RuntimeException _) {
+        } catch (IOException | RuntimeException ignored) {
             log.error("Error while checking or opening SonarScanner URL:");
         }
     }
@@ -67,8 +72,8 @@ class SonarLintInitializer implements GenericApplicationListener {
                 .responseSingle((HttpClientResponse response, ByteBufMono mono) ->
                         Mono.just(response.status().equals(HttpResponseStatus.OK)))
                 .onErrorResume((Throwable e) -> {
-                    log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
-                    return Mono.just(false);
+                    log.info("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
+                    return reactor.only(false);
                 });
     }
 

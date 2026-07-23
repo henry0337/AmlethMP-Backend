@@ -81,8 +81,8 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
-                    user.markAsDeleted(auditor);
-                    return reactorHelper.ignoreReturnValue(repository.save(user));
+                    user.markAsDisabled(auditor, java.time.Instant.now());
+                    return reactorHelper.ignoreReturnValueOf(repository.save(user));
                 }));
     }
 
@@ -92,7 +92,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> {
                     user.restore();
-                    return reactorHelper.ignoreReturnValue(repository.save(user));
+                    return reactorHelper.ignoreReturnValueOf(repository.save(user));
                 });
     }
 }

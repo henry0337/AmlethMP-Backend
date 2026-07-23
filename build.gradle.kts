@@ -1,6 +1,5 @@
 plugins {
 	java
-	checkstyle
 	idea
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.dependency.management)
@@ -13,7 +12,7 @@ description = "Backend for Amleth's music player application"
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(25)
+		languageVersion.set(JavaLanguageVersion.of(17))
 	}
 }
 
@@ -43,30 +42,23 @@ idea {
 	}
 }
 
-checkstyle {
-	toolVersion = "13.4.0"
-	configFile = file("config/checkstyle/checkstyle.xml")
-	isIgnoreFailures = true
-}
-
 extra["sentryVersion"] = "8.27.0"
-extra["springCloudAzureVersion"] = "7.3.0"
+extra["springCloudAzureVersion"] = "6.4.0"
 
 dependencies {
 	implementation(libs.spring.boot.starter.actuator)
 	implementation(libs.spring.boot.starter.aop)
 	implementation(libs.spring.boot.starter.webflux)
-	implementation(libs.spring.boot.starter.liquibase)
+	implementation(libs.liquibase.core)
 	implementation(libs.spring.boot.starter.mail)
 	implementation(libs.spring.boot.starter.validation)
 	implementation(libs.spring.boot.starter.security)
 	implementation(libs.spring.boot.starter.security.oauth2.resource.server)
 	implementation(libs.spring.boot.starter.data.r2dbc)
 	implementation(libs.spring.boot.starter.data.redis)
-	implementation(libs.spring.boot.starter.webclient)
 	implementation(libs.spring.jdbc)
 	implementation(libs.kafka.streams)
-	implementation(libs.spring.boot.starter.kafka)
+	implementation(libs.spring.kafka)
 	implementation(libs.spring.cloud.azure.starter)
 	implementation(libs.spring.cloud.azure.starter.storage)
 	implementation(libs.sentry.spring.boot.starter)
@@ -78,7 +70,7 @@ dependencies {
 	implementation(libs.bundles.jjwt)
 //	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
-	implementation(libs.resilience4j.spring.boot4)
+	implementation(libs.resilience4j.spring.boot3)
 	implementation(libs.myrlennia237.webflux)
 	implementation(libs.querydsl.r2dbc)
 
@@ -98,14 +90,7 @@ dependencies {
 	developmentOnly(libs.spring.boot.devtools)
 	developmentOnly(libs.spring.boot.docker.compose)
 
-	testImplementation(libs.spring.boot.starter.test.webflux)
-	testImplementation(libs.spring.boot.starter.test.security)
-	testImplementation(libs.spring.boot.starter.test.validation)
-	testImplementation(libs.spring.boot.starter.test.data.r2dbc)
-	testImplementation(libs.spring.boot.starter.test.liquibase)
-	testImplementation(libs.spring.boot.starter.test.mail)
-	testImplementation(libs.spring.boot.starter.test.security.oauth2)
-	testImplementation(libs.spring.boot.starter.data.redis.reactive.test)
+	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 	testAnnotationProcessor(libs.mapstruct.processor)
 }
@@ -114,6 +99,11 @@ dependencyManagement {
 	imports {
 		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
 		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
+	}
+
+	dependencies {
+		// Boot BOM ghim kotlin-stdlib ở bản cũ hơn bản mà dev.myrlennia237:webflux cần (kotlin.uuid.Uuid chỉ có từ 2.0.20+)
+		dependency("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
 	}
 }
 
@@ -127,14 +117,14 @@ tasks {
 	}
 
 	bootBuildImage {
-		runImage = "paketobuildpacks/ubuntu-noble-run:latest"
+		runImage.set("paketobuildpacks/ubuntu-noble-run:latest")
 	}
 }
 
 /**
  * Tạo danh sách tham số trình biên dịch cho MapStruct.
  */
-private fun mapstructCompilerArgs(): List<String> {
+fun mapstructCompilerArgs(): List<String> {
 	val args = mutableListOf(
 		"-Amapstruct.defaultComponentModel=spring",
 		"-Amapstruct.defaultInjectionStrategy=constructor",

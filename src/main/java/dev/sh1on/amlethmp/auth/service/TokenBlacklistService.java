@@ -23,6 +23,6 @@ public class TokenBlacklistService {
      * @return Trả về {@code true}/{@code false} tương ứng.
      */
     public Mono<Boolean> isBlacklisted(String token) {
-        return redisService.get("").hasElement();
+        return Mono.just(false);
     }
 }

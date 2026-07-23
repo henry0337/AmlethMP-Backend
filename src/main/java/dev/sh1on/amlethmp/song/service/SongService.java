@@ -70,8 +70,8 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
         return repository.findById(id)
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
                         .flatMap((UUID auditor) -> {
-                            song.markAsDeleted(auditor);
-                            return reactorHelper.ignoreReturnValue(repository.save(song));
+                            song.markAsDisabled(auditor, java.time.Instant.now());
+                            return reactorHelper.ignoreReturnValueOf(repository.save(song));
                         }));
     }
 
@@ -80,7 +80,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
         return repository.findById(id)
                 .flatMap((Song song) -> {
                     song.restore();
-                    return reactorHelper.ignoreReturnValue(repository.save(song));
+                    return reactorHelper.ignoreReturnValueOf(repository.save(song));
                 });
     }
 }
