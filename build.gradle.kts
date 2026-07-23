@@ -100,11 +100,6 @@ dependencyManagement {
 		mavenBom("io.sentry:sentry-bom:${property("sentryVersion")}")
 		mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
 	}
-
-	dependencies {
-		// Boot BOM ghim kotlin-stdlib ở bản cũ hơn bản mà dev.myrlennia237:webflux cần (kotlin.uuid.Uuid chỉ có từ 2.0.20+)
-		dependency("org.jetbrains.kotlin:kotlin-stdlib:2.2.21")
-	}
 }
 
 tasks {
