@@ -1,8 +1,5 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.myrlennia237.helper.ReactorHelper;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
-import io.netty.handler.codec.http.HttpResponseStatus;
 import dev.myrlennia237.service.ReactiveHttpClient;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.RequiredArgsConstructor;
@@ -26,25 +23,22 @@ import java.io.IOException;
 @Component
 @Profile(AppConstant.Environment.DEV)
 @Order(4)
-@RequiredArgsConstructor
 @Slf4j
 @RequiredArgsConstructor
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
-    private final ReactorHelper reactor;
     private final ReactiveHttpClient reactiveHttpClient;
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        var runnable = Mono.fromRunnable(this::initSonarLint);
-        reactor.waitUntilCompleted(runnable);
+        Mono.fromRunnable(this::initSonarLint).block();
     }
 
     private void initSonarLint() {
         log.info("Checking if SonarScanner is running...");
         try {
-            if (Boolean.TRUE.equals(reactor.waitUntilCompleted(isSonarLintRunning()))) {
+            if (Boolean.TRUE.equals(isSonarLintRunning().block())) {
                 log.info("SonarScanner is running at {}", SONAR_URL);
 
                 ProcessBuilder pb;
@@ -60,11 +54,10 @@ class SonarLintInitializer implements GenericApplicationListener {
                     return;
                 }
                 pb.start();
+
             } else {
                 log.info("SonarScanner is not running.");
             }
-        } catch (IOException | RuntimeException ignored) {
-            log.error("Error while checking or opening SonarScanner URL:");
         } catch (IOException | RuntimeException e) {
             log.error("Error while checking or opening SonarScanner URL:" + e.getLocalizedMessage());
         }
@@ -75,8 +68,8 @@ class SonarLintInitializer implements GenericApplicationListener {
                 .map(response -> true)
                 .defaultIfEmpty(true)
                 .onErrorResume((Throwable e) -> {
-                    log.info("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
-                    return reactor.only(false);
+                    log.debug("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
+                    return Mono.just(false);
                 });
     }
 
