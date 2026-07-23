@@ -3,6 +3,8 @@ package dev.sh1on.amlethmp.common.event;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import dev.myrlennia237.service.ReactiveHttpClient;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -10,13 +12,11 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.GenericApplicationListener;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import reactor.netty.ByteBufMono;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.http.client.HttpClientResponse;
 
 import java.io.IOException;
 
@@ -28,10 +28,12 @@ import java.io.IOException;
 @Order(4)
 @RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 class SonarLintInitializer implements GenericApplicationListener {
     private static final String SONAR_URL = "http://localhost:9000";
 
     private final ReactorHelper reactor;
+    private final ReactiveHttpClient reactiveHttpClient;
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
@@ -63,14 +65,15 @@ class SonarLintInitializer implements GenericApplicationListener {
             }
         } catch (IOException | RuntimeException ignored) {
             log.error("Error while checking or opening SonarScanner URL:");
+        } catch (IOException | RuntimeException e) {
+            log.error("Error while checking or opening SonarScanner URL:" + e.getLocalizedMessage());
         }
     }
 
     private Mono<Boolean> isSonarLintRunning() {
-        return HttpClient.create().get()
-                .uri(SonarLintInitializer.SONAR_URL)
-                .responseSingle((HttpClientResponse response, ByteBufMono mono) ->
-                        Mono.just(response.status().equals(HttpResponseStatus.OK)))
+        return reactiveHttpClient.doGet(SonarLintInitializer.SONAR_URL, new ParameterizedTypeReference<String>() { })
+                .map(response -> true)
+                .defaultIfEmpty(true)
                 .onErrorResume((Throwable e) -> {
                     log.info("Failed to connect to SonarScanner at {}: {}", SonarLintInitializer.SONAR_URL, e.getLocalizedMessage());
                     return reactor.only(false);

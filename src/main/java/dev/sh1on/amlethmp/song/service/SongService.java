@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
 import java.util.UUID;
 
 /**
@@ -70,7 +71,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
         return repository.findById(id)
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
                         .flatMap((UUID auditor) -> {
-                            song.markAsDisabled(auditor, java.time.Instant.now());
+                            song.markAsDisabled(auditor, Instant.now());
                             return reactorHelper.ignoreReturnValueOf(repository.save(song));
                         }));
     }
