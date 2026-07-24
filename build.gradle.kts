@@ -8,7 +8,7 @@ plugins {
 
 group = "dev.sh1on"
 version = "0.0.1-SNAPSHOT"
-description = "Backend for Amleth's music player application"
+description = "Backend for AmlethMP application"
 
 java {
 	toolchain {
@@ -68,7 +68,6 @@ dependencies {
 	implementation(libs.mapstruct.spring.annotations)
 	implementation(libs.therapi.runtime.javadoc)
 	implementation(libs.bundles.jjwt)
-//	implementation(libs.bundles.poi)
 	implementation(libs.spring.dotenv)
 	implementation(libs.resilience4j.spring.boot3)
 	implementation(libs.myrlennia237.webflux)
