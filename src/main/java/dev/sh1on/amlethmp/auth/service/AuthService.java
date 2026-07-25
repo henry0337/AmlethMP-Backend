@@ -4,7 +4,6 @@ import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.template.service.BaseReactiveService;
 import dev.myrlennia237.util.CommonUtils;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.Role;

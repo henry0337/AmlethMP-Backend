@@ -2,7 +2,7 @@ package dev.sh1on.amlethmp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 
 /**
  * Lớp khởi chạy hệ thống backend của ứng dụng <a href="https://github.com/henry0337/AmlethMP">AmlethMP</a>.

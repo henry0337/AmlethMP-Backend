@@ -1,5 +1,6 @@
 package dev.sh1on.amlethmp.common.event;
 
+import dev.myrlennia237.helper.ReactorHelper;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -23,23 +24,19 @@ import java.io.IOException;
 @Order(3)
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
+    private final ReactorHelper reactor;
     private final String url;
 
-    SwaggerUiInitializer(Environment env) {
+    SwaggerUiInitializer(Environment env, ReactorHelper reactor) {
         String port = env.getProperty("server.port", "8080");
         this.url = "http://localhost:" + port + "/swagger-ui.html";
+        this.reactor = reactor;
     }
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
-        // Đảm bảo event này chỉ được xử lý sau khi ứng dụng được khởi động đúng cách.
-        if (!(event instanceof ApplicationReadyEvent)) return;
-        Mono.fromRunnable(this::openSwaggerUi).block();
-    }
-
-    @Override
-    public boolean supportsEventType(ResolvableType eventType) {
-        return eventType.isAssignableFrom(ApplicationReadyEvent.class);
+        var runnable = Mono.fromRunnable(this::openSwaggerUi);
+        reactor.waitUntilCompleted(runnable);
     }
 
     private void openSwaggerUi() {
@@ -60,5 +57,10 @@ class SwaggerUiInitializer implements GenericApplicationListener {
         } catch (IOException | RuntimeException e) {
             log.error("Error opening browser for SonarScanner URL:", e);
         }
+    }
+
+    @Override
+    public boolean supportsEventType(ResolvableType eventType) {
+        return eventType.isAssignableFrom(ApplicationReadyEvent.class);
     }
 }
