@@ -12,7 +12,7 @@ description = "Backend for AmlethMP application"
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
 }
 
@@ -43,12 +43,12 @@ idea {
 }
 
 extra["sentryVersion"] = "8.27.0"
-extra["springCloudAzureVersion"] = "6.4.0"
+extra["springCloudAzureVersion"] = "7.3.0"
 
 dependencies {
 	implementation(libs.spring.boot.starter.actuator)
-	implementation(libs.spring.boot.starter.aop)
 	implementation(libs.spring.boot.starter.webflux)
+	implementation(libs.spring.boot.starter.webclient)
 	implementation(libs.liquibase.core)
 	implementation(libs.spring.boot.starter.mail)
 	implementation(libs.spring.boot.starter.validation)
@@ -58,7 +58,7 @@ dependencies {
 	implementation(libs.spring.boot.starter.data.redis)
 	implementation(libs.spring.jdbc)
 	implementation(libs.kafka.streams)
-	implementation(libs.spring.kafka)
+	implementation(libs.spring.boot.starter.kafka)
 	implementation(libs.spring.cloud.azure.starter)
 	implementation(libs.spring.cloud.azure.starter.storage)
 	implementation(libs.sentry.spring.boot.starter)
@@ -69,7 +69,7 @@ dependencies {
 	implementation(libs.therapi.runtime.javadoc)
 	implementation(libs.bundles.jjwt)
 	implementation(libs.spring.dotenv)
-	implementation(libs.resilience4j.spring.boot3)
+	implementation(libs.resilience4j.spring.boot4)
 	implementation(libs.myrlennia237.webflux)
 	implementation(libs.querydsl.r2dbc)
 

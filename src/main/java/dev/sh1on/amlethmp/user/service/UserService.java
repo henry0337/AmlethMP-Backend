@@ -1,5 +1,7 @@
 package dev.sh1on.amlethmp.user.service;
 
+import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.myrlennia237.util.CommonUtils;
@@ -15,7 +17,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
@@ -34,12 +35,12 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> deleteById(UUID id) {
         return repository.deleteById(id);
     }
 
-    @Transactional
+    @EffectiveTransactional
     @SuppressWarnings("java:S4449")
     public Mono<UserDto> insert(UserCreateDto dto) {
         var user = mapper.toUser(dto);
@@ -48,7 +49,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
         return repository.save(user).map(mapper::toUserDto);
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<UserDto> update(UUID id, UserUpdateDto body) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
@@ -62,12 +63,12 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(mapper::toUserDto);
     }
 
-    @Transactional(readOnly = true)
+    @EffectiveReadOnlyTransactional
     public Mono<UserDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toUserDto);
     }
 
-    @Transactional(readOnly = true)
+    @EffectiveReadOnlyTransactional
     public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(reactorHelper.emptyFlux())
@@ -77,23 +78,23 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
                     user.markAsDisabled(auditor, Instant.now());
-                    return reactorHelper.ignoreReturnValueOf(repository.save(user));
+                    return reactorHelper.discardReturnValue(repository.save(user));
                 }));
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Cannot find user with id: " + id)))
                 .flatMap((User user) -> {
                     user.restore();
-                    return reactorHelper.ignoreReturnValueOf(repository.save(user));
+                    return reactorHelper.discardReturnValue(repository.save(user));
                 });
     }
 }

@@ -80,7 +80,7 @@ public class User extends Entity implements UserDetails, UserPrincipal {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return !getDisabled();
     }
 
     @Override

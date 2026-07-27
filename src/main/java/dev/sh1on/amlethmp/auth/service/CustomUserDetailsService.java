@@ -21,7 +21,7 @@ class CustomUserDetailsService implements ReactiveUserDetailsService {
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         return userRepository.findByEmail(username)
-                .switchIfEmpty(Mono.error(new UsernameNotFoundException("")))
+                .switchIfEmpty(Mono.error(new UsernameNotFoundException("Không tìm thấy email hợp lệ cho: " + username)))
                 .cast(UserDetails.class);
     }
 }

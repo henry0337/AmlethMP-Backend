@@ -1,6 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
 import dev.myrlennia237.helper.ReactorHelper;
+import dev.myrlennia237.service.ReactiveHttpClient;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
@@ -8,10 +9,12 @@ import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.event.GenericApplicationListener;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
@@ -24,13 +27,14 @@ import java.io.IOException;
 @Order(3)
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
+    private final ReactiveHttpClient reactiveHttpClient;
     private final ReactorHelper reactor;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, ReactorHelper reactor) {
-        String port = env.getProperty("server.port", "8080");
-        this.url = "http://localhost:" + port + "/swagger-ui.html";
+    SwaggerUiInitializer(Environment env, ReactorHelper reactor, ReactiveHttpClient reactiveHttpClient) {
         this.reactor = reactor;
+        this.reactiveHttpClient = reactiveHttpClient;
+        this.url = createUrl(env.getProperty("server.port", "8080"));
     }
 
     @Override
@@ -40,7 +44,15 @@ class SwaggerUiInitializer implements GenericApplicationListener {
     }
 
     private void openSwaggerUi() {
+        log.info("Checking if Swagger UI is available...");
         try {
+            boolean isAvailable = Boolean.TRUE.equals(reactor.waitUntilCompleted(isSwaggerUiAvailable()));
+            if (!isAvailable) {
+                log.info("Swagger UI is not available at {}", url);
+                return;
+            }
+            log.info("Swagger UI is available at {}", url);
+
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
                 String comSpec = System.getenv(AppConstant.COM_SPEC);
@@ -55,8 +67,27 @@ class SwaggerUiInitializer implements GenericApplicationListener {
             }
             pb.start();
         } catch (IOException | RuntimeException e) {
-            log.error("Error opening browser for SonarScanner URL:", e);
+            log.error("Error opening browser for Swagger UI URL:", e);
         }
+    }
+
+    private Mono<Boolean> isSwaggerUiAvailable() {
+        return reactiveHttpClient.doGet(url, new ParameterizedTypeReference<String>() { })
+                .map(response -> true)
+                .defaultIfEmpty(true)
+                .onErrorResume((Throwable e) -> {
+                    log.debug("Failed to connect to Swagger UI at {}: {}", url, e.getLocalizedMessage());
+                    return Mono.just(false);
+                });
+    }
+
+    private static String createUrl(String port) {
+        return UriComponentsBuilder.newInstance()
+                .scheme("http")
+                .host("localhost")
+                .port(port)
+                .path("/swagger-ui.html")
+                .toUriString();
     }
 
     @Override

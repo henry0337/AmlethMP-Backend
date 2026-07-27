@@ -1,5 +1,7 @@
 package dev.sh1on.amlethmp.song.service;
 
+import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
@@ -12,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
@@ -31,7 +32,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     private final SongRepository repository;
     private final SongMapper mapper;
 
-    @Transactional(readOnly = true)
+    @EffectiveReadOnlyTransactional
     public Mono<PagedResponse<SongDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(reactorHelper.emptyFlux())
@@ -41,17 +42,17 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    @Transactional(readOnly = true)
+    @EffectiveReadOnlyTransactional
     public Mono<SongDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toSongDto);
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<SongDto> insert(SongCreateDto dto) {
         return repository.save(mapper.toSong(dto)).map(mapper::toSongDto);
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
         return repository.findById(id)
                 .flatMap((Song song) -> {
@@ -61,27 +62,27 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .map(mapper::toSongDto);
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> deleteById(UUID id) {
         return repository.deleteById(id);
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
                         .flatMap((UUID auditor) -> {
                             song.markAsDisabled(auditor, Instant.now());
-                            return reactorHelper.ignoreReturnValueOf(repository.save(song));
+                            return reactorHelper.discardReturnValue(repository.save(song));
                         }));
     }
 
-    @Transactional
+    @EffectiveTransactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
                 .flatMap((Song song) -> {
                     song.restore();
-                    return reactorHelper.ignoreReturnValueOf(repository.save(song));
+                    return reactorHelper.discardReturnValue(repository.save(song));
                 });
     }
 }

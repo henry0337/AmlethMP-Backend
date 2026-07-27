@@ -38,7 +38,7 @@ public class AuthController extends ReactiveRestController {
      * @param request Đối tượng {@link LoginRequest} chứa email và mật khẩu.
      * @return {@link ResponseEntity} chứa token JWT nếu đăng nhập thành công, hoặc {@code 401 Unauthorized} nếu thất bại.
      */
-    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.LOGIN, endpointSummary ="Đăng nhập")
+    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.LOGIN, endpointSummary = "Đăng nhập")
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
         return responseHelper.ok(service.login(request.getEmail(), request.getPassword()))
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));

@@ -14,6 +14,7 @@ import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Date;
 import java.util.function.Function;
 
 /**
@@ -28,7 +29,7 @@ public class JwtService {
 
     public JwtService(@Value("${jwt.secret}") String secret) {
         if (secret.isBlank()) {
-            throw new IllegalStateException("JWT secret not configured");
+            throw new IllegalStateException("Secret JWT chưa được thiết lập!");
         }
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
@@ -45,8 +46,8 @@ public class JwtService {
         return Jwts.builder()
                 .subject(username)
                 .claim("role", role != null ? role : Role.USER.toString())
-                .issuedAt(java.util.Date.from(now))
-                .expiration(java.util.Date.from(expiry))
+                .issuedAt(Date.from(now))
+                .expiration(Date.from(expiry))
                 .signWith(key)
                 .compact();
     }

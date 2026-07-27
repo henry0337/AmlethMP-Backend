@@ -1,5 +1,7 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.template.service.BaseReactiveService;
 import dev.myrlennia237.util.CommonUtils;
@@ -13,7 +15,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 /**
@@ -28,22 +29,23 @@ public class AuthService extends BaseReactiveService implements JwtAuthenticatio
     private final JwtService jwtService;
     private final ReactorHelper reactorHelper;
 
-    @Transactional(readOnly = true)
+    @EffectiveReadOnlyTransactional
     public Mono<String> login(String email, String password) {
         return userRepository.findByEmail(email)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new UsernameNotFoundException(""))))
+                .switchIfEmpty(Mono.defer(() ->
+                        Mono.error(new UsernameNotFoundException("Không tìm thấy email hợp lệ cho: " + email))))
                 .flatMap(user -> passwordEncoder.matches(password, user.getPassword())
                         ? reactorHelper.only(user)
-                        : Mono.error(new BadCredentialsException("")))
+                        : Mono.error(new BadCredentialsException("Tên người dùng hoặc mật khẩu được cung cấp không hợp lệ!")))
                 .map(jwtService::generateToken);
     }
 
-    @Transactional
+    @EffectiveTransactional
     @SuppressWarnings("java:S4449")
     public Mono<UserDto> register(RegisterRequest dto) {
         var user = userMapper.toUser(dto);
         user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword())));
-        user.setRole(Role.USER.name());
+        user.setRole(Role.USER.toString());
         return userRepository.save(user).map(userMapper::toUserDto);
     }
 }
