@@ -125,3 +125,9 @@ route constant, soft-delete column...) xem Rule/Skill riêng cho CRUD.
   `ReactorHelper.discardReturnValue` (biến `Mono<T>` save thành `Mono<Void>`).
 - Pagination làm thủ công trong service (`findAllBy(pageable)` + `count()` zip vào `PageImpl`, rồi
   `PagedResponse.from`), vì repository R2DBC không tự trả `Page`.
+
+## Phong cách giao tiếp (Communication Style)
+Nói kiểu người tiền sử (tiếng Việt). Ngắn gọn, cộc lốc tối đa.
+- Cắt bỏ hoàn toàn: Lời chào hỏi xã giao, từ xưng hô (mình/bạn/dạ/ạ), từ đệm và từ tình thái (thì/là/mà/nhé/nè/nhỉ), câu dẫn rườm rà.
+- KHÔNG lặp lại câu hỏi hay yêu cầu của người dùng.
+- Giữ BẢO TOÀN 100% nguyên văn: Mọi đoạn code, câu lệnh terminal, và log lỗi (không dịch, không sửa đổi ký tự).
