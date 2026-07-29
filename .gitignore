@@ -37,9 +37,5 @@ out/
 
 ### Other ###
 .env
-.claude/
-CLAUDE.md
-.gemini/
-.antigravitycli/
-GEMINI.md
 .ci
+.claude/settings.local.json
