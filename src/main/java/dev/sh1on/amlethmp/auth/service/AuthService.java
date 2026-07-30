@@ -4,7 +4,7 @@ import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
 import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.template.service.BaseReactiveService;
-import dev.myrlennia237.util.CommonUtils;
+import dev.myrlennia237.utils.CommonUtils;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.mapper.UserMapper;
@@ -44,7 +44,9 @@ public class AuthService extends BaseReactiveService implements JwtAuthenticatio
     @SuppressWarnings("java:S4449")
     public Mono<UserDto> register(RegisterRequest dto) {
         var user = userMapper.toUser(dto);
-        user.setAccountPassword(CommonUtils.requireNonNull(passwordEncoder.encode(dto.getPassword())));
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        CommonUtils.requireNonNull(encodedPassword);
+        user.setAccountPassword(encodedPassword);
         user.setRole(Role.USER.toString());
         return userRepository.save(user).map(userMapper::toUserDto);
     }

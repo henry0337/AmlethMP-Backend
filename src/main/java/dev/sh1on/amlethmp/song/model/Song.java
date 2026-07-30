@@ -3,9 +3,12 @@ package dev.sh1on.amlethmp.song.model;
 import dev.myrlennia237.template.entity.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
+
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -23,6 +26,8 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = false)
 @Table("songs")
 @SuppressWarnings("java:S2057")
 public class Song extends Entity {

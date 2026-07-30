@@ -2,12 +2,15 @@ package dev.sh1on.amlethmp.user.model;
 
 import dev.myrlennia237.contract.UserPrincipal;
 import dev.myrlennia237.template.entity.Entity;
-import dev.myrlennia237.util.CommonUtils;
+import dev.myrlennia237.utils.CommonUtils;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -21,11 +24,13 @@ import java.util.UUID;
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@ToString(callSuper = false)
 @Table("users")
 @SuppressWarnings("java:S2057")
 public class User extends Entity implements UserDetails, UserPrincipal {
@@ -35,6 +40,7 @@ public class User extends Entity implements UserDetails, UserPrincipal {
     private String displayName;
 
     @Column("password")
+    @ToString.Exclude
     private String accountPassword;
 
     private String role;
@@ -53,12 +59,10 @@ public class User extends Entity implements UserDetails, UserPrincipal {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
-    @Override
     public String getPassword() {
         return accountPassword;
     }
 
-    @Override
     public String getUsername() {
         return email;
     }
@@ -80,11 +84,12 @@ public class User extends Entity implements UserDetails, UserPrincipal {
 
     @Override
     public boolean isEnabled() {
-        return !getDisabled();
+        return !isDisabled();
     }
 
-    @Override
     public UUID getUserId() {
-        return CommonUtils.requireNonNull(super.getId());
+        UUID id = super.getId();
+        CommonUtils.requireNonNull(id, "");
+        return id;
     }
 }

@@ -32,8 +32,8 @@ class LocalizationConfig {
     @Bean
     LocaleContextResolver lcr() {
         var localeResolver = new AcceptHeaderLocaleContextResolver();
-        localeResolver.setDefaultLocale(new Locale("vi", "VN"));
-        localeResolver.setSupportedLocales(List.of(Locale.ENGLISH, Locale.JAPANESE, new Locale("vi", "VN")));
+        localeResolver.setDefaultLocale(Locale.of("vi", "VN"));
+        localeResolver.setSupportedLocales(List.of(Locale.ENGLISH, Locale.JAPANESE, Locale.of("vi", "VN")));
         return localeResolver;
     }
 }

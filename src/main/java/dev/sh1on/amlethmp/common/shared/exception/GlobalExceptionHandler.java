@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @SuppressWarnings("unused")
 class GlobalExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundException.class)
-    ResponseEntity<String> handleUserNotFound(UserNotFoundException ex) {
+    @ExceptionHandler(RecordNotFoundException.class)
+    ResponseEntity<String> handleUserNotFound(RecordNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 }
