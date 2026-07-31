@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.Instant;
-import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -32,8 +31,7 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
-    private static final Map<String, String> MESSAGES = Map.of(
-            "USER_NOT_FOUND", "Cannot find user with id: %s");
+    private static final String USER_NOT_FOUND_MESSAGE = "Cannot find user with id: %s";
 
     private final UserRepository repository;
     private final UserMapper mapper;
@@ -106,6 +104,6 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     }
 
     private static RecordNotFoundException userNotFound(UUID id) {
-        return new RecordNotFoundException(MESSAGES.get("USER_NOT_FOUND").formatted(id));
+        return new RecordNotFoundException(USER_NOT_FOUND_MESSAGE.formatted(id));
     }
 }

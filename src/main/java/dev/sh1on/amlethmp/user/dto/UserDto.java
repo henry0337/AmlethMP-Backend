@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
+@SuppressWarnings("NullAway.Init")
 public class UserDto {
     private UUID id;
     private String email;

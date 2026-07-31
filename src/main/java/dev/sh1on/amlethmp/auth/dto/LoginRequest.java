@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
+@SuppressWarnings("NullAway.Init")
 public class LoginRequest {
     @Email
     @NotBlank

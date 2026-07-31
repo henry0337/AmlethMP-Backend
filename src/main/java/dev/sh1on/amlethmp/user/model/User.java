@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 import org.springframework.security.core.GrantedAuthority;
@@ -59,7 +60,7 @@ public class User extends Entity implements UserDetails, UserPrincipal {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
-    public String getPassword() {
+    public @Nullable String getPassword() {
         return accountPassword;
     }
 

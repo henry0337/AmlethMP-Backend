@@ -31,8 +31,10 @@ spring:
     change-log: classpath:/db/changelog/db.changelog-master.xml
   servlet:
     multipart:
-      max-file-size: 20MB
-      max-request-size: 20MB
+      # Một file âm thanh (nhạc) với định dạng MP3 có thời lượng 3 phút sẽ chỉ loanh quanh khoảng 7-8MB
+      # => Tăng lên 10MB cho dễ upload
+      max-file-size: 10MB
+      max-request-size: 10MB
 springdoc:
   api-docs:
     enabled: false

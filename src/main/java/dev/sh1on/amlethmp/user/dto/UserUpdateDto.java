@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Normalized;
 import java.text.Normalizer;
 
 @Data
+@SuppressWarnings("NullAway.Init")
 public class UserUpdateDto {
     @Email
     private String email;
