@@ -9,6 +9,7 @@ import org.mapstruct.Javadoc;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
 /**
  * Mô hình cung cấp các phương thức mapping cho mô-đun {@link Song}.
@@ -27,8 +28,11 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 public interface SongMapper {
     SongDto toSongDto(Song song);
 
+    @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     Song toSong(SongCreateDto dto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            unmappedTargetPolicy = ReportingPolicy.IGNORE)
     void updateSong(SongUpdateDto dto, @MappingTarget Song song);
 }

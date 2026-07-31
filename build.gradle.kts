@@ -1,9 +1,13 @@
+import net.ltgt.gradle.errorprone.CheckSeverity
+import net.ltgt.gradle.errorprone.errorprone
+
 plugins {
 	java
 	idea
 	alias(libs.plugins.spring.boot)
 	alias(libs.plugins.dependency.management)
 	id("org.sonarqube") version "7.2.2.6593"
+	id("net.ltgt.errorprone") version "5.1.0"
 }
 
 group = "dev.sh1on"
@@ -89,6 +93,9 @@ dependencies {
 	developmentOnly(libs.spring.boot.devtools)
 	developmentOnly(libs.spring.boot.docker.compose)
 
+	errorprone("com.google.errorprone:error_prone_core:2.50.0")
+	errorprone("com.uber.nullaway:nullaway:0.13.8")
+
 	testImplementation(libs.spring.boot.starter.test)
 	testRuntimeOnly(libs.junit.platform.launcher)
 	testAnnotationProcessor(libs.mapstruct.processor)
@@ -108,6 +115,20 @@ tasks {
 
 	withType<JavaCompile> {
 		options.compilerArgs.addAll(mapstructCompilerArgs())
+
+		options.errorprone {
+			disableAllChecks.set(true)
+			check("NullAway", CheckSeverity.ERROR)
+			option("NullAway:AnnotatedPackages", "dev.sh1on.amlethmp")
+			option("NullAway:CheckContracts", "true")
+			excludedPaths.set(".*[/\\\\]build[/\\\\]generated[/\\\\].*")
+		}
+
+		if (name.lowercase().contains("test")) {
+			options.errorprone {
+				disable("NullAway")
+			}
+		}
 	}
 
 	bootBuildImage {
@@ -118,7 +139,7 @@ tasks {
 /**
  * Tạo danh sách tham số trình biên dịch cho MapStruct.
  */
-fun mapstructCompilerArgs(): List<String> {
+private fun mapstructCompilerArgs(): List<String> {
 	val args = mutableListOf(
 		"-Amapstruct.defaultComponentModel=spring",
 		"-Amapstruct.defaultInjectionStrategy=constructor",

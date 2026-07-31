@@ -35,7 +35,9 @@ public interface UserMapper {
     @Mapping(target = "role", ignore = true)
     User toUser(RegisterRequest dto);
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @BeanMapping(
+            nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+            unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "accountPassword", ignore = true)
     void updateUser(UserUpdateDto dto, @MappingTarget User user);
 }
