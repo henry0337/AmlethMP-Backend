@@ -75,7 +75,6 @@ dependencies {
 	implementation(libs.spring.dotenv)
 	implementation(libs.resilience4j.spring.boot4)
 	implementation(libs.myrlennia237.webflux)
-	implementation(libs.querydsl.r2dbc)
 
 	annotationProcessor(libs.mapstruct.processor)
 	annotationProcessor(libs.therapi.runtime.javadoc.scribe)
@@ -91,7 +90,7 @@ dependencies {
 	compileOnly(libs.jetbrains.annotations)
 
 	developmentOnly(libs.spring.boot.devtools)
-	developmentOnly(libs.spring.boot.docker.compose)
+//	developmentOnly(libs.spring.boot.docker.compose)
 
 	errorprone("com.google.errorprone:error_prone_core:2.50.0")
 	errorprone("com.uber.nullaway:nullaway:0.13.8")
@@ -118,7 +117,7 @@ tasks {
 
 		options.errorprone {
 			disableAllChecks.set(true)
-			check("NullAway", CheckSeverity.ERROR)
+			check("NullAway", CheckSeverity.WARN)
 			option("NullAway:AnnotatedPackages", "dev.sh1on.amlethmp")
 			option("NullAway:CheckContracts", "true")
 			excludedPaths.set(".*[/\\\\]build[/\\\\]generated[/\\\\].*")

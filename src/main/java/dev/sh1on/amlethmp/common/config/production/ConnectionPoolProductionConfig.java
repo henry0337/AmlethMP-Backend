@@ -1,19 +1,19 @@
 package dev.sh1on.amlethmp.common.config.production;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import javax.sql.DataSource;
 
 /**
  * <p>Lớp cấu hình <b>DataSource</b> cho môi trường triển khai (production).</p>
  *
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @Configuration(proxyBeanMethods = false)
 @Profile(AppConstant.Environment.PROD)

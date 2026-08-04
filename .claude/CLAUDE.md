@@ -9,7 +9,7 @@ Spring WebFlux + R2DBC (PostgreSQL) + Reactive Redis. Java 21, Gradle (Kotlin DS
 catalog. **Không có tầng data blocking (JPA/JDBC)** — mọi thứ đều trả về `Mono`/`Flux`.
 
 Dự án dùng các dependency bleeding-edge/milestone/snapshot (Spring Boot 4.0.7,
-`spring-boot-aop` 4.0.0-M2, `resilience4j` 2.4.0, `querydsl-r2dbc` 7.4.0). Repository khai báo trong
+`spring-boot-aop` 4.0.0-M2, `resilience4j` 2.4.0). Repository khai báo trong
 `settings.gradle.kts` gồm `mavenLocal()`, `mavenCentral()`, `jitpack.io`. Code trong dự án viết bằng
 tiếng Việt — Javadoc, comment và message `i18n` đều bằng tiếng Việt.
 
@@ -75,7 +75,7 @@ Dùng Gradle wrapper (`./gradlew` trên Unix, `gradlew.bat` trên Windows/PowerS
 - **`common.event`** — listener lúc startup (`SonarLintInitializer`, `SwaggerUiInitializer`).
 - **`common.shared`** — helper cross-cutting: `constant` (`AppConstant`, gồm
   `AppConstant.MessageCode` cho i18n) và `exception` (`GlobalExceptionHandler`,
-  `UserNotFoundException`, `TypeNotMatchException`).
+  `RecordNotFoundException`, `TypeNotMatchException`).
 
 ### CRUD template pattern (mấu chốt cần hiểu)
 CRUD của feature được xây bằng cách kế thừa lớp base **từ thư viện**, tham số hoá bởi
@@ -88,7 +88,8 @@ CRUD của feature được xây bằng cách kế thừa lớp base **từ thư
 - **Service** kế thừa `AbstractCrudService<T, I1, I2>` (kế thừa `BaseReactiveService`), có sẵn
   `reactorHelper`, `auditorAware`, `i18nService`.
 - **Repository** kế thừa `ModifiedR2dbcRepository<T>` (gộp `ReactiveCrudRepository` +
-  `ReactiveSortingRepository` + `ReactiveQuerydslPredicateExecutor`, thêm `findAllBy(Pageable)`).
+  `ReactiveSortingRepository`, thêm `findAllBy(Pageable)`; không có QueryDSL — `spring-data-r2dbc` chưa
+  implement `ReactiveQuerydslPredicateExecutor`).
 - **Entity** kế thừa `dev.myrlennia237.template.entity.Entity` (Kotlin class) — có sẵn `id`, auditing,
   optimistic-lock `@Version`, và **soft-delete built-in** (`disabled`,
   `lastDisabledAt`/`lastDisabledBy`, `markAsDeleted(auditor)`/`restore()`/`isDisabled()`).
@@ -116,7 +117,7 @@ route constant, soft-delete column...) xem Rule/Skill riêng cho CRUD.
 - **Resilience4j** circuit-breaker/retry đã bật; HTTP outbound dùng `ReactiveHttpClient` của thư viện
   (wrap `WebClient` reactive).
 - Đã wire nhưng chưa trung tâm: Kafka (Streams + starter), Azure Storage starter, Sentry, Spring Mail
-  (`MailService`), QueryDSL (predicate executor R2DBC). Apache POI có mặt nhưng đang comment out.
+  (`MailService`). Apache POI có mặt nhưng đang comment out.
 - API docs: springdoc OpenAPI (WebFlux UI) tại `/swagger-ui.html` / `/v3/api-docs`.
 
 ## Nguyên tắc reactive cần nhớ

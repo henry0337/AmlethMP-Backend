@@ -1,5 +1,15 @@
 package dev.sh1on.amlethmp.user.model;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import dev.myrlennia237.contract.UserPrincipal;
 import dev.myrlennia237.template.entity.Entity;
 import dev.myrlennia237.utils.CommonUtils;
@@ -11,17 +21,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.jspecify.annotations.Nullable;
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
-
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
@@ -31,7 +30,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = false)
+@ToString(doNotUseGetters = true)
 @Table("users")
 @SuppressWarnings("java:S2057")
 public class User extends Entity implements UserDetails, UserPrincipal {
@@ -60,7 +59,7 @@ public class User extends Entity implements UserDetails, UserPrincipal {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
-    public @Nullable String getPassword() {
+    public String getPassword() {
         return accountPassword;
     }
 
@@ -88,9 +87,10 @@ public class User extends Entity implements UserDetails, UserPrincipal {
         return !isDisabled();
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public UUID getUserId() {
         UUID id = super.getId();
-        CommonUtils.requireNonNull(id, "");
+        CommonUtils.requireNonNull(id);
         return id;
     }
 }

@@ -1,11 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.myrlennia237.helper.ReactorHelper;
-import dev.myrlennia237.service.ReactiveHttpClient;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.SystemUtils;
+import java.io.IOException;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
@@ -14,9 +10,14 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
-import java.io.IOException;
+import dev.myrlennia237.helper.ReactorHelper;
+import dev.myrlennia237.service.ReactiveHttpClient;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
+import reactor.core.publisher.Mono;
 
 /**
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
@@ -48,6 +49,11 @@ class SonarLintInitializer implements GenericApplicationListener {
             }
             log.info("SonarScanner is running at {}", SONAR_URL);
 
+            if (System.getProperty(AppConstant.SONAR_LINT_OPENED_PROPERTY) != null) {
+                log.debug("SonarScanner đã được mở trong phiên JVM này, bỏ qua để không mở thêm tab mới.");
+                return;
+            }
+
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
                 String comSpec = System.getenv(AppConstant.COM_SPEC);
@@ -61,6 +67,7 @@ class SonarLintInitializer implements GenericApplicationListener {
                 return;
             }
             pb.start();
+            System.setProperty(AppConstant.SONAR_LINT_OPENED_PROPERTY, "true");
         } catch (IOException | RuntimeException e) {
             log.error("Error opening browser for SonarScanner URL:", e);
         }

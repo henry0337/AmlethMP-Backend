@@ -1,4 +1,6 @@
 spring:
+  autoconfigure:
+    exclude: org.springframework.boot.devtools.autoconfigure.DevToolsDataSourceAutoConfiguration
   devtools:
     livereload:
       enabled: true
@@ -38,3 +40,8 @@ spring:
       max-request-size: 10MB
 server:
   shutdown: immediate
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

@@ -1,13 +1,13 @@
 package dev.sh1on.amlethmp.common.config.development;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import javax.sql.DataSource;
 
 /**

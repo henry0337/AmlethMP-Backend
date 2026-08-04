@@ -1,8 +1,9 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import org.springframework.stereotype.Service;
+
 import dev.myrlennia237.service.ReactiveRedisService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 /**

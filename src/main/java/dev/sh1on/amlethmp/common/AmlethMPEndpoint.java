@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
  * </p>
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AmlethMPEndpoint {

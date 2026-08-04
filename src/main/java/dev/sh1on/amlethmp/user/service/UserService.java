@@ -1,5 +1,13 @@
 package dev.sh1on.amlethmp.user.service;
 
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
 import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.component.dto.PagedResponse;
@@ -13,14 +21,7 @@ import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.time.Instant;
-import java.util.UUID;
 
 /**
  * <b>[Domain Service]</b> <br>
@@ -30,6 +31,7 @@ import java.util.UUID;
  */
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("DataFlowIssue")
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
     private static final String USER_NOT_FOUND_MESSAGE = "Cannot find user with id: %s";
 
@@ -47,6 +49,9 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     public Mono<UserDto> insert(UserCreateDto dto) {
         var user = mapper.toUser(dto);
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        // Vì user luôn có mật khẩu được thiết lập qua UserDetails
+        // annotation Nullable sẽ chỉ có mục đích xử lý trường hợp null ở runtime, chứ thực tế
+        // password không thể null trong trường hợp này.
         CommonUtils.requireNonNull(encodedPassword);
         user.setAccountPassword(encodedPassword);
         return repository.save(user).map(mapper::toUserDto);
@@ -60,6 +65,9 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                     mapper.updateUser(body, user);
                     if (body.getPassword() != null) {
                         String encodedPassword = passwordEncoder.encode(body.getPassword());
+                        // Vì user luôn có mật khẩu được thiết lập qua UserDetails
+                        // annotation Nullable sẽ chỉ có mục đích xử lý trường hợp null ở runtime, chứ thực tế
+                        // password không thể null trong trường hợp này.
                         CommonUtils.requireNonNull(encodedPassword);
                         user.setAccountPassword(encodedPassword);
                     }

@@ -9,25 +9,27 @@
 
 Mọi source file Java phải đáp ứng **toàn bộ** các điều kiện sau:
 
-| Hạng mục | Yêu cầu |
-|---|---|
-| Encoding | UTF-8, **không** dùng BOM |
-| End of line | Unix (LF) — **không** dùng DOS (CRLF) |
-| Trailing whitespace | Xóa sạch |
-| Dòng cuối file | Luôn có 1 dòng trống |
+| Hạng mục            | Yêu cầu                               |
+|---------------------|---------------------------------------|
+| Encoding            | UTF-8, **không** dùng BOM             |
+| End of line         | Unix (LF) — **không** dùng DOS (CRLF) |
+| Trailing whitespace | Xóa sạch                              |
+| Dòng cuối file      | Luôn có 1 dòng trống                  |
 
 ## 3. Quy tắc convention riêng cho dự án
 
 ### 3.1. Import
 
-- **Tuyệt đối không** dùng wildcard import, kể cả trong test code.
-- Thứ tự nhóm import (mỗi nhóm cách nhau 1 dòng trống, trong mỗi nhóm sắp xếp theo alphabet):
+- Tuyệt đối **KHÔNG** dùng **wildcard import**, kể cả trong **test code**.
+- **Thứ tự** nhóm import (mỗi nhóm cách nhau 1 dòng trống, trong mỗi nhóm sắp xếp theo alphabet):
 
   1. `java.*`
   2. *(dòng trống)*
   3. `org.springframework.*`
   4. *(dòng trống)*
-  5. Các `import static` khác
+  5. Các import của thư viện khác, sắp xếp thứ tự lần lượt theo **cặp**
+  6. *(dòng trống)*
+  7. Các `import static` khác
 
 ### 3.2. Thứ tự các thành phần trong file Java
 

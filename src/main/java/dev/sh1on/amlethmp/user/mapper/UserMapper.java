@@ -22,8 +22,8 @@ import org.mapstruct.ReportingPolicy;
         authors = {"<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>", "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
 public interface UserMapper {
 
-    @Mapping(source = "createdDate", target = "createdAt")
-    @Mapping(target = "createdBy", expression = "java(user.getCreatedBy() != null ? user.getCreatedBy().toString() : null)")
+    @Mapping(source = "createdTimestamp", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(user.getCreatedAuditor() != null ? user.getCreatedAuditor().toString() : null)")
     UserDto toUserDto(User user);
 
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)

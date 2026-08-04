@@ -1,3 +1,7 @@
-/gradlew text eol=lf
+# Mặc định: mọi file text đều dùng LF, cả trong repo lẫn working copy.
+* text=auto eol=lf
+
+# Ngoại lệ: script đặc thù của Windows bắt buộc dùng CRLF.
 *.bat text eol=crlf
+
 *.jar binary

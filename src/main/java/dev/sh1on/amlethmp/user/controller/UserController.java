@@ -1,5 +1,13 @@
 package dev.sh1on.amlethmp.user.controller;
 
+import java.util.UUID;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+
 import dev.myrlennia237.annotation.spring.ApiController;
 import dev.myrlennia237.annotation.spring.ApiMethod;
 import dev.myrlennia237.annotation.spring.ApiParameter;
@@ -12,14 +20,7 @@ import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
 import dev.sh1on.amlethmp.user.service.UserService;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMethod;
 import reactor.core.publisher.Mono;
-
-import java.util.UUID;
 
 @ApiController(
         path = AmlethMPEndpoint.User.BASE,

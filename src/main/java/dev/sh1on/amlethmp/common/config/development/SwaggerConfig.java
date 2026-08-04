@@ -1,13 +1,14 @@
 package dev.sh1on.amlethmp.common.config.development;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 
 /**
  * <p>Lớp cấu hình <b>Swagger/OpenAPI</b>.</p>

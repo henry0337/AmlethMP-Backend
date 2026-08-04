@@ -1,9 +1,14 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
 import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
 import dev.myrlennia237.annotation.spring.EffectiveTransactional;
 import dev.myrlennia237.helper.ReactorHelper;
-import dev.myrlennia237.template.service.BaseReactiveService;
+import dev.myrlennia237.template.service.ReactiveService;
 import dev.myrlennia237.utils.CommonUtils;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.user.dto.UserDto;
@@ -11,10 +16,6 @@ import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.Role;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 /**
@@ -22,7 +23,7 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-public class AuthService extends BaseReactiveService implements JwtAuthenticationService {
+public class AuthService extends ReactiveService implements JwtAuthenticationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;

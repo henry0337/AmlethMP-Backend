@@ -1,21 +1,23 @@
 package dev.sh1on.amlethmp.auth.controller;
 
-import dev.myrlennia237.annotation.spring.ApiController;
-import dev.myrlennia237.annotation.spring.ApiMethod;
-import dev.myrlennia237.template.controller.ReactiveRestController;
-import dev.myrlennia237.helper.ResponseHelper;
-import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
-import dev.sh1on.amlethmp.auth.dto.LoginRequest;
-import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
-import dev.sh1on.amlethmp.auth.service.AuthService;
-import dev.sh1on.amlethmp.user.dto.UserDto;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
+
+import dev.myrlennia237.annotation.spring.ApiController;
+import dev.myrlennia237.annotation.spring.ApiMethod;
+import dev.myrlennia237.helper.ResponseHelper;
+import dev.myrlennia237.template.controller.ReactiveController;
+import dev.sh1on.amlethmp.auth.dto.LoginRequest;
+import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
+import dev.sh1on.amlethmp.auth.service.AuthService;
+import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.user.dto.UserDto;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
@@ -24,11 +26,11 @@ import reactor.core.publisher.Mono;
 @ApiController(
         path = AmlethMPEndpoint.Auth.BASE,
         moduleName = "Auth",
-        description = "Mô-đun đảm nhiệm tác vụ xác thực thông tin đăng ký/đăng nhập của người dùng")
+        description = "Module đảm nhiệm tác vụ xử lý đăng ký/đăng nhập của người dùng")
 @Validated
 @RequiredArgsConstructor
 @SuppressWarnings({"unused", "java:S6856"})
-public class AuthController extends ReactiveRestController {
+public class AuthController extends ReactiveController {
     private final ResponseHelper responseHelper;
     private final AuthService service;
 
@@ -38,7 +40,12 @@ public class AuthController extends ReactiveRestController {
      * @param request Đối tượng {@link LoginRequest} chứa email và mật khẩu.
      * @return {@link ResponseEntity} chứa token JWT nếu đăng nhập thành công, hoặc {@code 401 Unauthorized} nếu thất bại.
      */
-    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.LOGIN, endpointSummary = "Đăng nhập")
+    @ApiMethod(
+            method = RequestMethod.POST,
+            path = AmlethMPEndpoint.Auth.LOGIN,
+            endpointSummary = "Đăng nhập",
+            consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
         return responseHelper.ok(service.login(request.getEmail(), request.getPassword()))
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
@@ -51,7 +58,12 @@ public class AuthController extends ReactiveRestController {
      * @return {@link ResponseEntity} chứa {@link UserDto} của người dùng vừa được tạo (status 201 Created) nếu thành công,
      * hoặc 400 Bad Request nếu thất bại.
      */
-    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.Auth.REGISTER, endpointSummary ="Đăng ký")
+    @ApiMethod(
+            method = RequestMethod.POST,
+            path = AmlethMPEndpoint.Auth.REGISTER,
+            endpointSummary = "Đăng ký",
+            consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {
         return responseHelper.created(service.register(user))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));
