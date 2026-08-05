@@ -12,6 +12,7 @@ import org.springframework.web.server.i18n.AcceptHeaderLocaleContextResolver;
 import org.springframework.web.server.i18n.LocaleContextResolver;
 
 /**
+ * <b>[Configuration Class]</b> <br>
  * <p>Lớp cấu hình chức năng <b>quốc tế hóa (i18n)</b> cho ứng dụng.</p>
  *
  * @see <a href="https://docs.spring.io/spring-boot/reference/features/internationalization.html">Internationalization</a>

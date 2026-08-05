@@ -14,7 +14,7 @@ import dev.myrlennia237.template.controller.ReactiveController;
 import dev.sh1on.amlethmp.auth.dto.LoginRequest;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.auth.service.AuthService;
-import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ public class AuthController extends ReactiveController {
     @ApiMethod(
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.LOGIN,
-            endpointSummary = "Đăng nhập",
+            summary = "Đăng nhập",
             consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
@@ -61,7 +61,7 @@ public class AuthController extends ReactiveController {
     @ApiMethod(
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.REGISTER,
-            endpointSummary = "Đăng ký",
+            summary = "Đăng ký",
             consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {

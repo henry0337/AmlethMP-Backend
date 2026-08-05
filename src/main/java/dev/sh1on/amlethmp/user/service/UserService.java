@@ -24,8 +24,8 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
- * <b>[Domain Service]</b> <br>
- * Lớp xử lý nghiệp vụ cho mô-đun {@link User}.
+ * <b>[API Service]</b> <br>
+ * Lớp xử lý logic nghiệp vụ cho module {@link User}.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
@@ -33,15 +33,26 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @SuppressWarnings("DataFlowIssue")
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
+
     private static final String USER_NOT_FOUND_MESSAGE = "Cannot find user with id: %s";
 
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    @EffectiveTransactional
-    public Mono<Void> deleteById(UUID id) {
-        return repository.deleteById(id);
+    @EffectiveReadOnlyTransactional
+    public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
+        return repository.findAllBy(pageable)
+                .switchIfEmpty(reactorHelper.emptyFlux())
+                .map(mapper::toUserDto)
+                .collectList()
+                .zipWith(repository.count())
+                .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
+    }
+
+    @EffectiveReadOnlyTransactional
+    public Mono<UserDto> findById(UUID id) {
+        return repository.findById(id).map(mapper::toUserDto);
     }
 
     @EffectiveTransactional
@@ -76,29 +87,9 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(mapper::toUserDto);
     }
 
-    @EffectiveReadOnlyTransactional
-    public Mono<UserDto> findById(UUID id) {
-        return repository.findById(id).map(mapper::toUserDto);
-    }
-
-    @EffectiveReadOnlyTransactional
-    public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
-        return repository.findAllBy(pageable)
-                .switchIfEmpty(reactorHelper.emptyFlux())
-                .map(mapper::toUserDto)
-                .collectList()
-                .zipWith(repository.count())
-                .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
-    }
-
     @EffectiveTransactional
-    public Mono<Void> disable(UUID id) {
-        return repository.findById(id)
-                .switchIfEmpty(Mono.error(userNotFound(id)))
-                .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
-                    user.markAsDisabled(auditor, Instant.now());
-                    return reactorHelper.discardReturnValue(repository.save(user));
-                }));
+    public Mono<Void> deleteById(UUID id) {
+        return repository.deleteById(id);
     }
 
     @EffectiveTransactional
@@ -109,6 +100,16 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                     user.restore();
                     return reactorHelper.discardReturnValue(repository.save(user));
                 });
+    }
+
+    @EffectiveTransactional
+    public Mono<Void> disable(UUID id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(userNotFound(id)))
+                .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
+                    user.markAsDisabled(auditor, Instant.now());
+                    return reactorHelper.discardReturnValue(repository.save(user));
+                }));
     }
 
     private static RecordNotFoundException userNotFound(UUID id) {

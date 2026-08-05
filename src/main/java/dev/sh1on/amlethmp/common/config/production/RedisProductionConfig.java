@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Profile;
 import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 
 /**
+ * <b>[Configuration Class]</b> <br>
  * Lớp cấu hình Redis dành riêng cho môi trường <b>Production (prod)</b>.
  *
  * @author <a href="https://github.com/henry0337">S3lena</a>

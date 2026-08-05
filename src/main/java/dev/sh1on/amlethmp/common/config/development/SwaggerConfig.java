@@ -11,6 +11,7 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 
 /**
+ * <b>[Configuration Class]</b> <br>
  * <p>Lớp cấu hình <b>Swagger/OpenAPI</b>.</p>
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>

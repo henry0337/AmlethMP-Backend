@@ -21,6 +21,7 @@ import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
 
 /**
+ * <b>[Lifecycle Event]</b> <br>
  * Component giúp khởi tạo và chạy <b>Swagger UI</b>.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>

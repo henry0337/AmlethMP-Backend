@@ -11,6 +11,7 @@ import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import javax.sql.DataSource;
 
 /**
+ * <b>[Configuration Class]</b> <br>
  * <p>Lớp cấu hình {@link DataSource} cho môi trường <b>phát triển (development)</b>.</p>
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>

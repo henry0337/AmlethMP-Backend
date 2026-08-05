@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
+ * <b>[API Service]</b> <br>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service

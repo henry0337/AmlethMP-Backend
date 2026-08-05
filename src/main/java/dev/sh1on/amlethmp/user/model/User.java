@@ -22,6 +22,9 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
+ * <b>[API Entity]</b> <br>
+ * Entity chứa các field liên quan tới <b>thông tin người dùng ứng dụng</b>.
+ * 
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Getter
@@ -34,23 +37,49 @@ import lombok.ToString;
 @Table("users")
 @SuppressWarnings("java:S2057")
 public class User extends Entity implements UserDetails, UserPrincipal {
+    /**
+     * Email duy nhất của người dùng hệ thống.
+     */
+    @Column("email")
     private String email;
 
+    /**
+     * Tên hiển thị của người dùng hệ thống, có thể trùng nhau.
+     */
     @Column("display_name")
     private String displayName;
 
+    /**
+     * Mật khẩu của tài khoản mà người dùng đã đăng ký.
+     * <p><b>Ghi chú:</b> Giá trị được lưu vào đây <b>phải</b> là giá trị đã được <b>hash</b>.</p>
+     */
     @Column("password")
     @ToString.Exclude
     private String accountPassword;
 
+    /**
+     * Vai trò của người dùng trong hệ thống.
+     * 
+     * @see Role
+     */
+    @Column("role")
     private String role;
 
+    /**
+     * Đánh dấu liệu tài khoản đã đăng ký với hệ thống là <b>đã hết hạn</b>.
+     */
     @Column("is_account_expired")
     private boolean expired;
 
+    /**
+     * Đánh dấu liệu tài khoản đã đăng ký với hệ thống là <b>đã bị khóa</b>.
+     */
     @Column("is_account_locked")
     private boolean locked;
 
+    /**
+     * Đánh dấu liệu tài khoản đã đăng ký với hệ thống là <b>thông tin người dùng đã hết hạn</b>.
+     */
     @Column("is_credentials_expired")
     private boolean credentialExpired;
 
