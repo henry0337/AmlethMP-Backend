@@ -1,9 +1,5 @@
 package dev.sh1on.amlethmp.auth.config;
 
-import dev.sh1on.amlethmp.common.AmlethMPEndpoint;
-import dev.sh1on.amlethmp.auth.service.JwtService;
-import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -18,6 +14,11 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
+
+import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
+import dev.sh1on.amlethmp.auth.service.JwtService;
+import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**

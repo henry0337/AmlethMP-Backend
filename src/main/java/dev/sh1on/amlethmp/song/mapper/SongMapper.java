@@ -14,14 +14,14 @@ import org.mapstruct.ReportingPolicy;
 /**
  * Mô hình cung cấp các phương thức mapping cho mô-đun {@link Song}.
  *
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Mapper
 @Javadoc(
         value = "Mô hình cung cấp phiên bản triển khai cho các phương thức mapping thuộc module {@link Song}.",
         authors = {
-                "<a href=\"https://github.com/henry0337\">Muharux</a>",
+                "<a href=\"https://github.com/henry0337\">Myrlennia</a>",
                 "<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>",
                 "<a href=\"https://github.com/mapstruct\">MapStruct</a>"}
 )

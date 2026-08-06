@@ -1,9 +1,9 @@
 package dev.sh1on.amlethmp.song.dto;
 
+import java.util.UUID;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.UUID;
 
 @Data
 @AllArgsConstructor

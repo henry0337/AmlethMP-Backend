@@ -14,6 +14,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 /**
+ * <b>[API Conversion Service]</b> <br>
+ * Interface chứa các phương thức chuyển đổi dữ liệu cho module {@link User}.
+ * 
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Mapper
@@ -21,15 +24,23 @@ import org.mapstruct.ReportingPolicy;
         value = "Giao diện cung cấp các phương thức mapping cho mô-đun {@link User}.",
         authors = {"<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>", "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
 public interface UserMapper {
-
-    @Mapping(source = "createdDate", target = "createdAt")
-    @Mapping(target = "createdBy", expression = "java(user.getCreatedBy() != null ? user.getCreatedBy().toString() : null)")
+    /**
+     * {@link User} -> {@link UserDto}
+     */
+    @Mapping(source = "createdTimestamp", target = "createdAt")
+    @Mapping(target = "createdBy", expression = "java(user.getCreatedAuditor() != null ? user.getCreatedAuditor().toString() : null)")
     UserDto toUserDto(User user);
 
+    /**
+     * {@link UserCreateDto} -> {@link User}
+     */
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "accountPassword", ignore = true)
     User toUser(UserCreateDto dto);
 
+    /**
+     * {@link RegisterRequest} -> {@link User}
+     */
     @BeanMapping(unmappedTargetPolicy = ReportingPolicy.IGNORE)
     @Mapping(target = "accountPassword", ignore = true)
     @Mapping(target = "role", ignore = true)

@@ -12,7 +12,6 @@ mapstruct-spring-ext = "2.0.0"
 resilience4j = "2.4.0"
 jetbrains-annotations = "26.1.0"
 myrlennia237-webflux = "0.1.0-SNAPSHOT"
-querydsl = "6.2.1"
 
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
@@ -75,7 +74,6 @@ mapstruct-spring-extensions = { module = "org.mapstruct.extensions.spring:mapstr
 resilience4j-spring-boot4 = { module = "io.github.resilience4j:resilience4j-spring-boot4", version.ref = "resilience4j" }
 
 myrlennia237-webflux = { module = "dev.myrlennia237:webflux", version.ref = "myrlennia237-webflux" }
-querydsl-r2dbc = { module = "io.github.openfeign.querydsl:querydsl-r2dbc", version.ref = "querydsl" }
 
 [bundles]
 jjwt = ["jjwt-api", "jjwt-jackson", "jjwt-impl"]

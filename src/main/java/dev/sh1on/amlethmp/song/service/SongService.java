@@ -1,7 +1,14 @@
 package dev.sh1on.amlethmp.song.service;
 
-import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
-import dev.myrlennia237.annotation.spring.EffectiveTransactional;
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
@@ -11,19 +18,13 @@ import dev.sh1on.amlethmp.song.mapper.SongMapper;
 import dev.sh1on.amlethmp.song.model.Song;
 import dev.sh1on.amlethmp.song.repository.SongRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.time.Instant;
-import java.util.UUID;
 
 /**
  * <b>[Domain Service]</b> <br>
  * Lớp xử lý logic API và nghiệp vụ cho module {@link Song}.
  *
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
@@ -32,7 +33,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     private final SongRepository repository;
     private final SongMapper mapper;
 
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<PagedResponse<SongDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(reactorHelper.emptyFlux())
@@ -42,17 +43,17 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<SongDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toSongDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<SongDto> insert(SongCreateDto dto) {
         return repository.save(mapper.toSong(dto)).map(mapper::toSongDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
         return repository.findById(id)
                 .flatMap((Song song) -> {
@@ -62,12 +63,12 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .map(mapper::toSongDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> deleteById(UUID id) {
         return repository.deleteById(id);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
@@ -77,7 +78,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                         }));
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
                 .flatMap((Song song) -> {

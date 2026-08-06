@@ -1,5 +1,10 @@
 package dev.sh1on.amlethmp.song.model;
 
+import java.util.UUID;
+
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+
 import dev.myrlennia237.template.entity.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,26 +14,21 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import org.springframework.data.relational.core.mapping.Column;
-import org.springframework.data.relational.core.mapping.Table;
-
-import java.util.UUID;
-
 /**
- * <b>[Domain Entity]</b> <br>
+ * <b>[API Entity]</b> <br>
  * Entity chứa thông tin liên quan tới các <b>bài hát</b>.
  *
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
+@Table("songs")
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString(callSuper = false)
-@Table("songs")
+@ToString
 @SuppressWarnings("java:S2057")
 public class Song extends Entity {
     /**
@@ -49,7 +49,7 @@ public class Song extends Entity {
     private String audioUrl;
 
     /**
-     * URL tham chiếu tới ảnh cover cho bài hát này
+     * URL tham chiếu tới ảnh cover cho bài hát này.
      */
     @Column("cover_url")
     private String coverUrl;

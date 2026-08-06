@@ -1,6 +1,5 @@
 package dev.sh1on.amlethmp.common.config.development;
 
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -9,9 +8,11 @@ import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+
 /**
- * <p>Lớp cấu hình cho <b>Redis</b> trong môi trường phát triển (development).</p>
- * <p>Cung cấp cấu hình cho các thao tác với dữ liệu trên <b>Redis</b> thông qua Reactive API.</p>
+ * <b>[Configuration Class]</b> <br>
+ * Lớp cấu hình cho <b>Redis</b>.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */

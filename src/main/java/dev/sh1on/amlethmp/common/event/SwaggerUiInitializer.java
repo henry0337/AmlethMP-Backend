@@ -1,10 +1,7 @@
 package dev.sh1on.amlethmp.common.event;
 
-import dev.myrlennia237.helper.ReactorHelper;
-import dev.myrlennia237.service.ReactiveHttpClient;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.SystemUtils;
+import java.io.IOException;
+
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
@@ -15,12 +12,20 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import dev.myrlennia237.helper.ReactorHelper;
+import dev.myrlennia237.service.ReactiveHttpClient;
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-
 /**
+ * <b>[Lifecycle Event]</b> <br>
+ * Component giúp khởi tạo và chạy <b>Swagger UI</b>.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @Component
 @Profile(AppConstant.Environment.DEV)
@@ -53,6 +58,11 @@ class SwaggerUiInitializer implements GenericApplicationListener {
             }
             log.info("Swagger UI is available at {}", url);
 
+            if (System.getProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY) != null) {
+                log.info("Swagger UI đã được mở trong phiên JVM này, bỏ qua để không mở thêm tab mới.");
+                return;
+            }
+
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
                 String comSpec = System.getenv(AppConstant.COM_SPEC);
@@ -66,6 +76,7 @@ class SwaggerUiInitializer implements GenericApplicationListener {
                 return;
             }
             pb.start();
+            System.setProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY, "true");
         } catch (IOException | RuntimeException e) {
             log.error("Error opening browser for Swagger UI URL:", e);
         }

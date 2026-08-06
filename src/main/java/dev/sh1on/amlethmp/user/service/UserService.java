@@ -1,7 +1,15 @@
 package dev.sh1on.amlethmp.user.service;
 
-import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
-import dev.myrlennia237.annotation.spring.EffectiveTransactional;
+import java.time.Instant;
+import java.util.UUID;
+
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.myrlennia237.utils.CommonUtils;
@@ -13,67 +21,26 @@ import dev.sh1on.amlethmp.user.mapper.UserMapper;
 import dev.sh1on.amlethmp.user.model.User;
 import dev.sh1on.amlethmp.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.time.Instant;
-import java.util.UUID;
-
 /**
- * <b>[Domain Service]</b> <br>
- * Lớp xử lý nghiệp vụ cho mô-đun {@link User}.
+ * <b>[API Service]</b> <br>
+ * Lớp xử lý logic nghiệp vụ cho module {@link User}.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Service
 @RequiredArgsConstructor
+@SuppressWarnings("DataFlowIssue")
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
+
     private static final String USER_NOT_FOUND_MESSAGE = "Cannot find user with id: %s";
 
     private final UserRepository repository;
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    @EffectiveTransactional
-    public Mono<Void> deleteById(UUID id) {
-        return repository.deleteById(id);
-    }
-
-    @EffectiveTransactional
-    @SuppressWarnings("java:S4449")
-    public Mono<UserDto> insert(UserCreateDto dto) {
-        var user = mapper.toUser(dto);
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        CommonUtils.requireNonNull(encodedPassword);
-        user.setAccountPassword(encodedPassword);
-        return repository.save(user).map(mapper::toUserDto);
-    }
-
-    @EffectiveTransactional
-    public Mono<UserDto> update(UUID id, UserUpdateDto body) {
-        return repository.findById(id)
-                .switchIfEmpty(Mono.error(userNotFound(id)))
-                .flatMap((User user) -> {
-                    mapper.updateUser(body, user);
-                    if (body.getPassword() != null) {
-                        String encodedPassword = passwordEncoder.encode(body.getPassword());
-                        CommonUtils.requireNonNull(encodedPassword);
-                        user.setAccountPassword(encodedPassword);
-                    }
-                    return repository.save(user);
-                })
-                .map(mapper::toUserDto);
-    }
-
-    @EffectiveReadOnlyTransactional
-    public Mono<UserDto> findById(UUID id) {
-        return repository.findById(id).map(mapper::toUserDto);
-    }
-
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(reactorHelper.emptyFlux())
@@ -83,17 +50,49 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    @EffectiveTransactional
-    public Mono<Void> disable(UUID id) {
-        return repository.findById(id)
-                .switchIfEmpty(Mono.error(userNotFound(id)))
-                .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
-                    user.markAsDisabled(auditor, Instant.now());
-                    return reactorHelper.discardReturnValue(repository.save(user));
-                }));
+    @ReadOnlyTransactional
+    public Mono<UserDto> findById(UUID id) {
+        return repository.findById(id).map(mapper::toUserDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
+    @SuppressWarnings("java:S4449")
+    public Mono<UserDto> insert(UserCreateDto dto) {
+        var user = mapper.toUser(dto);
+        String encodedPassword = passwordEncoder.encode(dto.getPassword());
+        // Vì user luôn có mật khẩu được thiết lập qua UserDetails
+        // annotation Nullable sẽ chỉ có mục đích xử lý trường hợp null ở runtime, chứ thực tế
+        // password không thể null trong trường hợp này.
+        CommonUtils.requireNonNull(encodedPassword);
+        user.setAccountPassword(encodedPassword);
+        return repository.save(user).map(mapper::toUserDto);
+    }
+
+    @Transactional
+    public Mono<UserDto> update(UUID id, UserUpdateDto body) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(userNotFound(id)))
+                .flatMap((User user) -> {
+                    mapper.updateUser(body, user);
+                    if (body.getPassword() != null) {
+                        String encodedPassword = passwordEncoder.encode(body.getPassword());
+                        // Vì user luôn có mật khẩu được thiết lập qua UserDetails
+                        // annotation Nullable sẽ chỉ có mục đích xử lý trường hợp null ở runtime, chứ thực tế
+                        // password không thể null trong trường hợp này.
+                        CommonUtils.requireNonNull(encodedPassword);
+                        user.setAccountPassword(encodedPassword);
+                    }
+                    return repository.save(user);
+                })
+                .map(mapper::toUserDto);
+    }
+
+    @Transactional
+    public Mono<Void> deleteById(UUID id) {
+        return repository.deleteById(id);
+    }
+
+    @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(userNotFound(id)))
@@ -101,6 +100,16 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                     user.restore();
                     return reactorHelper.discardReturnValue(repository.save(user));
                 });
+    }
+
+    @Transactional
+    public Mono<Void> disable(UUID id) {
+        return repository.findById(id)
+                .switchIfEmpty(Mono.error(userNotFound(id)))
+                .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
+                    user.markAsDisabled(auditor, Instant.now());
+                    return reactorHelper.discardReturnValue(repository.save(user));
+                }));
     }
 
     private static RecordNotFoundException userNotFound(UUID id) {

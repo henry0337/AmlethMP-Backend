@@ -1,18 +1,13 @@
-package dev.sh1on.amlethmp.common;
+package dev.sh1on.amlethmp.common.shared.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
- * Tập trung toàn bộ hằng số đường dẫn (endpoint) của hệ thống <b>AmlethMP</b>.
- * <p>
- * Mỗi mô-đun được gom thành một nhóm riêng (nested class), cung cấp đường dẫn gốc ({@code BASE})
- * và các đường dẫn con tương ứng. Các controller tham chiếu tới các hằng này thay vì viết chuỗi
- * literal trực tiếp.
- * </p>
+ * Nơi tập trung toàn bộ endpoint của hệ thống <b>AmlethMP</b>.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
- * @author <a href="https://github.com/henry0337">Muharux</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AmlethMPEndpoint {

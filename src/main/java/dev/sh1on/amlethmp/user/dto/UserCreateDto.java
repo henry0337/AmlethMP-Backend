@@ -1,5 +1,7 @@
 package dev.sh1on.amlethmp.user.dto;
 
+import java.text.Normalizer;
+
 import dev.sh1on.amlethmp.user.model.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,8 +10,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Normalized;
-
-import java.text.Normalizer;
 
 @Data
 @SuppressWarnings("NullAway.Init")

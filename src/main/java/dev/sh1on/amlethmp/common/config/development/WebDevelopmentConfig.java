@@ -1,12 +1,14 @@
 package dev.sh1on.amlethmp.common.config.development;
 
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
+import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+
 /**
+ * <b>[Configuration Class]</b> <br>
  * <p>Lớp cấu hình Web cho môi trường phát triển (development).</p>
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
