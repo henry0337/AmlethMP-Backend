@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
-import dev.myrlennia237.annotation.spring.EffectiveTransactional;
+import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.myrlennia237.utils.CommonUtils;
@@ -40,7 +40,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     private final UserMapper mapper;
     private final PasswordEncoder passwordEncoder;
 
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<PagedResponse<UserDto>> findAll(Pageable pageable) {
         return repository.findAllBy(pageable)
                 .switchIfEmpty(reactorHelper.emptyFlux())
@@ -50,12 +50,12 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(tuple -> PagedResponse.from(new PageImpl<>(tuple.getT1(), pageable, tuple.getT2())));
     }
 
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<UserDto> findById(UUID id) {
         return repository.findById(id).map(mapper::toUserDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     @SuppressWarnings("java:S4449")
     public Mono<UserDto> insert(UserCreateDto dto) {
         var user = mapper.toUser(dto);
@@ -68,7 +68,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
         return repository.save(user).map(mapper::toUserDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<UserDto> update(UUID id, UserUpdateDto body) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(userNotFound(id)))
@@ -87,12 +87,12 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .map(mapper::toUserDto);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> deleteById(UUID id) {
         return repository.deleteById(id);
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(userNotFound(id)))
@@ -102,7 +102,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 });
     }
 
-    @EffectiveTransactional
+    @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
                 .switchIfEmpty(Mono.error(userNotFound(id)))

@@ -27,6 +27,7 @@ import lombok.ToString;
  * 
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
+@Table("users")
 @Getter
 @Setter
 @Builder
@@ -34,7 +35,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString(doNotUseGetters = true)
-@Table("users")
 @SuppressWarnings("java:S2057")
 public class User extends Entity implements UserDetails, UserPrincipal {
     /**
@@ -88,10 +88,12 @@ public class User extends Entity implements UserDetails, UserPrincipal {
         return List.of(new SimpleGrantedAuthority(role));
     }
 
+    @Override
     public String getPassword() {
         return accountPassword;
     }
 
+    @Override
     public String getUsername() {
         return email;
     }

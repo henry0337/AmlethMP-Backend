@@ -31,15 +31,10 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 @SuppressWarnings({"unused", "java:S6856"})
 public class AuthController extends ReactiveController {
+
     private final ResponseHelper responseHelper;
     private final AuthService service;
 
-    /**
-     * Phương thức đại diện request <b>POST</b> dùng để xác thực thông tin đăng nhập của người dùng.
-     *
-     * @param request Đối tượng {@link LoginRequest} chứa email và mật khẩu.
-     * @return {@link ResponseEntity} chứa token JWT nếu đăng nhập thành công, hoặc {@code 401 Unauthorized} nếu thất bại.
-     */
     @ApiMethod(
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.LOGIN,
@@ -51,13 +46,6 @@ public class AuthController extends ReactiveController {
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 
-    /**
-     * Phương thức đại diện request <b>POST</b> dùng để đăng ký tài khoản người dùng mới.
-     *
-     * @param user Đối tượng {@link RegisterRequest} chứa thông tin cần thiết để tạo người dùng.
-     * @return {@link ResponseEntity} chứa {@link UserDto} của người dùng vừa được tạo (status 201 Created) nếu thành công,
-     * hoặc 400 Bad Request nếu thất bại.
-     */
     @ApiMethod(
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.REGISTER,

@@ -5,8 +5,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import dev.myrlennia237.annotation.spring.EffectiveReadOnlyTransactional;
-import dev.myrlennia237.annotation.spring.EffectiveTransactional;
+import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
+import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.template.service.ReactiveService;
 import dev.myrlennia237.utils.CommonUtils;
@@ -25,13 +25,14 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class AuthService extends ReactiveService implements JwtAuthenticationService {
+
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final ReactorHelper reactorHelper;
 
-    @EffectiveReadOnlyTransactional
+    @ReadOnlyTransactional
     public Mono<String> login(String email, String password) {
         return userRepository.findByEmail(email)
                 .switchIfEmpty(Mono.defer(() ->
@@ -42,8 +43,8 @@ public class AuthService extends ReactiveService implements JwtAuthenticationSer
                 .map(jwtService::generateToken);
     }
 
-    @EffectiveTransactional
-    @SuppressWarnings("java:S4449")
+    @Transactional
+    @SuppressWarnings({"java:S4449", "DataFlowIssue"})
     public Mono<UserDto> register(RegisterRequest dto) {
         var user = userMapper.toUser(dto);
         String encodedPassword = passwordEncoder.encode(dto.getPassword());

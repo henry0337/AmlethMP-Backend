@@ -21,6 +21,7 @@ import lombok.ToString;
  * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
+@Table("songs")
 @Getter
 @Setter
 @Builder
@@ -28,7 +29,6 @@ import lombok.ToString;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 @ToString
-@Table("songs")
 @SuppressWarnings("java:S2057")
 public class Song extends Entity {
     /**
@@ -49,7 +49,7 @@ public class Song extends Entity {
     private String audioUrl;
 
     /**
-     * URL tham chiếu tới ảnh cover cho bài hát này
+     * URL tham chiếu tới ảnh cover cho bài hát này.
      */
     @Column("cover_url")
     private String coverUrl;

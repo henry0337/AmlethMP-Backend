@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import dev.myrlennia237.annotation.spring.ApiController;
 import dev.myrlennia237.annotation.spring.ApiMethod;
 import dev.myrlennia237.annotation.spring.ApiParameter;
+import dev.myrlennia237.annotation.spring.ApiRequestBody;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.controller.java.AbstractCrudController;
 import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
@@ -24,8 +25,8 @@ import reactor.core.publisher.Mono;
 
 /**
  * <b>[API Controller]</b> <br>
- * Lớp xử lý các HTTP request nhận được tới module {@link User}.
- * 
+ * Lớp xử lý các HTTP request nhận được tới module {@link dev.sh1on.amlethmp.user.model.User User}.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @ApiController(
@@ -47,12 +48,11 @@ public class UserController extends AbstractCrudController<UserDto, UserCreateDt
     }
 
     @ApiMethod(
-            method = RequestMethod.GET, 
+            method = RequestMethod.GET,
             path = AmlethMPEndpoint.User.BY_ID,
             summary = "Thông tin người dùng cụ thể",
             description = "Lấy ra thông tin người dùng theo id được chỉ định")
-    public Mono<ResponseEntity<UserDto>> findById(
-            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+    public Mono<ResponseEntity<UserDto>> findById(@PathVariable @ApiParameter(type = ParameterIn.PATH) UUID id) {
         return responseHelper.okOrNotFound(service.findById(id));
     }
 
@@ -60,36 +60,50 @@ public class UserController extends AbstractCrudController<UserDto, UserCreateDt
             method = RequestMethod.POST,
             summary = "Thêm người dùng",
             description = "Thêm thông tin người dùng mới vào hệ thống")
-    public Mono<ResponseEntity<UserDto>> create(@RequestBody UserCreateDto dto) {
+    public Mono<ResponseEntity<UserDto>> create(
+            @RequestBody @ApiRequestBody(description = "Đối tượng chứa thông tin của người dùng mới")
+            UserCreateDto dto) {
         return responseHelper.created(service.insert(dto));
     }
 
     @ApiMethod(
-            method = RequestMethod.PUT, 
+            method = RequestMethod.PUT,
             path = AmlethMPEndpoint.User.BY_ID,
-            summary = "Thêm người dùng",
-            description = "Thêm thông tin người dùng mới vào hệ thống")
+            summary = "Cập nhật dữ liệu người dùng",
+            description = "Cập nhật thông tin người dùng mới vào hệ thống")
     public Mono<ResponseEntity<UserDto>> update(
-            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id,
-            @RequestBody UserUpdateDto dto) {
+            @PathVariable @ApiParameter(type = ParameterIn.PATH)
+            UUID id,
+            @RequestBody @ApiRequestBody(description = "Đối tượng chứa thông tin về dữ liệu mới sử dụng để cập nhật")
+            UserUpdateDto dto) {
+
         return responseHelper.ok(service.update(id, dto));
     }
 
-    @ApiMethod(method = RequestMethod.DELETE, path = AmlethMPEndpoint.User.BY_ID)
-    public Mono<ResponseEntity<Void>> delete(
-            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+    @ApiMethod(
+            method = RequestMethod.DELETE,
+            path = AmlethMPEndpoint.User.BY_ID,
+            summary = "Xóa người dùng",
+            description = "Xóa hoàn toàn thông tin người dùng khỏi vào hệ thống")
+    public Mono<ResponseEntity<Void>> delete(@PathVariable @ApiParameter(type = ParameterIn.PATH) UUID id) {
         return responseHelper.ok(service.deleteById(id));
     }
 
-    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.User.DISABLE)
-    public Mono<ResponseEntity<Void>> disable(
-            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+    @ApiMethod(
+            method = RequestMethod.PATCH,
+            path = AmlethMPEndpoint.User.DISABLE,
+            summary = "Vô hiệu hóa người dùng",
+            description = "Tạm thời vô hiệu hóa người dùng được chỉ định")
+    public Mono<ResponseEntity<Void>> disable(@PathVariable @ApiParameter(type = ParameterIn.PATH) UUID id) {
         return responseHelper.ok(service.disable(id));
     }
 
-    @ApiMethod(method = RequestMethod.POST, path = AmlethMPEndpoint.User.ENABLE)
-    public Mono<ResponseEntity<Void>> enable(
-            @ApiParameter(type = ParameterIn.PATH) @PathVariable UUID id) {
+    @ApiMethod(
+            method = RequestMethod.PATCH,
+            path = AmlethMPEndpoint.User.ENABLE,
+            summary = "Kích hoạt lại người dùng",
+            description = "Bỏ khả năng vô hiệu hóa khỏi người dùng")
+    public Mono<ResponseEntity<Void>> enable(@PathVariable @ApiParameter(type = ParameterIn.PATH) UUID id) {
         return responseHelper.ok(service.enable(id));
     }
 }
