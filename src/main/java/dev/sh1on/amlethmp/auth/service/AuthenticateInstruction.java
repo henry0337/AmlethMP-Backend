@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 public interface AuthenticateInstruction {
 
     /**
-     * Gửi yêu cầu xác thực đăng nhập lên hệ thống.
+     * Nhận, validate và xác nhận yêu cầu xác thực đăng nhập lên từ phía client.
      * @param email     Email dùng để xác thực
      * @param password  Mật khẩu đăng nhập
      * @return JWT token dành riêng cho người dùng yêu cầu.
@@ -23,14 +23,14 @@ public interface AuthenticateInstruction {
     Mono<String> login(String email, String password);
 
     /**
-     *
-     * @param dto
-     * @return
+     * Nhận, validate và xác nhận yêu cầu thêm thông tin đăng nhập mới vào hệ thống từ phía client.
+     * @param dto Thông tin người dùng mới cần thêm vào hệ thống
+     * @return Thông tin cơ bản của người dùng mới.
      */
     Mono<UserDto> register(RegisterRequest dto);
 
     /**
-     * Đăng xuất người dùng đang thực hiện yêu cầu, bằng cách thu hồi JWT được đính kèm trong yêu cầu đó.
+     * Đăng xuất người dùng đang thực hiện yêu cầu.
      *
      * @return {@link Mono} hoàn tất khi token đã được thu hồi.
      */

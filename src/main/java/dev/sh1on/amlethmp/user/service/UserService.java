@@ -52,7 +52,9 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
 
     @ReadOnlyTransactional
     public Mono<UserDto> findById(UUID id) {
-        return repository.findById(id).map(mapper::toUserDto);
+        return repository.findById(id)
+                .switchIfEmpty(reactorHelper.deferError(userNotFound(id)))
+                .map(mapper::toUserDto);
     }
 
     @Transactional
@@ -95,7 +97,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(userNotFound(id)))
+                .switchIfEmpty(reactorHelper.error(userNotFound(id)))
                 .flatMap((User user) -> {
                     user.restore();
                     return reactorHelper.discardReturnValue(repository.save(user));
@@ -105,7 +107,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
     @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
-                .switchIfEmpty(Mono.error(userNotFound(id)))
+                .switchIfEmpty(reactorHelper.error(userNotFound(id)))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
                     user.markAsDisabled(auditor, Instant.now());
                     return reactorHelper.discardReturnValue(repository.save(user));

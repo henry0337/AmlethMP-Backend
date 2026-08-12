@@ -21,7 +21,11 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
+ * <b>[API Controller]</b> <br>
+ * Lớp xử lý các HTTP request nhận được tới module <b>Auth</b>.
+ * 
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @ApiController(
         path = AmlethMPEndpoint.Auth.BASE,
@@ -62,8 +66,7 @@ public class AuthController extends ReactiveController {
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.LOGOUT,
             summary = "Đăng xuất",
-            description = "Thu hồi JWT đang được sử dụng, token đó sẽ bị từ chối ở mọi yêu cầu tiếp theo.",
-            produceType = MediaType.APPLICATION_JSON_VALUE)
+            description = "Thu hồi JWT đang được sử dụng, token đó sẽ bị từ chối ở mọi yêu cầu tiếp theo.")
     public Mono<ResponseEntity<Void>> logout() {
         return responseHelper.okEmpty(service.logout())
                 .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
