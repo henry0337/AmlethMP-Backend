@@ -28,7 +28,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@ToString
+@ToString(doNotUseGetters = true)
 @SuppressWarnings("java:S2057")
 public class Song extends Entity {
     /**

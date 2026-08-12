@@ -35,11 +35,11 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 
-    String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) {
         String username = userDetails.getUsername();
-        String role = userDetails.getAuthorities().isEmpty()
-                ? null
-                : userDetails.getAuthorities().iterator().next().getAuthority();
+        String role = !userDetails.getAuthorities().isEmpty()
+                ? userDetails.getAuthorities().iterator().next().getAuthority()
+                : null;
 
         var now = Instant.now();
         var expiry = now.plus(EXPIRATION_TIME);
@@ -55,6 +55,17 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    /**
+     * Lấy ra thời điểm hết hạn được ghi trong {@code token} được chỉ định.
+     *
+     * @param token Token cần lấy thời điểm hết hạn
+     * @return Thời điểm token đó hết hiệu lực.
+     * @throws io.jsonwebtoken.JwtException Nếu token không hợp lệ hoặc không thể phân giải.
+     */
+    public Instant extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration).toInstant();
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {

@@ -36,17 +36,18 @@ triển ở **repo anh em `../Kotlin-Spring-Utils`** và cài vào **`mavenLocal
 Dùng Gradle wrapper (`./gradlew` trên Unix, `gradlew.bat` trên Windows/PowerShell).
 
 ```bash
-./gradlew build              # compile + test + checkstyle
+./gradlew build              # compile + test
 ./gradlew bootRun            # chạy app (mặc định profile 'dev')
 ./gradlew test               # chạy toàn bộ test
 ./gradlew test --tests "dev.sh1on.amlethmp.AmlethMPBackendApplicationTests"
 ./gradlew test --tests "*.UserServiceTest.findAll*"
-./gradlew checkstyleMain     # lint main sources (config/checkstyle/checkstyle.xml)
 ./gradlew bootBuildImage     # build OCI image (paketo buildpacks)
 ```
 
 - Thêm `-Pdev` để tắt timestamp/version comment do MapStruct sinh ra và bật log verbose cho mapper.
-- Checkstyle cấu hình `isIgnoreFailures = true` — vi phạm style chỉ **cảnh báo, không fail build**.
+- Lint chạy ngay trong `compileJava` bằng **Error Prone + NullAway** (không có Checkstyle). `NullAway`
+  đặt severity `WARN` cho package `dev.sh1on.amlethmp` (tắt hẳn ở test), nên vi phạm chỉ **cảnh báo,
+  không fail build**.
 - Nếu build lỗi không resolve được `dev.myrlennia237:*`, publish thư viện từ
   `../Kotlin-Spring-Utils` vào mavenLocal trước (xem mục trên).
 
@@ -103,17 +104,19 @@ route constant, soft-delete column...) xem Rule/Skill riêng cho CRUD.
   `auth.config.SecurityConfiguration` (annotate `@EnableReactiveSecurityCustomization`) build
   `SecurityWebFilterChain` với `AuthenticationWebFilter` validate header qua `JwtService` +
   `CustomUserDetailsService`.
-- Module `auth`: `AuthController`/`AuthService` (`JwtAuthenticationService`) xử lý login/register;
+- Module `auth`: `AuthController`/`AuthService` (`AuthenticateInstruction`) xử lý login/register;
   `TokenBlacklistService` phục vụ logout/revoke. Password dùng `BCryptPasswordEncoder`.
-- Path permit-all khai báo trong `SecurityConfiguration` (`/api/auth/v1/**`, `/api/user/v1/**`, path
-  springdoc/swagger). Cập nhật allowlist này khi thêm endpoint cần truy cập không cần auth.
+- Path permit-all khai báo trong `SecurityConfiguration` (`/api/auth/v1/login`,
+  `/api/auth/v1/register`, `/api/user/v1/**`, path springdoc/swagger) — riêng `/api/auth/v1/logout`
+  **bắt buộc** đã xác thực. Cập nhật allowlist này khi thêm endpoint cần truy cập không cần auth.
 
 ### Hạ tầng khác
 - **i18n**: text hiển thị cho user đi qua `i18nService.translate(code, …)` của thư viện, key khai báo
   ở `AppConstant.MessageCode`, resolve từ `src/main/resources/i18n/messages*.properties`
   (default/en/ja/vi). Ưu tiên cách này hơn string literal.
-- **Redis**: dùng `ReactiveRedisService` của thư viện để ghi (`set(key, value[, ttl])`) — thư viện
-  **không có `get`**, đọc thì inject thẳng `ReactiveStringRedisTemplate` của Spring.
+- **Redis**: dùng `ReactiveRedisService` của thư viện — có đủ `get(key)`, `set(key, value[, ttl])`,
+  `delete(key)`, `expire(key[, ttl])` (kèm biến thể `*AndAwait` cho Kotlin). `set` với `ttl` ≤ 0 sẽ
+  **không ghi** và trả `false`.
 - **Resilience4j** circuit-breaker/retry đã bật; HTTP outbound dùng `ReactiveHttpClient` của thư viện
   (wrap `WebClient` reactive).
 - Đã wire nhưng chưa trung tâm: Kafka (Streams + starter), Azure Storage starter, Sentry, Spring Mail

@@ -1,6 +1,13 @@
 package dev.sh1on.amlethmp.auth.service;
 
+import java.time.Duration;
+import java.time.Instant;
+
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,18 +27,23 @@ import reactor.core.publisher.Mono;
 
 /**
  * <b>[API Service]</b> <br>
+ * Lớp xử lý logic nghiệp vụ liên quan tới xác thực các <b>yêu cầu bảo mật</b>.
+ *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
+ * @author <a href="https://github.com/henry0337">Myrlennia</a>
  */
 @Service
 @RequiredArgsConstructor
-public class AuthService extends ReactiveService implements JwtAuthenticationService {
+public class AuthService extends ReactiveService implements AuthenticateInstruction {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
     private final ReactorHelper reactorHelper;
 
+    @Override
     @ReadOnlyTransactional
     public Mono<String> login(String email, String password) {
         return userRepository.findByEmail(email)
@@ -43,8 +55,8 @@ public class AuthService extends ReactiveService implements JwtAuthenticationSer
                 .map(jwtService::generateToken);
     }
 
+    @Override
     @Transactional
-    @SuppressWarnings({"java:S4449", "DataFlowIssue"})
     public Mono<UserDto> register(RegisterRequest dto) {
         var user = userMapper.toUser(dto);
         String encodedPassword = passwordEncoder.encode(dto.getPassword());
@@ -53,9 +65,31 @@ public class AuthService extends ReactiveService implements JwtAuthenticationSer
         user.setRole(Role.USER.toString());
         return userRepository.save(user).map(userMapper::toUserDto);
     }
-}
 
-interface JwtAuthenticationService {
-    Mono<String> login(String email, String password);
-    Mono<UserDto> register(RegisterRequest dto);
+    @Override
+    public Mono<Void> logout() {
+        var credentialNotFoundError = Mono.error(new AuthenticationCredentialsNotFoundException(
+                        "Không tìm thấy thông tin xác thực cho yêu cầu đăng xuất hiện tại!");
+
+        Mono<Boolean> revoked = ReactiveSecurityContextHolder.getContext()
+                .map(securityContext -> {
+                    if (securityContext.getAuthentication() == null) {
+                        return (Authentication) Mono.empty();
+                    }
+                    return securityContext.getAuthentication();
+                })
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new AuthenticationCredentialsNotFoundException(
+                        "Không tìm thấy thông tin xác thực cho yêu cầu đăng xuất hiện tại!"))))
+                .flatMap(authentication -> authentication.getCredentials() instanceof String token
+                        ? revoke(token)
+                        : Mono.error(new AuthenticationCredentialsNotFoundException(
+                                "Yêu cầu đăng xuất không đi kèm JWT hợp lệ!")));
+
+        return reactorHelper.discardReturnValue(revoked);
+    }
+
+    private Mono<Boolean> revoke(String token) {
+        var remaining = Duration.between(Instant.now(), jwtService.extractExpiration(token));
+        return tokenBlacklistService.blacklistToken(token, remaining);
+    }
 }

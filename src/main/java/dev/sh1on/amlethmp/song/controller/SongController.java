@@ -25,7 +25,7 @@ import reactor.core.publisher.Mono;
 
 /**
  * <b>[API Controller]</b> <br>
- * Lớp giao tiếp với các yêu cầu HTTP thuộc module {@link dev.sh1on.amlethmp.song.model.Song Song}.
+ * Lớp xử lý các HTTP request nhận được tới module {@link dev.sh1on.amlethmp.song.model.Song Song}.
  *
  * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>

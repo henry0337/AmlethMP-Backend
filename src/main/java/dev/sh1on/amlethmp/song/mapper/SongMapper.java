@@ -12,19 +12,21 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
 /**
- * Mô hình cung cấp các phương thức mapping cho mô-đun {@link Song}.
+ * Interface cung cấp các phương thức mapping cho module {@link Song}.
  *
  * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @Mapper
 @Javadoc(
-        value = "Mô hình cung cấp phiên bản triển khai cho các phương thức mapping thuộc module {@link Song}.",
+        value = """
+        <b>[Conversion Service]</b> <br>
+        Interface cung cấp các phương thức mapping đã được triển khai cho module {@link Song}.
+        """,
         authors = {
                 "<a href=\"https://github.com/henry0337\">Myrlennia</a>",
                 "<a href=\"https://github.com/AdorableDandelion25\">Himekawa</a>",
-                "<a href=\"https://github.com/mapstruct\">MapStruct</a>"}
-)
+                "<a href=\"https://github.com/mapstruct\">MapStruct</a>"})
 public interface SongMapper {
     SongDto toSongDto(Song song);
 

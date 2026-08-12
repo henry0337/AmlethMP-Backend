@@ -29,7 +29,6 @@ import reactor.core.publisher.Mono;
         description = "Module đảm nhiệm tác vụ xử lý đăng ký/đăng nhập của người dùng")
 @Validated
 @RequiredArgsConstructor
-@SuppressWarnings({"unused", "java:S6856"})
 public class AuthController extends ReactiveController {
 
     private final ResponseHelper responseHelper;
@@ -39,6 +38,7 @@ public class AuthController extends ReactiveController {
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.LOGIN,
             summary = "Đăng nhập",
+            description = "",
             consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<String>> login(@RequestBody @Valid LoginRequest request) {
@@ -50,10 +50,22 @@ public class AuthController extends ReactiveController {
             method = RequestMethod.POST,
             path = AmlethMPEndpoint.Auth.REGISTER,
             summary = "Đăng ký",
+            description = "",
             consumeType = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
             produceType = MediaType.APPLICATION_JSON_VALUE)
     public Mono<ResponseEntity<UserDto>> register(@RequestBody @Valid RegisterRequest user) {
         return responseHelper.created(service.register(user))
                 .onErrorResume(e -> Mono.just(ResponseEntity.badRequest().build()));
+    }
+
+    @ApiMethod(
+            method = RequestMethod.POST,
+            path = AmlethMPEndpoint.Auth.LOGOUT,
+            summary = "Đăng xuất",
+            description = "Thu hồi JWT đang được sử dụng, token đó sẽ bị từ chối ở mọi yêu cầu tiếp theo.",
+            produceType = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<Void>> logout() {
+        return responseHelper.okEmpty(service.logout())
+                .onErrorResume(e -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 }

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>AmlethMP — Entity Relationship Diagram</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: #0d1117;
+  min-height: 100vh;
+}
+
+#page-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: #010409;
+  color: #e6edf3;
+  padding: 11px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  border-bottom: 1px solid #21262d;
+  box-shadow: 0 2px 12px rgba(0,0,0,.6);
+}
+#page-header h1 { font-size: 15px; font-weight: 700; letter-spacing: .3px; }
+#page-header span { font-size: 11px; color: #484f58; }
+.pill {
+  margin-left: auto;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 11px;
+}
+.pill-item { display: flex; align-items: center; gap: 5px; }
+.pill-line {
+  display: inline-block;
+  width: 28px;
+  height: 2px;
+  border-radius: 2px;
+}
+.pill-fk  { background: #6e7681; }
+.pill-log { background: #58a6ff; border-style: dashed; border-top: 2px dashed #58a6ff; height: 0; }
+.pill-label { color: #6e7681; }
+
+#erd-scroll {
+  overflow: hidden;
+  height: calc(100vh - 50px);
+}
+
+#erd-canvas {
+  position: relative;
+  width: 1250px;
+  height: 1200px;
+}
+
+#svg-overlay {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.tc {
+  position: absolute;
+  background: #161b22;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1px solid #30363d;
+  box-shadow: 0 4px 16px rgba(0,0,0,.4);
+  z-index: 1;
+  font-size: 11.5px;
+}
+
+.tc-head {
+  padding: 8px 11px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 12.5px;
+  font-family: 'Consolas', 'Courier New', monospace;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: .2px;
+}
+.tc-icon { font-size: 13px; }
+
+.tc-row {
+  display: flex;
+  align-items: center;
+  padding: 2px 10px 2px 8px;
+  gap: 5px;
+  border-bottom: 1px solid #21262d;
+  min-height: 24px;
+}
+.tc-row:last-child { border-bottom: none; }
+.tc-row:hover { background: #1c2128; }
+.tc-row.audit { background: #0d1117; }
+.tc-row.audit .col-name { color: #3d444d; }
+.tc-row.audit .col-type { color: #2d333b; }
+
+.badge {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 3px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  width: 22px;
+  text-align: center;
+  line-height: 14px;
+  letter-spacing: .3px;
+}
+.badge-pk  { background: #2d2000; color: #e3b341; border: 1px solid #5a3e00; }
+.badge-fk  { background: #051d4d; color: #58a6ff; border: 1px solid #0d3a8c; }
+.badge-pfk { background: #1a0e3d; color: #a78bfa; border: 1px solid #3d2a7a; }
+.badge-no  { visibility: hidden; }
+
+.col-name {
+  font-family: 'Consolas', 'Courier New', monospace;
+  color: #c9d1d9;
+  flex: 1;
+  white-space: nowrap;
+}
+.col-name.is-pk { color: #e3b341; font-weight: 700; }
+
+.col-type {
+  font-family: 'Consolas', monospace;
+  color: #484f58;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+.col-tags {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.tag {
+  font-size: 8px;
+  font-weight: 700;
+  padding: 0 3px;
+  border-radius: 2px;
+  line-height: 13px;
+}
+.tag-nn { background: #3d0c0c; color: #f87171; }
+.tag-uq { background: #1e0c3d; color: #c084fc; }
+.tag-ch { background: #2d2000; color: #fbbf24; }
+
+.section-divider {
+  height: 1px;
+  background: #21262d;
+  margin: 0 8px;
+}
+</style>
+</head>
+<body>
+
+<div id="page-header">
+  <div>
+    <h1>AmlethMP — Entity Relationship Diagram</h1>
+    <span>14 tables · generated from Liquibase changelogs</span>
+    <span id="zoom-label" style="margin-left:12px;font-size:11px;color:#58a6ff;font-family:'Consolas',monospace;min-width:52px">zoom 100%</span>
+  </div>
+  <div class="pill">
+    <div class="pill-item">
+      <div class="pill-line pill-fk"></div>
+      <span class="pill-label">FK constraint (bảng trung gian)</span>
+    </div>
+    <div class="pill-item" style="margin-left:8px">
+      <div class="pill-line pill-log"></div>
+      <span class="pill-label">Logical reference (không có FK)</span>
+    </div>
+  </div>
+</div>
+
+<div id="erd-scroll">
+  <div id="zoom-wrapper">
+    <div id="erd-canvas">
+      <svg id="svg-overlay"></svg>
+      <!-- Cards rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── Schema definition ──────────────────────────────────────────────────────
+const C = (name, type, opts = {}) => ({ name, type, ...opts });
+const NN = { nn: true };
+const AUDIT = { audit: true };
+const ANN = { nn: true, audit: true };
+
+const TABLES = {
+  users: {
+    label: 'users', color: '#1d4ed8', icon: '👤',
+    left: 20, top: 20, width: 295,
+    cols: [
+      C('id',                    'UUID',         { pk: true }),
+      C('version',               'INT',          NN),
+      C('email',                 'VARCHAR(255)', { nn:true, uq:true }),
+      C('display_name',          'VARCHAR(255)'),
+      C('avatar_url',            'VARCHAR(1024)'),
+      C('password',              'VARCHAR(255)', NN),
+      C('role',                  'VARCHAR(50)',  { nn:true, check:true }),
+      C('is_account_expired',    'BOOL',         NN),
+      C('is_account_locked',     'BOOL',         NN),
+      C('is_credentials_expired','BOOL',         NN),
+      C('is_disabled',           'BOOL',         ANN),
+      C('last_disabled_by',      'VARCHAR(255)', AUDIT),
+      C('last_disabled_at',      'TSTZ',         AUDIT),
+      C('created_at',            'TSTZ',         ANN),
+      C('created_by',            'VARCHAR(255)', AUDIT),
+      C('last_updated_at',       'TSTZ',         ANN),
+      C('last_updated_by',       'VARCHAR(255)', AUDIT),
+    ]
+  },
+
+  artists: {
+    label: 'artists', color: '#7c3aed', icon: '🎤',
+    left: 355, top: 20, width: 270,
+    cols: [
+      C('id',              'UUID',         { pk: true }),
+      C('version',         'INT',          NN),
+      C('name',            'VARCHAR(255)', NN),
+      C('bio',             'TEXT'),
+      C('avatar_url',      'VARCHAR(1024)'),
+      C('verified',        'BOOL',         NN),
+      C('is_disabled',     'BOOL',         ANN),
+      C('last_disabled_by','VARCHAR(255)', AUDIT),
+      C('last_disabled_at','TSTZ',         AUDIT),
+      C('created_at',      'TSTZ',         ANN),
+      C('created_by',      'VARCHAR(255)', AUDIT),
+      C('last_updated_at', 'TSTZ',         ANN),
+      C('last_updated_by', 'VARCHAR(255)', AUDIT),
+    ]
+  },
+
+  genres: {
+    label: 'genres', color: '#0f766e', icon: '🎵',
+    left: 665, top: 20, width: 235,
+    cols: [
+      C('id',  'UUID',        { pk: true }),
+      C('name','VARCHAR(100)',{ nn:true, uq:true }),
+    ]
+  },
+
+  albums: {
+    label: 'albums', color: '#b45309', icon: '💿',
+    left: 355, top: 392, width: 270,
+    cols: [
+      C('id',              'UUID',         { pk: true }),
+      C('version',         'INT',          NN),
+      C('title',           'VARCHAR(255)', NN),
+      C('description',     'TEXT'),
+      C('cover_url',       'VARCHAR(1024)'),
+      C('release_date',    'DATE'),
+      C('album_type',      'VARCHAR(20)',  { nn:true, check:true }),
+      C('artist_id',       'UUID',         { nn:true, logicalRef:'artists' }),
+      C('is_disabled',     'BOOL',         ANN),
+      C('last_disabled_by','VARCHAR(255)', AUDIT),
+      C('last_disabled_at','TSTZ',         AUDIT),
+      C('created_at',      'TSTZ',         ANN),
+      C('created_by',      'VARCHAR(255)', AUDIT),
+      C('last_updated_at', 'TSTZ',         ANN),
+      C('last_updated_by', 'VARCHAR(255)', AUDIT),
+    ]
+  },
+
+  songs: {
+    label: 'songs', color: '#be123c', icon: '🎧',
+    left: 20, top: 488, width: 295,
+    cols: [
+      C('id',              'UUID',          { pk: true }),
+      C('version',         'INT',           NN),
+      C('title',           'VARCHAR(255)',  NN),
+      C('description',     'TEXT'),
+      C('duration_ms',     'INT',           NN),
+      C('audio_url',       'VARCHAR(1024)', NN),
+      C('cover_url',       'VARCHAR(1024)'),
+      C('album_id',        'UUID',          { logicalRef:'albums' }),
+      C('track_number',    'INT'),
+      C('explicit',        'BOOL',          NN),
+      C('play_count',      'BIGINT',        NN),
+      C('is_disabled',     'BOOL',          ANN),
+      C('last_disabled_by','VARCHAR(255)',  AUDIT),
+      C('last_disabled_at','TSTZ',          AUDIT),
+      C('created_at',      'TSTZ',          ANN),
+      C('created_by',      'VARCHAR(255)',  AUDIT),
+      C('last_updated_at', 'TSTZ',          ANN),
+      C('last_updated_by', 'VARCHAR(255)',  AUDIT),
+    ]
+  },
+
+  song_artists: {
+    label: 'song_artists', color: '#475569', icon: '🔗',
+    left: 355, top: 832, width: 260,
+    cols: [
+      C('song_id',  'UUID',        { pkfk: true }),
+      C('artist_id','UUID',        { pkfk: true }),
+      C('role',     'VARCHAR(20)', NN),
+    ]
+  },
+
+  song_genres: {
+    label: 'song_genres', color: '#475569', icon: '🔗',
+    left: 665, top: 148, width: 235,
+    cols: [
+      C('song_id', 'UUID', { pkfk: true }),
+      C('genre_id','UUID', { pkfk: true }),
+    ]
+  },
+
+  playlists: {
+    label: 'playlists', color: '#15803d', icon: '📋',
+    left: 950, top: 20, width: 280,
+    cols: [
+      C('id',              'UUID',         { pk: true }),
+      C('version',         'INT',          NN),
+      C('name',            'VARCHAR(255)', NN),
+      C('description',     'TEXT'),
+      C('cover_url',       'VARCHAR(1024)'),
+      C('is_public',       'BOOL',         NN),
+      C('owner_id',        'UUID',         { nn:true, logicalRef:'users' }),
+      C('is_disabled',     'BOOL',         ANN),
+      C('last_disabled_by','VARCHAR(255)', AUDIT),
+      C('last_disabled_at','TSTZ',         AUDIT),
+      C('created_at',      'TSTZ',         ANN),
+      C('created_by',      'VARCHAR(255)', AUDIT),
+      C('last_updated_at', 'TSTZ',         ANN),
+      C('last_updated_by', 'VARCHAR(255)', AUDIT),
+    ]
+  },
+
+  playlist_songs: {
+    label: 'playlist_songs', color: '#475569', icon: '🔗',
+    left: 665, top: 276, width: 245,
+    cols: [
+      C('playlist_id','UUID', { pkfk: true }),
+      C('song_id',    'UUID', { pkfk: true }),
+      C('position',   'INT',  NN),
+      C('added_at',   'TSTZ', NN),
+      C('added_by',   'UUID', { fk: true }),
+    ]
+  },
+
+  user_liked_songs: {
+    label: 'user_liked_songs', color: '#4338ca', icon: '❤️',
+    left: 950, top: 436, width: 275,
+    cols: [
+      C('user_id', 'UUID', { pkfk: true }),
+      C('song_id', 'UUID', { pkfk: true }),
+      C('liked_at','TSTZ', NN),
+    ]
+  },
+
+  user_liked_albums: {
+    label: 'user_liked_albums', color: '#4338ca', icon: '❤️',
+    left: 950, top: 588, width: 275,
+    cols: [
+      C('user_id',  'UUID', { pkfk: true }),
+      C('album_id', 'UUID', { pkfk: true }),
+      C('liked_at', 'TSTZ', NN),
+    ]
+  },
+
+  user_followed_artists: {
+    label: 'user_followed_artists', color: '#4338ca', icon: '👁️',
+    left: 950, top: 740, width: 275,
+    cols: [
+      C('user_id',    'UUID', { pkfk: true }),
+      C('artist_id',  'UUID', { pkfk: true }),
+      C('followed_at','TSTZ', NN),
+    ]
+  },
+
+  user_followed_playlists: {
+    label: 'user_followed_playlists', color: '#4338ca', icon: '👁️',
+    left: 950, top: 892, width: 275,
+    cols: [
+      C('user_id',     'UUID', { pkfk: true }),
+      C('playlist_id', 'UUID', { pkfk: true }),
+      C('followed_at', 'TSTZ', NN),
+    ]
+  },
+
+  listening_history: {
+    label: 'listening_history', color: '#9333ea', icon: '📜',
+    left: 355, top: 976, width: 275,
+    cols: [
+      C('id',                'UUID',        { pk: true }),
+      C('user_id',           'UUID',        { nn:true, logicalRef:'users' }),
+      C('song_id',           'UUID',        { nn:true, logicalRef:'songs' }),
+      C('played_at',         'TSTZ',        NN),
+      C('duration_played_ms','INT'),
+      C('context_type',      'VARCHAR(20)'),
+      C('context_id',        'UUID'),
+    ]
+  },
+};
+
+// ─── Relationships ───────────────────────────────────────────────────────────
+// type: 'fk' = solid (junction table FK), 'logical' = dashed (no DB constraint)
+const RELS = [
+  // logical references (no FK in DB)
+  { from:'artists',  to:'albums',                 type:'logical', label:'artist_id'  },
+  { from:'albums',   to:'songs',                  type:'logical', label:'album_id'   },
+  { from:'users',    to:'playlists',              type:'logical', label:'owner_id'   },
+  { from:'users',    to:'listening_history',      type:'logical', label:'user_id'    },
+  { from:'songs',    to:'listening_history',      type:'logical', label:'song_id'    },
+
+  // junction table FKs
+  { from:'songs',    to:'song_artists',           type:'fk', label:'song_id'    },
+  { from:'artists',  to:'song_artists',           type:'fk', label:'artist_id'  },
+  { from:'songs',    to:'song_genres',            type:'fk', label:'song_id'    },
+  { from:'genres',   to:'song_genres',            type:'fk', label:'genre_id'   },
+  { from:'playlists',to:'playlist_songs',         type:'fk', label:'playlist_id'},
+  { from:'songs',    to:'playlist_songs',         type:'fk', label:'song_id'    },
+  { from:'users',    to:'user_liked_songs',       type:'fk', label:'user_id'    },
+  { from:'songs',    to:'user_liked_songs',       type:'fk', label:'song_id'    },
+  { from:'users',    to:'user_liked_albums',      type:'fk', label:'user_id'    },
+  { from:'albums',   to:'user_liked_albums',      type:'fk', label:'album_id'   },
+  { from:'users',    to:'user_followed_artists',  type:'fk', label:'user_id'    },
+  { from:'artists',  to:'user_followed_artists',  type:'fk', label:'artist_id'  },
+  { from:'users',    to:'user_followed_playlists',type:'fk', label:'user_id'    },
+  { from:'playlists',to:'user_followed_playlists',type:'fk', label:'playlist_id'},
+];
+
+// ─── Render cards ─────────────────────────────────────────────────────────────
+const canvas = document.getElementById('erd-canvas');
+
+function renderBadge(col) {
+  if (col.pk)   return `<span class="badge badge-pk">PK</span>`;
+  if (col.pkfk) return `<span class="badge badge-pfk">PFK</span>`;
+  if (col.fk)   return `<span class="badge badge-fk">FK</span>`;
+  return `<span class="badge badge-no">·</span>`;
+}
+
+function renderTags(col) {
+  const tags = [];
+  if (col.nn && !col.pk && !col.pkfk) tags.push(`<span class="tag tag-nn">NN</span>`);
+  if (col.uq)    tags.push(`<span class="tag tag-uq">UQ</span>`);
+  if (col.check) tags.push(`<span class="tag tag-ch">CK</span>`);
+  return tags.length ? `<span class="col-tags">${tags.join('')}</span>` : '';
+}
+
+const auditNames = new Set(['is_disabled','last_disabled_by','last_disabled_at','created_at','created_by','last_updated_at','last_updated_by']);
+
+for (const [key, t] of Object.entries(TABLES)) {
+  const colsHtml = t.cols.map(col => {
+    const isAudit = col.audit || auditNames.has(col.name);
+    const auditCls = isAudit ? ' audit' : '';
+    const nameCls  = col.pk ? ' is-pk' : '';
+    return `<div class="tc-row${auditCls}">
+      ${renderBadge(col)}
+      <span class="col-name${nameCls}">${col.name}</span>
+      <span class="col-type">${col.type}</span>
+      ${renderTags(col)}
+    </div>`;
+  }).join('');
+
+  const el = document.createElement('div');
+  el.className = 'tc';
+  el.id = `tc-${key}`;
+  el.style.left  = t.left  + 'px';
+  el.style.top   = t.top   + 'px';
+  el.style.width = t.width + 'px';
+  el.innerHTML = `
+    <div class="tc-head" style="background:${t.color}">
+      <span class="tc-icon">${t.icon}</span>${t.label}
+    </div>
+    ${colsHtml}`;
+  canvas.appendChild(el);
+}
+
+// ─── Draw SVG lines ──────────────────────────────────────────────────────────
+const svg = document.getElementById('svg-overlay');
+
+// Arrowhead markers
+svg.innerHTML = `
+<defs>
+  <marker id="arrow-fk" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+    <path d="M 0 0 L 7 3.5 L 0 7 Z" fill="#6e7681"/>
+  </marker>
+  <marker id="arrow-log" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+    <path d="M 0 0 L 7 3.5 L 0 7 Z" fill="#58a6ff"/>
+  </marker>
+</defs>`;
+
+function getEdgePoints(el) {
+  const canvasRect = canvas.getBoundingClientRect();
+  const r = el.getBoundingClientRect();
+  const x1 = r.left - canvasRect.left;
+  const y1 = r.top  - canvasRect.top;
+  const x2 = x1 + r.width;
+  const y2 = y1 + r.height;
+  return {
+    top:    { x: x1 + r.width / 2, y: y1 },
+    bottom: { x: x1 + r.width / 2, y: y2 },
+    left:   { x: x1, y: y1 + r.height / 2 },
+    right:  { x: x2, y: y1 + r.height / 2 },
+    cx: x1 + r.width / 2,
+    cy: y1 + r.height / 2,
+    x1, y1, x2, y2
+  };
+}
+
+function addPath(x1, y1, cx1, cy1, cx2, cy2, x2, y2, opts) {
+  const p = document.createElementNS('http://www.w3.org/2000/svg','path');
+  p.setAttribute('d', `M ${x1} ${y1} C ${cx1} ${cy1}, ${cx2} ${cy2}, ${x2} ${y2}`);
+  p.setAttribute('fill', 'none');
+  if (opts.logical) {
+    p.setAttribute('stroke', '#58a6ff');
+    p.setAttribute('stroke-dasharray', '5,3');
+    p.setAttribute('marker-end', 'url(#arrow-log)');
+  } else {
+    p.setAttribute('stroke', '#6e7681');
+    p.setAttribute('marker-end', 'url(#arrow-fk)');
+  }
+  p.setAttribute('stroke-width', '1.5');
+  p.setAttribute('opacity', '0.8');
+  svg.appendChild(p);
+}
+
+function drawRel(fromKey, toKey, logical) {
+  const fromEl = document.getElementById(`tc-${fromKey}`);
+  const toEl   = document.getElementById(`tc-${toKey}`);
+  if (!fromEl || !toEl) return;
+
+  const f = getEdgePoints(fromEl);
+  const t = getEdgePoints(toEl);
+
+  let x1, y1, x2, y2, cx1, cy1, cx2, cy2;
+  const pad = 40;
+
+  // Pick best edges based on relative positions
+  const goRight  = f.x2 < t.x1 - 5;
+  const goLeft   = f.x1 > t.x2 + 5;
+  const goDown   = f.y2 < t.y1 - 5;
+  const goUp     = f.y1 > t.y2 + 5;
+
+  if (goRight) {
+    // from.right → to.left
+    const fy = f.y1 + (f.y2 - f.y1) * 0.35;
+    const ty = t.y1 + (t.y2 - t.y1) * 0.35;
+    x1 = f.x2; y1 = fy;
+    x2 = t.x1; y2 = ty;
+    const dx = Math.max(pad, (x2 - x1) * 0.5);
+    cx1 = x1 + dx; cy1 = y1;
+    cx2 = x2 - dx; cy2 = y2;
+  } else if (goLeft) {
+    // from.left → to.right
+    const fy = f.y1 + (f.y2 - f.y1) * 0.35;
+    const ty = t.y1 + (t.y2 - t.y1) * 0.35;
+    x1 = f.x1; y1 = fy;
+    x2 = t.x2; y2 = ty;
+    const dx = Math.max(pad, (x1 - x2) * 0.5);
+    cx1 = x1 - dx; cy1 = y1;
+    cx2 = x2 + dx; cy2 = y2;
+  } else if (goDown) {
+    // from.bottom → to.top
+    const fx = f.x1 + (f.x2 - f.x1) * 0.35;
+    const tx = t.x1 + (t.x2 - t.x1) * 0.35;
+    x1 = fx; y1 = f.y2;
+    x2 = tx; y2 = t.y1;
+    const dy = Math.max(pad, (y2 - y1) * 0.5);
+    cx1 = x1; cy1 = y1 + dy;
+    cx2 = x2; cy2 = y2 - dy;
+  } else if (goUp) {
+    // from.top → to.bottom
+    const fx = f.x1 + (f.x2 - f.x1) * 0.35;
+    const tx = t.x1 + (t.x2 - t.x1) * 0.35;
+    x1 = fx; y1 = f.y1;
+    x2 = tx; y2 = t.y2;
+    const dy = Math.max(pad, (y1 - y2) * 0.5);
+    cx1 = x1; cy1 = y1 - dy;
+    cx2 = x2; cy2 = y2 + dy;
+  } else {
+    // Overlap — route around with offset
+    x1 = f.x2; y1 = f.cy;
+    x2 = t.x2; y2 = t.cy;
+    cx1 = x1 + 60; cy1 = y1;
+    cx2 = x2 + 60; cy2 = y2;
+  }
+
+  addPath(x1, y1, cx1, cy1, cx2, cy2, x2, y2, { logical });
+}
+
+// ─── Viewport: pan + zoom (transform-based, Figma style) ─────────────────────
+const scrollEl  = document.getElementById('erd-scroll');
+const zoomLabel = document.getElementById('zoom-label');
+
+let tx = 20, ty = 20;
+let zoomLevel = 1;
+const ZOOM_MIN  = 1;
+const ZOOM_MAX  = 2.5;
+const ZOOM_STEP = 0.08;
+
+canvas.style.transformOrigin = '0 0';
+scrollEl.style.cursor = 'grab';
+
+function applyTransform() {
+  canvas.style.transform = `translate(${tx}px, ${ty}px) scale(${zoomLevel})`;
+  zoomLabel.textContent  = `zoom ${Math.round(zoomLevel * 100)}%`;
+}
+
+// Zoom xung quanh vị trí con trỏ
+scrollEl.addEventListener('wheel', (e) => {
+  if (!e.ctrlKey) return;
+  e.preventDefault();
+  const rect    = scrollEl.getBoundingClientRect();
+  const mx      = e.clientX - rect.left;
+  const my      = e.clientY - rect.top;
+  const oldZoom = zoomLevel;
+  const delta   = e.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP;
+  zoomLevel = Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, +(zoomLevel + delta).toFixed(3)));
+  // Giữ nguyên điểm canvas dưới con trỏ sau khi scale
+  tx = mx - (mx - tx) * (zoomLevel / oldZoom);
+  ty = my - (my - ty) * (zoomLevel / oldZoom);
+  applyTransform();
+}, { passive: false });
+
+// Chặn browser zoom
+window.addEventListener('wheel', (e) => { if (e.ctrlKey) e.preventDefault(); }, { passive: false });
+
+// Pan – kéo thả đa hướng không giới hạn
+let isPanning = false, panStartX = 0, panStartY = 0, panStartTx = 0, panStartTy = 0;
+
+scrollEl.addEventListener('mousedown', (e) => {
+  if (e.button !== 0) return;
+  isPanning  = true;
+  panStartX  = e.clientX;  panStartY  = e.clientY;
+  panStartTx = tx;          panStartTy = ty;
+  scrollEl.style.cursor          = 'grabbing';
+  document.body.style.userSelect = 'none';
+  e.preventDefault();
+});
+
+globalThis.addEventListener('mousemove', (e) => {
+  if (!isPanning) return;
+  tx = panStartTx + (e.clientX - panStartX);
+  ty = panStartTy + (e.clientY - panStartY);
+  applyTransform();
+});
+
+globalThis.addEventListener('mouseup', () => {
+  if (!isPanning) return;
+  isPanning                      = false;
+  scrollEl.style.cursor          = 'grab';
+  document.body.style.userSelect = '';
+});
+
+// Wait for layout, then draw
+requestAnimationFrame(() => requestAnimationFrame(() => {
+  for (const rel of RELS) {
+    drawRel(rel.from, rel.to, rel.type === 'logical');
+  }
+
+  // Expand canvas height to fit all cards
+  let maxBottom = 0;
+  for (const [, t] of Object.entries(TABLES)) {
+    const el = document.getElementById(`tc-${t.label.replaceAll('_','-') }`)
+            || document.getElementById(`tc-${Object.keys(TABLES).find(k => TABLES[k] === t)}`);
+    if (el) {
+      const b = el.offsetTop + el.offsetHeight;
+      if (b > maxBottom) maxBottom = b;
+    }
+  }
+  canvas.style.height = (maxBottom + 40) + 'px';
+  svg.setAttribute('height', maxBottom + 40);
+  applyTransform();
+}));
+</script>
+</body>
+</html>

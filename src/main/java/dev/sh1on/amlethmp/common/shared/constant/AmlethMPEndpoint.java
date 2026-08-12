@@ -18,23 +18,20 @@ public final class AmlethMPEndpoint {
     /** Phiên bản API hiện hành. */
     public static final String V1 = "/v1";
 
-    /** Constant đại diện cho tất cả các path con trong một path cha. */
-    public static final String WILDCARD_PATH = "/**";
-
     /**
      * Nhóm endpoint cho mô-đun <b>xác thực</b> (auth).
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Auth {
-        /** Phân đoạn định danh mô-đun. */
         public static final String SEGMENT = "/auth";
-        /** Đường dẫn gốc: {@code /api/auth/v1}. */
         public static final String BASE = API_PREFIX + SEGMENT + V1;
 
         /** Đăng nhập, trả về JWT. */
         public static final String LOGIN = "/login";
         /** Đăng ký tài khoản mới. */
         public static final String REGISTER = "/register";
+        /** Đăng xuất, thu hồi JWT đang được sử dụng. */
+        public static final String LOGOUT = "/logout";
     }
 
     /**
@@ -42,16 +39,10 @@ public final class AmlethMPEndpoint {
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class User {
-        /** Phân đoạn định danh mô-đun. */
         public static final String SEGMENT = "/user";
-        /** Đường dẫn gốc: {@code /api/user/v1}. */
         public static final String BASE = API_PREFIX + SEGMENT + V1;
-
-        /** Thao tác trên một bản ghi theo id (xem chi tiết / cập nhật / xóa cứng). */
         public static final String BY_ID = "/{id}";
-        /** Vô hiệu hóa (soft-delete) một bản ghi. */
         public static final String DISABLE = "/{id}/disable";
-        /** Kích hoạt lại một bản ghi đã bị vô hiệu hóa. */
         public static final String ENABLE = "/{id}/enable";
     }
 
@@ -60,15 +51,10 @@ public final class AmlethMPEndpoint {
      */
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Song {
-        /** Phân đoạn định danh mô-đun. */
         public static final String SEGMENT = "/song";
-        /** Đường dẫn gốc: {@code /api/song/v1}. */
         public static final String BASE = API_PREFIX + SEGMENT + V1;
-        /** Thao tác trên một bản ghi theo id. */
         public static final String BY_ID = "/{id}";
-        /** Vô hiệu hóa (soft-delete) một bản ghi. */
         public static final String DISABLE = "/{id}/disable";
-        /** Kích hoạt lại một bản ghi đã bị vô hiệu hóa. */
         public static final String ENABLE = "/{id}/enable";
     }
 

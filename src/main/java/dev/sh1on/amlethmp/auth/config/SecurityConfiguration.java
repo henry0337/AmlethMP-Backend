@@ -7,6 +7,7 @@ import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +18,14 @@ import org.springframework.web.server.ServerWebExchange;
 
 import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
 import dev.sh1on.amlethmp.auth.service.JwtService;
+import dev.sh1on.amlethmp.auth.service.TokenBlacklistService;
 import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
+import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
+ * <b>[Configuration Class]</b> <br>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @EnableReactiveSecurityCustomization
@@ -30,6 +34,7 @@ class SecurityConfiguration {
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtService jwtService;
+    private final TokenBlacklistService tokenBlacklistService;
     private final ReactiveUserDetailsService userDetailsService;
 
     @Bean
@@ -40,7 +45,8 @@ class SecurityConfiguration {
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(
-                                AmlethMPEndpoint.Auth.BASE + AmlethMPEndpoint.WILDCARD_PATH,
+                                AmlethMPEndpoint.Auth.BASE + AmlethMPEndpoint.Auth.LOGIN,
+                                AmlethMPEndpoint.Auth.BASE + AmlethMPEndpoint.Auth.REGISTER,
                                 AmlethMPEndpoint.User.BASE + "/**",
                                 AmlethMPEndpoint.Docs.API_DOCS,
                                 AmlethMPEndpoint.Docs.SWAGGER_UI,
@@ -72,15 +78,17 @@ class SecurityConfiguration {
             }
 
             var token = authHeader.substring(BEARER_PREFIX.length());
-            String username = jwtService.extractUsername(token);
 
-            return userDetailsService.findByUsername(username)
+            return tokenBlacklistService.isBlacklisted(token)
+                    .filter(blacklisted -> !blacklisted)
+                    .flatMap(ignored -> userDetailsService.findByUsername(jwtService.extractUsername(token)))
                     .filter(userDetails -> jwtService.isTokenValid(token, userDetails))
-                    .map(userDetails -> new UsernamePasswordAuthenticationToken(
+                    .<Authentication>map(userDetails -> new UsernamePasswordAuthenticationToken(
                             userDetails,
                             token,
                             userDetails.getAuthorities()
-                    ));
+                    ))
+                    .onErrorResume(JwtException.class, e -> Mono.empty());
         };
     }
 

@@ -11,6 +11,7 @@ import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
 import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
+import dev.sh1on.amlethmp.common.shared.exception.RecordNotFoundException;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
 import dev.sh1on.amlethmp.song.dto.SongDto;
 import dev.sh1on.amlethmp.song.dto.SongUpdateDto;
@@ -21,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 /**
- * <b>[Domain Service]</b> <br>
+ * <b>[API Service]</b> <br>
  * Lớp xử lý logic API và nghiệp vụ cho module {@link Song}.
  *
  * @author <a href="https://github.com/henry0337">Myrlennia</a>
@@ -30,6 +31,7 @@ import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
 public class SongService extends AbstractCrudService<SongDto, SongCreateDto, SongUpdateDto> {
+
     private final SongRepository repository;
     private final SongMapper mapper;
 
@@ -45,7 +47,9 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
 
     @ReadOnlyTransactional
     public Mono<SongDto> findById(UUID id) {
-        return repository.findById(id).map(mapper::toSongDto);
+        return repository.findById(id)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new RecordNotFoundException(id))))
+                .map(mapper::toSongDto);
     }
 
     @Transactional
@@ -56,6 +60,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional
     public Mono<SongDto> update(UUID id, SongUpdateDto dto) {
         return repository.findById(id)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new RecordNotFoundException(id))))
                 .flatMap((Song song) -> {
                     mapper.updateSong(dto, song);
                     return repository.save(song);
@@ -71,6 +76,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional
     public Mono<Void> disable(UUID id) {
         return repository.findById(id)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new RecordNotFoundException(id))))
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
                         .flatMap((UUID auditor) -> {
                             song.markAsDisabled(auditor, Instant.now());
@@ -81,6 +87,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
     @Transactional
     public Mono<Void> enable(UUID id) {
         return repository.findById(id)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new RecordNotFoundException(id))))
                 .flatMap((Song song) -> {
                     song.restore();
                     return reactorHelper.discardReturnValue(repository.save(song));

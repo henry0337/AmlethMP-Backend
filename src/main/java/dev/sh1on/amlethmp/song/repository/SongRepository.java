@@ -6,8 +6,8 @@ import dev.myrlennia237.template.repository.ExtendedR2dbcRepository;
 import dev.sh1on.amlethmp.song.model.Song;
 
 /**
- * <b>[Domain Repository]</b> <br>
- * Repository cho module {@code Song}.
+ * <b>[API Repository]</b> <br>
+ * Interface cung cấp các phương thức truy vấn cơ sở dữ liệu cho module {@code Song}.
  *
  * @author <a href="https://github.com/henry0337">Myrlennia</a>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
