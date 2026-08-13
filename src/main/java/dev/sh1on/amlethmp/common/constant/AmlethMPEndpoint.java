@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.constant;
+package dev.sh1on.amlethmp.common.constant;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

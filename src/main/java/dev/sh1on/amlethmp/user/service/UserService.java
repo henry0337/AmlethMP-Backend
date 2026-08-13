@@ -13,7 +13,7 @@ import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
 import dev.myrlennia237.utils.CommonUtils;
-import dev.sh1on.amlethmp.common.shared.exception.RecordNotFoundException;
+import dev.sh1on.amlethmp.common.exception.RecordNotFoundException;
 import dev.sh1on.amlethmp.user.dto.UserCreateDto;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import dev.sh1on.amlethmp.user.dto.UserUpdateDto;
@@ -31,7 +31,6 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-@SuppressWarnings("DataFlowIssue")
 public class UserService extends AbstractCrudService<UserDto, UserCreateDto, UserUpdateDto> {
 
     private static final String USER_NOT_FOUND_MESSAGE = "Cannot find user with id: %s";
@@ -100,7 +99,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .switchIfEmpty(reactorHelper.error(userNotFound(id)))
                 .flatMap((User user) -> {
                     user.restore();
-                    return reactorHelper.discardReturnValue(repository.save(user));
+                    return reactorHelper.emitCompleteSignal(repository.save(user));
                 });
     }
 
@@ -110,7 +109,7 @@ public class UserService extends AbstractCrudService<UserDto, UserCreateDto, Use
                 .switchIfEmpty(reactorHelper.error(userNotFound(id)))
                 .flatMap((User user) -> auditorAware.getCurrentAuditor().flatMap((UUID auditor) -> {
                     user.markAsDisabled(auditor, Instant.now());
-                    return reactorHelper.discardReturnValue(repository.save(user));
+                    return reactorHelper.emitCompleteSignal(repository.save(user));
                 }));
     }
 

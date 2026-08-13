@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Profile;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+import dev.sh1on.amlethmp.common.constant.AppConstant;
 import javax.sql.DataSource;
 
 /**

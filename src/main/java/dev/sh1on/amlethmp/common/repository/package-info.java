@@ -1,4 +1,4 @@
 @NullMarked
-package dev.sh1on.amlethmp.common.shared.repository;
+package dev.sh1on.amlethmp.common.repository;
 
 import org.jspecify.annotations.NullMarked;

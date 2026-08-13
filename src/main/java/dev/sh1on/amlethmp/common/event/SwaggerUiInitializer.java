@@ -15,7 +15,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.service.ReactiveHttpClient;
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+import dev.sh1on.amlethmp.common.constant.AppConstant;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
@@ -32,26 +32,26 @@ import reactor.core.publisher.Mono;
 @Order(3)
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
-    private final ReactiveHttpClient reactiveHttpClient;
+    private final ReactiveHttpClient httpClient;
     private final ReactorHelper reactor;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, ReactorHelper reactor, ReactiveHttpClient reactiveHttpClient) {
+    SwaggerUiInitializer(Environment env, ReactorHelper reactor, ReactiveHttpClient httpClient) {
         this.reactor = reactor;
-        this.reactiveHttpClient = reactiveHttpClient;
+        this.httpClient = httpClient;
         this.url = createUrl(env.getProperty("server.port", "8080"));
     }
 
     @Override
     public void onApplicationEvent(ApplicationEvent event) {
         var runnable = Mono.fromRunnable(this::openSwaggerUi);
-        reactor.waitUntilCompleted(runnable);
+        reactor.emitCompleteSignal(runnable);
     }
 
     private void openSwaggerUi() {
         log.info("Checking if Swagger UI is available...");
         try {
-            boolean isAvailable = Boolean.TRUE.equals(reactor.waitUntilCompleted(isSwaggerUiAvailable()));
+            boolean isAvailable = Boolean.TRUE.equals(reactor.awaitMonoComplete(isSwaggerUiAvailable()));
             if (!isAvailable) {
                 log.info("Swagger UI is not available at {}", url);
                 return;
@@ -83,7 +83,7 @@ class SwaggerUiInitializer implements GenericApplicationListener {
     }
 
     private Mono<Boolean> isSwaggerUiAvailable() {
-        return reactiveHttpClient.doGet(url, new ParameterizedTypeReference<String>() { })
+        return httpClient.doGet(url, new ParameterizedTypeReference<String>() { })
                 .map(response -> true)
                 .defaultIfEmpty(true)
                 .onErrorResume((Throwable e) -> {

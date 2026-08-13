@@ -72,7 +72,7 @@ public class AuthService extends ReactiveService implements AuthenticateInstruct
                         ? revoke(token)
                         : reactorHelper.error(new AuthenticationCredentialsNotFoundException("Yêu cầu đăng xuất không đi kèm JWT hợp lệ!")));
 
-        return reactorHelper.discardReturnValue(revoked);
+        return reactorHelper.emitCompleteSignal(revoked);
     }
 
     private Mono<Boolean> revoke(String token) {

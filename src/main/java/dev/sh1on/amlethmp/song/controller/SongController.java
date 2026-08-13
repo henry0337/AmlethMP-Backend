@@ -14,7 +14,7 @@ import dev.myrlennia237.annotation.spring.ApiParameter;
 import dev.myrlennia237.annotation.spring.ApiRequestBody;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.controller.java.AbstractCrudController;
-import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
 import dev.sh1on.amlethmp.song.dto.SongDto;
 import dev.sh1on.amlethmp.song.dto.SongUpdateDto;

@@ -19,7 +19,7 @@ import org.springframework.web.server.ServerWebExchange;
 import dev.myrlennia237.annotation.spring.EnableReactiveSecurityCustomization;
 import dev.sh1on.amlethmp.auth.service.JwtService;
 import dev.sh1on.amlethmp.auth.service.TokenBlacklistService;
-import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;

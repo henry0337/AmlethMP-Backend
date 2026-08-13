@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.exception;
+package dev.sh1on.amlethmp.common.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
 @RestControllerAdvice
-@SuppressWarnings("unused")
 class GlobalExceptionHandler {
 
     @ExceptionHandler(RecordNotFoundException.class)

@@ -68,15 +68,16 @@ Dùng Gradle wrapper (`./gradlew` trên Unix, `gradlew.bat` trên Windows/PowerS
 ### Cấu trúc package (`dev.sh1on.amlethmp`)
 - **Feature modules** (`auth`, `user`, `song`) đều theo layout vertical-slice giống nhau:
   `controller` / `service` / `repository` / `model` / `dto` / `mapper`.
-- **`common.AmlethMPEndpoint`** — một lớp final duy nhất chứa **toàn bộ** route constant, nhóm theo
-  module thành nested class (`Auth`, `User`, `Song`, `Docs`), mỗi class có `BASE`, `BY_ID`, `DISABLE`,
-  `ENABLE`, v.v.
+- **`common.constant.AmlethMPEndpoint`** — một lớp final duy nhất chứa **toàn bộ** route constant, nhóm
+  theo module thành nested class (`Auth`, `User`, `Song`, `Docs`), mỗi class có `BASE`, `BY_ID`,
+  `DISABLE`, `ENABLE`, v.v.
 - **`common.config`** — config Spring chia theo profile (`development/`, `production/`), cộng thêm
   `LocalizationConfig` không phụ thuộc profile (`MessageSource` + `LocaleContextResolver`).
 - **`common.event`** — listener lúc startup (`SonarLintInitializer`, `SwaggerUiInitializer`).
-- **`common.shared`** — helper cross-cutting: `constant` (`AppConstant`, gồm
-  `AppConstant.MessageCode` cho i18n) và `exception` (`GlobalExceptionHandler`,
-  `RecordNotFoundException`, `TypeNotMatchException`).
+- **`common.constant`** (`AppConstant`, gồm `AppConstant.MessageCode` cho i18n) và **`common.exception`**
+  (`GlobalExceptionHandler`, `RecordNotFoundException`, `TypeNotMatchException`) — helper cross-cutting.
+- **`common.repository`** — `AmlethMPCustomRepository`, custom repository base xử lý SQL query file
+  `.sql`.
 
 ### CRUD template pattern (mấu chốt cần hiểu)
 CRUD của feature được xây bằng cách kế thừa lớp base **từ thư viện**, tham số hoá bởi

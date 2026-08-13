@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.exception;
+package dev.sh1on.amlethmp.common.exception;
 
 import java.util.UUID;
 

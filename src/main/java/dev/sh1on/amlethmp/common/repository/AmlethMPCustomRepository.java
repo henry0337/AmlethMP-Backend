@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.common.shared.repository;
+package dev.sh1on.amlethmp.common.repository;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

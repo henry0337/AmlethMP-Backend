@@ -14,7 +14,7 @@ import dev.myrlennia237.template.controller.ReactiveController;
 import dev.sh1on.amlethmp.auth.dto.LoginRequest;
 import dev.sh1on.amlethmp.auth.dto.RegisterRequest;
 import dev.sh1on.amlethmp.auth.service.AuthService;
-import dev.sh1on.amlethmp.common.shared.constant.AmlethMPEndpoint;
+import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.user.dto.UserDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

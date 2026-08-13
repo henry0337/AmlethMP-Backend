@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 
-import dev.sh1on.amlethmp.common.shared.constant.AppConstant;
+import dev.sh1on.amlethmp.common.constant.AppConstant;
 
 /**
  * <b>[Configuration Class]</b> <br>

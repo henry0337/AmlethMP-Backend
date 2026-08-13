@@ -11,7 +11,7 @@ import dev.myrlennia237.annotation.spring.ReadOnlyTransactional;
 import dev.myrlennia237.annotation.spring.Transactional;
 import dev.myrlennia237.component.dto.PagedResponse;
 import dev.myrlennia237.template.service.java.AbstractCrudService;
-import dev.sh1on.amlethmp.common.shared.exception.RecordNotFoundException;
+import dev.sh1on.amlethmp.common.exception.RecordNotFoundException;
 import dev.sh1on.amlethmp.song.dto.SongCreateDto;
 import dev.sh1on.amlethmp.song.dto.SongDto;
 import dev.sh1on.amlethmp.song.dto.SongUpdateDto;
@@ -80,7 +80,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .flatMap((Song song) -> auditorAware.getCurrentAuditor()
                         .flatMap((UUID auditor) -> {
                             song.markAsDisabled(auditor, Instant.now());
-                            return reactorHelper.discardReturnValue(repository.save(song));
+                            return reactorHelper.emitCompleteSignal(repository.save(song));
                         }));
     }
 
@@ -90,7 +90,7 @@ public class SongService extends AbstractCrudService<SongDto, SongCreateDto, Son
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new RecordNotFoundException(id))))
                 .flatMap((Song song) -> {
                     song.restore();
-                    return reactorHelper.discardReturnValue(repository.save(song));
+                    return reactorHelper.emitCompleteSignal(repository.save(song));
                 });
     }
 }
