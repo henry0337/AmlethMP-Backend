@@ -1,4 +1,4 @@
-package dev.sh1on.amlethmp.user.model;
+package dev.sh1on.amlethmp.user.enums;
 
 /**
  * Enum class định nghĩa các <b>role (vai trò)</b> để phân quyền người dùng.

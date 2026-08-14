@@ -11,11 +11,13 @@ import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import dev.myrlennia237.helper.ReactorHelper;
+import dev.myrlennia237.helper.WebFluxUriBuilder;
 import dev.myrlennia237.service.ReactiveHttpClient;
+import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.common.constant.AppConstant;
+import dev.sh1on.amlethmp.common.enums.ExecutionPriority;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
@@ -29,7 +31,7 @@ import reactor.core.publisher.Mono;
  */
 @Component
 @Profile(AppConstant.Environment.DEV)
-@Order(3)
+@Order(ExecutionPriority.THIRD)
 @Slf4j
 class SwaggerUiInitializer implements GenericApplicationListener {
     private final ReactiveHttpClient httpClient;
@@ -39,7 +41,7 @@ class SwaggerUiInitializer implements GenericApplicationListener {
     SwaggerUiInitializer(Environment env, ReactorHelper reactor, ReactiveHttpClient httpClient) {
         this.reactor = reactor;
         this.httpClient = httpClient;
-        this.url = createUrl(env.getProperty("server.port", "8080"));
+        this.url = createUrl(env.getProperty("server.port", Integer.class, 8080));
     }
 
     @Override
@@ -49,6 +51,12 @@ class SwaggerUiInitializer implements GenericApplicationListener {
     }
 
     private void openSwaggerUi() {
+        if (System.getProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY) != null) {
+            log.debug("Swagger UI initializer đã chạy trong phiên JVM này (kể cả qua DevTools restart), bỏ qua.");
+            return;
+        }
+        System.setProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY, "true");
+
         log.info("Checking if Swagger UI is available...");
         try {
             boolean isAvailable = Boolean.TRUE.equals(reactor.awaitMonoComplete(isSwaggerUiAvailable()));
@@ -57,11 +65,6 @@ class SwaggerUiInitializer implements GenericApplicationListener {
                 return;
             }
             log.info("Swagger UI is available at {}", url);
-
-            if (System.getProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY) != null) {
-                log.info("Swagger UI đã được mở trong phiên JVM này, bỏ qua để không mở thêm tab mới.");
-                return;
-            }
 
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
@@ -76,7 +79,6 @@ class SwaggerUiInitializer implements GenericApplicationListener {
                 return;
             }
             pb.start();
-            System.setProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY, "true");
         } catch (IOException | RuntimeException e) {
             log.error("Error opening browser for Swagger UI URL:", e);
         }
@@ -92,13 +94,8 @@ class SwaggerUiInitializer implements GenericApplicationListener {
                 });
     }
 
-    private static String createUrl(String port) {
-        return UriComponentsBuilder.newInstance()
-                .scheme("http")
-                .host("localhost")
-                .port(port)
-                .path("/swagger-ui.html")
-                .toUriString();
+    private static String createUrl(int port) {
+        return WebFluxUriBuilder.build("http", "localhost", port, AmlethMPEndpoint.Docs.SWAGGER_UI_HTML);
     }
 
     @Override

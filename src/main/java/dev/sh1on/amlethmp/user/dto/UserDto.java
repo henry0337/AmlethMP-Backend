@@ -3,7 +3,7 @@ package dev.sh1on.amlethmp.user.dto;
 import java.time.Instant;
 import java.util.UUID;
 
-import dev.sh1on.amlethmp.user.model.Role;
+import dev.sh1on.amlethmp.user.enums.Role;
 import lombok.Data;
 
 @Data

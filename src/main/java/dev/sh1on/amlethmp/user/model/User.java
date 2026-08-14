@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import dev.myrlennia237.contract.UserPrincipal;
 import dev.myrlennia237.template.entity.Entity;
 import dev.myrlennia237.utils.CommonUtils;
+import dev.sh1on.amlethmp.user.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;

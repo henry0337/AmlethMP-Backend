@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 /**
+ * <b>[Constant]</b> <br>
  * Nơi tập trung toàn bộ endpoint của hệ thống <b>AmlethMP</b>.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
