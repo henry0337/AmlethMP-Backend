@@ -32,7 +32,7 @@ import reactor.core.publisher.Mono;
  */
 @Service
 @RequiredArgsConstructor
-public class AuthService extends ReactiveService implements AuthenticateInstruction {
+public class AuthService extends ReactiveService implements AuthenticationInstruction {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;

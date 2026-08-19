@@ -3,21 +3,17 @@ package dev.sh1on.amlethmp.common.event;
 import java.io.IOException;
 
 import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.GenericApplicationListener;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.ResolvableType;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import dev.myrlennia237.component.event.ReadyEventListener;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.helper.WebFluxUriBuilder;
-import dev.myrlennia237.service.ReactiveHttpClient;
 import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.common.constant.AppConstant;
-import dev.sh1on.amlethmp.common.enums.ExecutionPriority;
+import dev.sh1on.amlethmp.common.enums.InitializationPriority;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
@@ -31,41 +27,29 @@ import reactor.core.publisher.Mono;
  */
 @Component
 @Profile(AppConstant.Environment.DEV)
-@Order(ExecutionPriority.THIRD)
+@Order(InitializationPriority.THIRD)
 @Slf4j
-class SwaggerUiInitializer implements GenericApplicationListener {
-    private final ReactiveHttpClient httpClient;
+class SwaggerUiInitializer implements ReadyEventListener {
     private final ReactorHelper reactor;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, ReactorHelper reactor, ReactiveHttpClient httpClient) {
+    SwaggerUiInitializer(Environment env, ReactorHelper reactor) {
         this.reactor = reactor;
-        this.httpClient = httpClient;
         this.url = createUrl(env.getProperty("server.port", Integer.class, 8080));
     }
 
+    private static String createUrl(int port) {
+        return WebFluxUriBuilder.build("http", "localhost", port, AmlethMPEndpoint.Docs.SWAGGER_UI_HTML);
+    }
+
     @Override
-    public void onApplicationEvent(ApplicationEvent event) {
+    public void onApplicationReady(ApplicationReadyEvent event) {
         var runnable = Mono.fromRunnable(this::openSwaggerUi);
         reactor.emitCompleteSignal(runnable);
     }
 
     private void openSwaggerUi() {
-        if (System.getProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY) != null) {
-            log.debug("Swagger UI initializer đã chạy trong phiên JVM này (kể cả qua DevTools restart), bỏ qua.");
-            return;
-        }
-        System.setProperty(AppConstant.SWAGGER_UI_OPENED_PROPERTY, "true");
-
-        log.info("Checking if Swagger UI is available...");
         try {
-            boolean isAvailable = Boolean.TRUE.equals(reactor.awaitMonoComplete(isSwaggerUiAvailable()));
-            if (!isAvailable) {
-                log.info("Swagger UI is not available at {}", url);
-                return;
-            }
-            log.info("Swagger UI is available at {}", url);
-
             ProcessBuilder pb;
             if (SystemUtils.IS_OS_WINDOWS) {
                 String comSpec = System.getenv(AppConstant.COM_SPEC);
@@ -82,24 +66,5 @@ class SwaggerUiInitializer implements GenericApplicationListener {
         } catch (IOException | RuntimeException e) {
             log.error("Error opening browser for Swagger UI URL:", e);
         }
-    }
-
-    private Mono<Boolean> isSwaggerUiAvailable() {
-        return httpClient.doGet(url, new ParameterizedTypeReference<String>() { })
-                .map(response -> true)
-                .defaultIfEmpty(true)
-                .onErrorResume((Throwable e) -> {
-                    log.debug("Failed to connect to Swagger UI at {}: {}", url, e.getLocalizedMessage());
-                    return Mono.just(false);
-                });
-    }
-
-    private static String createUrl(int port) {
-        return WebFluxUriBuilder.build("http", "localhost", port, AmlethMPEndpoint.Docs.SWAGGER_UI_HTML);
-    }
-
-    @Override
-    public boolean supportsEventType(ResolvableType eventType) {
-        return eventType.isAssignableFrom(ApplicationReadyEvent.class);
     }
 }

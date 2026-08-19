@@ -12,7 +12,7 @@ import reactor.core.publisher.Mono;
  * </p>
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */
-public interface AuthenticateInstruction {
+public interface AuthenticationInstruction {
 
     /**
      * Nhận, validate và xác nhận yêu cầu xác thực đăng nhập lên từ phía client.

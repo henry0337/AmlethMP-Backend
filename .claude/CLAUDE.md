@@ -105,7 +105,7 @@ route constant, soft-delete column...) xem Rule/Skill riêng cho CRUD.
   `auth.config.SecurityConfiguration` (annotate `@EnableReactiveSecurityCustomization`) build
   `SecurityWebFilterChain` với `AuthenticationWebFilter` validate header qua `JwtService` +
   `CustomUserDetailsService`.
-- Module `auth`: `AuthController`/`AuthService` (`AuthenticateInstruction`) xử lý login/register;
+- Module `auth`: `AuthController`/`AuthService` (`AuthenticationInstruction`) xử lý login/register;
   `TokenBlacklistService` phục vụ logout/revoke. Password dùng `BCryptPasswordEncoder`.
 - Path permit-all khai báo trong `SecurityConfiguration` (`/api/auth/v1/login`,
   `/api/auth/v1/register`, `/api/user/v1/**`, path springdoc/swagger) — riêng `/api/auth/v1/logout`

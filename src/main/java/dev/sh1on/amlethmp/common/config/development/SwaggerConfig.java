@@ -21,27 +21,30 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 @Profile(AppConstant.Environment.DEV)
 class SwaggerConfig {
     private static final String OPENAPI_VERSION = "3.2.0";
-    private static final String OPENAPI_TITLE = "AmlethMP: Endpoint Presentation";
-    private static final String OPENAPI_DESCRIPTION = "Danh sách các API endpoint của hệ thống AmlethMP";
+    private static final String OPENAPI_TITLE = "AmlethMP";
+    private static final String OPENAPI_DESCRIPTION = "Danh sách các endpoint API của hệ thống AmlethMP";
     private static final String API_VERSION = "0.1.0-SNAPSHOT";
     private static final String AUTHORIZATION_TYPE = "Bearer Token";
 
     @Bean
     OpenAPI swagger() {
-        var instance = new OpenAPI();
-        instance.setOpenapi(OPENAPI_VERSION);
-        instance.setInfo(new Info()
-                .title(OPENAPI_TITLE)
-                .version(API_VERSION)
-                .description(OPENAPI_DESCRIPTION));
-        instance.setComponents(new Components()
-                .addSecuritySchemes(
-                        AUTHORIZATION_TYPE,
-                        new SecurityScheme()
-                                .type(SecurityScheme.Type.HTTP)
-                                .bearerFormat("JWT")
-                                .scheme("bearer")));
+        var info = new Info();
+        info.setTitle(OPENAPI_TITLE);
+        info.setDescription(OPENAPI_DESCRIPTION);
+        info.setVersion(API_VERSION);
 
-        return instance;
+        var securityScheme = new SecurityScheme();
+        securityScheme.setType(SecurityScheme.Type.HTTP);
+        securityScheme.setScheme("bearer");
+        securityScheme.setBearerFormat("JWT");
+
+        var component = new Components();
+        component.addSecuritySchemes(AUTHORIZATION_TYPE, securityScheme);
+
+        var swagger = new OpenAPI();
+        swagger.setOpenapi(OPENAPI_VERSION);
+        swagger.setInfo(info);
+        swagger.setComponents(component);
+        return swagger;
     }
 }
