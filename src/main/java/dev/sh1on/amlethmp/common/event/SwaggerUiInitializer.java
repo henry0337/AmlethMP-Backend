@@ -9,11 +9,12 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import dev.myrlennia237.component.event.ReadyEventListener;
+import dev.myrlennia237.component.service.I18nService;
 import dev.myrlennia237.helper.ReactorHelper;
 import dev.myrlennia237.helper.WebFluxUriBuilder;
 import dev.sh1on.amlethmp.common.constant.AmlethMPEndpoint;
 import dev.sh1on.amlethmp.common.constant.AppConstant;
-import dev.sh1on.amlethmp.common.enums.InitializationPriority;
+import dev.sh1on.amlethmp.common.constant.InitializationPriority;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.SystemUtils;
 import reactor.core.publisher.Mono;
@@ -31,11 +32,13 @@ import reactor.core.publisher.Mono;
 @Slf4j
 class SwaggerUiInitializer implements ReadyEventListener {
     private final ReactorHelper reactor;
+    private final I18nService i18nService;
     private final String url;
 
-    SwaggerUiInitializer(Environment env, ReactorHelper reactor) {
-        this.reactor = reactor;
+    SwaggerUiInitializer(Environment env, ReactorHelper reactor, I18nService i18nService) {
         this.url = createUrl(env.getProperty("server.port", Integer.class, 8080));
+        this.reactor = reactor;
+        this.i18nService = i18nService;
     }
 
     private static String createUrl(int port) {
@@ -59,12 +62,13 @@ class SwaggerUiInitializer implements ReadyEventListener {
             } else if (SystemUtils.IS_OS_LINUX) {
                 pb = new ProcessBuilder(AppConstant.OPEN_LINUX, url);
             } else {
-                log.warn("Your current OS you are using is not supported by this backend, please use other supporting OSes.");
+                log.warn(i18nService.translate("swagger.os.notsupported"));
                 return;
             }
             pb.start();
+            log.info(i18nService.translate("swagger.available", url));
         } catch (IOException | RuntimeException e) {
-            log.error("Error opening browser for Swagger UI URL:", e);
+            log.error(i18nService.translate("swagger.error"), e);
         }
     }
 }

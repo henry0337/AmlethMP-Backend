@@ -8,7 +8,7 @@ import dev.sh1on.amlethmp.common.constant.AppConstant;
 
 /**
  * <b>[Configuration Class]</b> <br>
- * Lớp cấu hình WebFlux dành riêng cho môi trường <b>Production</b>.
+ * Lớp cấu hình WebFlux cho môi trường <b>thật (production)</b>.
  *
  * @see WebFluxConfigurer
  */

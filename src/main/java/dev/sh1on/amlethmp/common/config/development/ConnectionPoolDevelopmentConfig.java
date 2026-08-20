@@ -12,7 +12,7 @@ import javax.sql.DataSource;
 
 /**
  * <b>[Configuration Class]</b> <br>
- * <p>Lớp cấu hình {@link DataSource} cho môi trường <b>phát triển (development)</b>.</p>
+ * Lớp cấu hình {@link DataSource} cho môi trường <b>phát triển (Development)</b>.
  *
  * @author <a href="https://github.com/AdorableDandelion25">Himekawa</a>
  */

@@ -24,17 +24,23 @@ class LocalizationConfig {
 
     @Bean
     MessageSource messageSource() {
+        var i18nFolderPath = "classpath:i18n/messages";
+        String defaultPropertiesFileEncoding = Charset.defaultCharset().name();
+
         var messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename("classpath:i18n/messages");
-        messageSource.setDefaultEncoding(Charset.defaultCharset().name());
+        messageSource.setBasename(i18nFolderPath);
+        messageSource.setDefaultEncoding(defaultPropertiesFileEncoding);
         return messageSource;
     }
 
     @Bean
     LocaleContextResolver lcr() {
+        List<Locale> supportedLocales = List.of(Locale.ENGLISH, Locale.JAPANESE, Locale.of("vi", "VN"));
+        var defaultLocale = Locale.ENGLISH;
+
         var localeResolver = new AcceptHeaderLocaleContextResolver();
-        localeResolver.setDefaultLocale(Locale.of("vi", "VN"));
-        localeResolver.setSupportedLocales(List.of(Locale.ENGLISH, Locale.JAPANESE, Locale.of("vi", "VN")));
+        localeResolver.setSupportedLocales(supportedLocales);
+        localeResolver.setDefaultLocale(defaultLocale);
         return localeResolver;
     }
 }
