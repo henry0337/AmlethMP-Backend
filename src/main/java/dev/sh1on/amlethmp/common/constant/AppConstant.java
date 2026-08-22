@@ -32,9 +32,4 @@ public final class AppConstant {
      * @see <a href="https://man.archlinux.org/man/xdg-open.1.en">xdg-open (Arch Linux)</a>
      */
     public static final String OPEN_LINUX = "/usr/bin/xdg-open";
-
-    /**
-     * Tên System property đánh dấu Swagger UI đã được tự mở trên trình duyệt trong phiên JVM hiện tại.
-     */
-    public static final String SWAGGER_UI_OPENED_PROPERTY = "amlethmp.devtools.swagger-ui-opened";
 }
